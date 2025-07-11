@@ -135,19 +135,19 @@ section.banner p {
 
 /* Specific styles for each banner */
 #cvBanner {
-    background-image: url('assets/cvHomeBanner.png');
+    background-image: url('../assets/cvHomeBanner.png');
     background-size: cover;
     background-position: center;
 }
 
 #projectsBanner {
-    background-image: url('assets/projectsPageBanner.png');
+    background-image: url('../assets/projectsPageBanner.png');
     background-size: cover;
     background-position: center;
 }
 
 #aboutBanner {
-    background-image: url('assets/aboutHomeBanner.png');
+    background-image: url('../assets/aboutHomeBanner.png');
     background-size: cover;
     background-position: center;
 }
