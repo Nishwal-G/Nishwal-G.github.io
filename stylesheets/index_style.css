@@ -147,7 +147,7 @@ section.banner p {
 }
 
 #aboutBanner {
-    background-image: url('../assets/pictures/homePage/aboutHomeBanner.png');
+    background-image: url('../assets/aboutHomeBanner.png');
     background-size: cover;
     background-position: center;
 }
