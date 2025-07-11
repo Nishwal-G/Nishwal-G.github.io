@@ -1,3 +1,3 @@
 # Website Code
 
-Link to website - https://USERNAME.github.io/home/
+Link to website - https://nishwal-g.github.io/
