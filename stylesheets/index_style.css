@@ -135,7 +135,7 @@ section.banner p {
 
 /* Specific styles for each banner */
 #cvBanner {
-    background-image: url('../assets/pictures/homePage/cvHomeBanner.png');
+    background-image: url('../assets/cvHomeBanner.png');
     background-size: cover;
     background-position: center;
 }
