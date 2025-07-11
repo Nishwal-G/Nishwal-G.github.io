@@ -141,7 +141,9 @@ section.banner p {
 }
 
 #projectsBanner {
-    background-color: #000;
+    background-image: url('../assets/projectsHomeBanner.png');
+    background-size: cover;
+    background-position: center;
 }
 
 #aboutBanner {
