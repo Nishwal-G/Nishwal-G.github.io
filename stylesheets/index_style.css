@@ -140,6 +140,7 @@ section.banner p {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
+    transition: background-size 0.5s ease;
 }
 
 #cvBanner:hover {
@@ -163,6 +164,7 @@ section.banner p {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
+    transition: background-size 0.5s ease;
 }
 #aboutBanner:hover {
     background-size: 110%;
@@ -173,6 +175,7 @@ section.banner p {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
+    transition: background-size 0.5s ease;
 }
 #movieBanner:hover {
     background-size: 110%;
@@ -183,6 +186,7 @@ section.banner p {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
+    transition: background-size 0.5s ease;
 }
 #contactBanner:hover {
     background-size: 110%;
