@@ -152,6 +152,12 @@ section.banner p {
     background-position: center;
 }
 
+#contactBanner {
+    background-image: url('../assets/contact.png');
+    background-size: cover;
+    background-position: center;
+}
+
 /* ################# Footer ################# */
 footer {
     background-color: #333;
