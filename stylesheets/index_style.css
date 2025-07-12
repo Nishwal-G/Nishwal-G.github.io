@@ -112,6 +112,14 @@ section.banner {
     background-color: #f0f0f0; /* Background color for banners */
 }
 
+section.banner {
+    transition: background-size 0.5s ease;
+}
+
+section.banner:hover {
+    background-size: 90%;
+}
+
 section.banner a {
     text-decoration: none;
     color: #fff;
