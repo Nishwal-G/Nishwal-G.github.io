@@ -66,9 +66,13 @@ section {
 }
 
 section#aboutText {
-    text-align: center; 
+    background-color: #444; /* medium-dark grey */
+    color: #fff;            /* white text */
+    text-align: justify;    /* justified text */
     margin-left: 20%;
     margin-right: 20%;
+    padding: 30px;
+    border-radius: 8px;
 }
 
 section#aboutText p {
