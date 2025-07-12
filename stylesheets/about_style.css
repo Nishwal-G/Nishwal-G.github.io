@@ -84,7 +84,7 @@ section#aboutText p {
 }
 
 section#aboutText p a {
-    color: blue;
+    color: #00bcd4;
     text-decoration: none; 
     position: relative; 
 }
