@@ -112,14 +112,6 @@ section.banner {
     background-color: #f0f0f0; /* Background color for banners */
 }
 
-/* Zoom effect on banner background images */
-section.banner {
-    transition: background-size 0.5s ease;
-}
-
-section.banner:hover {
-    background-size: 90%;
-}
 
 section.banner a {
     text-decoration: none;
@@ -145,32 +137,55 @@ section.banner p {
 /* Specific styles for each banner */
 #cvBanner {
     background-image: url('../assets/cvHomeBanner.png');
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
+    background-repeat: no-repeat;
+}
+
+#cvBanner:hover {
+    background-size: 90%;
 }
 
 #projectsBanner {
     background-image: url('../assets/projectsHomeBanner.png');
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
+    background-repeat: no-repeat;
+    transition: background-size 0.5s ease;
+}
+
+#projectsBanner:hover {
+    background-size: 90%;
 }
 
 #aboutBanner {
     background-image: url('../assets/aboutHomeBanner.png');
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
+    background-repeat: no-repeat;
+}
+#aboutBanner:hover {
+    background-size: 90%;
 }
 
 #movieBanner {
     background-image: url('../assets/movieHomeBanner.png');
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
+    background-repeat: no-repeat;
+}
+#movieBanner:hover {
+    background-size: 90%;
 }
 
 #contactBanner {
     background-image: url('../assets/contact.png');
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
+    background-repeat: no-repeat;
+}
+#contactBanner:hover {
+    background-size: 90%;
 }
 
 /* ################# Footer ################# */
