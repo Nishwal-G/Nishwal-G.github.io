@@ -143,7 +143,7 @@ section.banner p {
 }
 
 #cvBanner:hover {
-    background-size: 90%;
+    background-size: 110%;
 }
 
 #projectsBanner {
@@ -155,7 +155,7 @@ section.banner p {
 }
 
 #projectsBanner:hover {
-    background-size: 90%;
+    background-size: 110%;
 }
 
 #aboutBanner {
@@ -165,7 +165,7 @@ section.banner p {
     background-repeat: no-repeat;
 }
 #aboutBanner:hover {
-    background-size: 90%;
+    background-size: 110%;
 }
 
 #movieBanner {
@@ -175,7 +175,7 @@ section.banner p {
     background-repeat: no-repeat;
 }
 #movieBanner:hover {
-    background-size: 90%;
+    background-size: 110%;
 }
 
 #contactBanner {
@@ -185,7 +185,7 @@ section.banner p {
     background-repeat: no-repeat;
 }
 #contactBanner:hover {
-    background-size: 90%;
+    background-size: 110%;
 }
 
 /* ################# Footer ################# */
