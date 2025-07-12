@@ -38,6 +38,16 @@ nav a:hover {
     color: #4A90E2;
 }
 
+.intro-text {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    text-align: center;
+    color: #222;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
 /* Heading style */
 h1 {
     text-align: center;
