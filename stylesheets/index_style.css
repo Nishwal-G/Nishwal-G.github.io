@@ -152,6 +152,12 @@ section.banner p {
     background-position: center;
 }
 
+#movieBanner {
+    background-image: url('../assets/movieHomeBanner.png');
+    background-size: cover;
+    background-position: center;
+}
+
 #contactBanner {
     background-image: url('../assets/contact.png');
     background-size: cover;
