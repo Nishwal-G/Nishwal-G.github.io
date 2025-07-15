@@ -197,3 +197,20 @@ footer {
     background: #333;
     color: white;
 }
+
+/* ################# Intro Text ################# */
+#introText {
+    border: none;            /* override the generic section border */
+    max-width: 800px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    text-align: center;
+}
+
+#introText p {
+    font-size: larger;
+    color: #252424;
+    line-height: 1.6;
+    margin: 0;
+    padding: 10px 0;
+}
