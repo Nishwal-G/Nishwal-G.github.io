@@ -192,6 +192,10 @@ section.banner p {
     background-size: 110%;
 }
 
+#contactBanner a h2 {
+  color: #000;   /* or whatever shade of black you like */
+}
+
 /* ################# Footer ################# */
 footer {
     background-color: #333;
