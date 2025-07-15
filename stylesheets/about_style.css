@@ -59,52 +59,65 @@ nav ul li a:hover::after {
     transform: scaleX(1);
 }
 
-/* ################# Section, paragraphs, and titles ################# */
-section {
-    padding: 5px;
-    margin-bottom: 20px;
+/* ################# About Text (card style) ################# */
+section#aboutText {
+    background-color: #f9f9f9;       /* light card background */
+    border: 1px solid #ccc;          /* subtle border */
+    border-radius: 8px;              /* rounded corners */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);  /* soft drop shadow */
+
+    max-width: 800px;                /* constrain width */
+    margin: 0 auto 40px;             /* center + bottom spacing */
+    padding: 20px;                   /* inner spacing */
+
+    text-align: justify;             /* justify all paragraphs */
+    color: #252424;                  /* dark text for readability */
+    font-size: larger;               /* match other sections */
+    line-height: 1.6;
 }
 
-section#aboutText {
-    background-color: #777; /* medium-dark grey */
-    color: #fff;            /* white text */
-    text-align: justify;    /* justified text */
-    margin-left: 20%;
-    margin-right: 20%;
-    padding: 30px;
-    border-radius: 8px;
+section#aboutText h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+section#aboutText h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #333;
+    margin: 10px auto 0;
 }
 
 section#aboutText p {
-    color: #fff;
-    font-size: larger;
-    position: relative; 
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0;
 }
 
-section#aboutText p a {
-    color: #ff6f61;
-    text-decoration: none; 
-    position: relative; 
+section#aboutText a {
+    color: #ff6f61;                   /* your existing accent color */
+    text-decoration: none;
+    position: relative;
 }
 
-
-section#aboutText p a::after {
-    content: ''; 
-    position: absolute; 
-    bottom: -3px; 
-    left: 0; 
-    width: 100%; 
-    height: 2px; 
-    background-color: #333; 
-    transform: scaleX(0); 
-    transition: transform 0.3s ease; 
+section#aboutText a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff6f61;              /* match link color */
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-section#aboutText p a:hover::after {
-    transform: scaleX(1); 
+section#aboutText a:hover::after {
+    transform: scaleX(1);
 }
+
 
 /* ################# Banner styles and animation ################# */
 section.banner {
