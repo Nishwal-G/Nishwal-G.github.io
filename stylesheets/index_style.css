@@ -1,216 +1,76 @@
-/* ################# Global reset and font ################# */
+:root {
+    /* Design tokens */
+    --primary-color: #333;
+    --accent-color: #0077cc;
+    --bg-light: #f9f9f9;
+    --bg-banner: #f0f0f0;
+    --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-heading: 'Open Sans', sans-serif;
+    --radius: 8px;
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+}
+
+/* ################# Global reset ################# */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Palatino', 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif; 
+    font-family: var(--font-body);
+}
+
+body {
+    background-color: #fff;
+    color: #252424;
+    line-height: 1.6;
+}
+
+/* ################# Layout Container ################# */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
 }
 
 /* ################# Header ################# */
 header {
-    background-color: #333;
+    background-color: var(--primary-color);
     color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    font-size: large;
-    text-align: center; 
+    padding: var(--spacing-md) 0;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
 }
 
-/* ################# Navigation styles  ################# */
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 2em;
+}
+
+/* ################# Navigation ################# */
 nav ul {
+    list-style: none;
     text-align: center;
-    list-style-type: none;
-    font-size: medium;
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-sm);
 }
 
 nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li:last-child {
-    margin-right: 0;
+    display: inline-block;
+    margin: 0 var(--spacing-sm);
 }
 
 nav ul li a {
     color: #fff;
     text-decoration: none;
-    position: relative; 
+    font-family: var(--font-heading);
+    font-size: 1em;
+    position: relative;
+    padding: var(--spacing-xs) 0;
+    transition: color 0.3s ease;
 }
 
 nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; 
-    left: 0;
-    width: 100%;
-    height: 2px; 
-    background-color: #fff; 
-    transform: scaleX(0); 
-    transition: transform 0.3s ease; 
-}
-
-nav ul li a:hover::after {
-    transform: scaleX(1); 
-}
-
-/* ################# Home Text Card ################# */
-section#homeText {
-    background-color: #f9f9f9;             /* light card background */
-    border: 1px solid #ccc;                /* subtle border */
-    border-radius: 8px;                    /* rounded corners */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);  /* soft drop shadow */
-
-    max-width: 800px;                      /* constrain width */
-    margin: 20px auto 40px;                /* center + top/bottom spacing */
-    padding: 20px;                         /* inner spacing */
-
-    text-align: justify;                   /* justify paragraphs */
-    color: #252424;                        /* dark text for readability */
-    font-size: larger;                     /* match other sections */
-    line-height: 1.6;
-}
-
-section#homeText p {
-    margin: 10px 0;
-}
-
-section#homeText a {
-    color: #333;                           /* match other link colors */
-    text-decoration: none;
-    position: relative;
-}
-
-section#homeText a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #333;                      /* underline color */
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-section#homeText a:hover::after {
-    transform: scaleX(1);
-}
-
-/* ################# Banner styles ################# */
-section.banner {
-    height: 200px;
-    width: 100%;
-    position: relative;
-    margin: 5px auto;
-    border: 5px solid white;
-    overflow: hidden;
-    text-align: center; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0; /* Background color for banners */
-}
-
-
-section.banner a {
-    text-decoration: none;
-    color: #fff;
-    display: block;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-section.banner h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-section.banner p {
-    font-size: 1.2em;
-}
-
-/* Specific styles for each banner */
-#cvBanner {
-    background-image: url('../assets/cvHomeBanner.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-size 0.5s ease;
-}
-
-#cvBanner:hover {
-    background-size: 110%;
-}
-
-#projectsBanner {
-    background-image: url('../assets/projectsHomeBanner.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-size 0.5s ease;
-}
-
-#projectsBanner:hover {
-    background-size: 110%;
-}
-
-#aboutBanner {
-    background-image: url('../assets/aboutHomeBanner.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-size 0.5s ease;
-}
-#aboutBanner:hover {
-    background-size: 110%;
-}
-
-#movieBanner {
-    background-image: url('../assets/movieHomeBanner.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-size 0.5s ease;
-}
-#movieBanner:hover {
-    background-size: 110%;
-}
-
-#contactBanner {
-    background-image: url('../assets/contactHomeBanner.png');
-    background-size: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: background-size 0.5s ease;
-}
-#contactBanner:hover {
-    background-size: 110%;
-}
-
-
-/* ################# Footer ################# */
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    border: none;
-}
-
-/* ################# Social links in the footer ################# */
-.social-links a {
-    color: #fff;
-    text-decoration: none;
-    position: relative;
-}
-
-.social-links a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -222,29 +82,129 @@ footer {
     transition: transform 0.3s ease;
 }
 
-.social-links a:hover::after {
+nav ul li a:hover,
+nav ul li a:focus {
+    color: var(--accent-color);
+}
+
+nav ul li a:hover::after,
+nav ul li a:focus::after {
     transform: scaleX(1);
 }
 
-.fa {
-    padding: 20px;
-    font-size: 30px;
-    width: 50px;
-    text-align: center;
+/* ################# Home Text ################# */
+#homeText {
+    background-color: var(--bg-light);
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+    padding: var(--spacing-md);
+    text-align: justify;
+    font-size: 1.125em;
+}
+
+#homeText p {
+    margin-bottom: var(--spacing-sm);
+}
+
+#homeText a {
+    color: var(--primary-color);
     text-decoration: none;
-    margin: 5px 2px;
+    position: relative;
 }
 
-.fa:hover {
-    opacity: 0.7;
+#homeText a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-.fa-linkedin,
-.fa-github {
-    background: #333;
-    color: white;
+#homeText a:hover::after,
+#homeText a:focus::after {
+    transform: scaleX(1);
 }
 
-#contactBanner a h2 {
-  color: #000;   /* or whatever shade of black you like */
+/* ################# Banner ################# */
+section.banner {
+    background-color: var(--bg-banner);
+    border: 5px solid #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+section.banner:hover,
+section.banner:focus-within {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+section.banner a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+section.banner h2 {
+    font-family: var(--font-heading);
+    font-size: 2em;
+    margin-bottom: var(--spacing-xs);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Background images */
+#projectsBanner { background: url('../assets/projectsHomeBanner.png') center / cover no-repeat; }
+#cvBanner       { background: url('../assets/cvHomeBanner.png') center / cover no-repeat; }
+#aboutBanner    { background: url('../assets/aboutHomeBanner.png') center / cover no-repeat; }
+#contactBanner  { background: url('../assets/contactHomeBanner.png') center / cover no-repeat; }
+
+/* Ensure contrast on contact */
+#contactBanner h2 { color: #000; text-shadow: none; }
+
+/* ################# Footer ################# */
+footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    text-align: center;
+    padding: var(--spacing-sm) 0;
+}
+
+.social-links a {
+    color: #fff;
+    font-size: 1.5em;
+    margin: 0 var(--spacing-xs);
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.social-links a:hover,
+.social-links a:focus {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* ################# Responsive ################# */
+@media (max-width: 768px) {
+    nav ul li { margin: 0 var(--spacing-xs); }
+    section.banner { height: auto; padding: var(--spacing-md) 0; flex-direction: column; }
+}
+
