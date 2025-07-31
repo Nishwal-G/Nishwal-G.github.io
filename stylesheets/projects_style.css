@@ -94,17 +94,19 @@ section.banner img {
 
 /* ################# Intro Text ################# */
 #introText {
-  background-color: var(--bg-light);
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    /* box styling */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
-  /* sizing & centering */
-  max-width: 800px;
-  margin: 0 auto var(--spacing-lg);
+    /* sizing & centering */
+    max-width: 800px;
+    margin: 0 auto 30px;
+    padding: 20px;
 
-  padding: var(--spacing-md);
-  text-align: justify;
+    /* text formatting */
+    text-align: justify;
 }
 
 
