@@ -98,8 +98,12 @@ section.banner img {
     border: 1px solid #ccc;
     border-radius: var(--radius);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    /* sizing & centering */
+    width: 100%;
     max-width: 800px;
     margin: 0 auto var(--spacing-lg);
+
     padding: var(--spacing-md);
     text-align: justify;
 }
