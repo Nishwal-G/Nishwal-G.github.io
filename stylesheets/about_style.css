@@ -1,217 +1,181 @@
-/* ################# Global reset and font ################# */
+:root {
+    /* Match your index tokens */
+    --primary-color: #333;
+    --accent-color: #0077cc;
+    --bg-light: #f9f9f9;
+    --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-heading: 'Open Sans', sans-serif;
+    --radius: 8px;
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+}
+
+/* ################# Global reset ################# */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Palatino', 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif; 
+    font-family: var(--font-body);
+}
+body {
+    color: #252424;
+    line-height: 1.6;
+    background: #fff;
+}
+
+/* ################# Layout Container ################# */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
 }
 
 /* ################# Header ################# */
 header {
-    background-color: #333;
+    background: var(--primary-color);
     color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    font-size: large;
-    text-align: center; 
-}
-
-/* ################# Navigation styles ################# */
-nav ul {
     text-align: center;
-    list-style-type: none;
-    font-size: medium;
-    margin-bottom: 10px;
+    padding: var(--spacing-md) 0;
+    margin-bottom: var(--spacing-md);
+}
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 2em;
+    margin-top: var(--spacing-xs);
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 20px;
+/* ################# Navigation ################# */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
 }
-
-nav ul li:last-child {
-    margin-right: 0;
-}
-
 nav ul li a {
     color: #fff;
     text-decoration: none;
-    position: relative; 
+    font-family: var(--font-heading);
+    position: relative;
+    padding: var(--spacing-xs) 0;
 }
-
 nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; 
-    left: 0;
-    width: 100%;
-    height: 2px; 
-    background-color: #fff; 
-    transform: scaleX(0); 
-    transition: transform 0.3s ease; 
-}
-
-nav ul li a:hover::after {
-    transform: scaleX(1); 
-}
-
-nav ul li a:hover::after {
-    transform: scaleX(1);
-}
-
-/* ################# About Text (card style) ################# */
-section#aboutText {
-    background-color: #f9f9f9;       /* light card background */
-    border: 1px solid #ccc;          /* subtle border */
-    border-radius: 8px;              /* rounded corners */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);  /* soft drop shadow */
-
-    max-width: 800px;                /* constrain width */
-    margin: 0 auto 40px;             /* center + bottom spacing */
-    padding: 20px;                   /* inner spacing */
-
-    text-align: justify;             /* justify all paragraphs */
-    color: #252424;                  /* dark text for readability */
-    font-size: larger;               /* match other sections */
-    line-height: 1.6;
-}
-
-section#aboutText h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 15px;
-    position: relative;
-}
-
-section#aboutText h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 3px;
-    background: #333;
-    margin: 10px auto 0;
-}
-
-section#aboutText p {
-    margin: 10px 0;
-}
-
-section#aboutText a {
-    color: #ff6f61;                   /* your existing accent color */
-    text-decoration: none;
-    position: relative;
-}
-
-section#aboutText a::after {
     content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
     width: 100%;
     height: 2px;
-    background: #ff6f61;              /* match link color */
+    background: #fff;
     transform: scaleX(0);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s;
 }
-
-section#aboutText a:hover::after {
+nav ul li a:hover::after,
+nav ul li a:focus::after {
     transform: scaleX(1);
 }
 
-
-/* ################# Banner styles and animation ################# */
+/* ################# Banner ################# */
 section.banner {
-    height: 300px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    margin: 0 auto 20px auto;
-    border: 5px white;
-}
-
-.slideshow {
-    width: 100%;
-    height: 300px;
     overflow: hidden;
-    position: relative;
+    margin-bottom: var(--spacing-md);
 }
-
-.slideshow img {
+section.banner img {
+    display: block;
     width: 100%;
     height: auto;
+}
+
+/* ################# About Text (card) ################# */
+#aboutText {
+    background: var(--bg-light);
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    text-align: justify;
+}
+#aboutText h2 {
+    text-align: center;
+    font-family: var(--font-heading);
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+}
+#aboutText h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--primary-color);
+    margin: var(--spacing-xs) auto 0;
+}
+#aboutText p + p {
+    margin-top: var(--spacing-md);
+}
+#aboutText a {
+    color: var(--accent-color);
+    position: relative;
+    text-decoration: none;
+}
+#aboutText a::after {
+    content: '';
     position: absolute;
-    top: 0;
+    bottom: -2px;
     left: 0;
-    opacity: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transition: transform 0.3s;
 }
-
-.slideshow img:nth-child(1) { animation-delay: 0s; }
-.slideshow img:nth-child(2) { animation-delay: 16s; }
-.slideshow img:nth-child(3) { animation-delay: 32s; }
-
-.slideshow img {
-    animation: slide_animation 45s infinite;
-}
-
-@keyframes slide_animation {
-    0% { opacity: 0; }
-    6.67% { opacity: 1; }
-    53.33% { opacity: 1; }
-    60% { opacity: 1; }
-    100% { opacity: 0; }
+#aboutText a:hover::after,
+#aboutText a:focus::after {
+    transform: scaleX(1);
 }
 
 /* ################# Footer ################# */
 footer {
-    background-color: #333;
+    background: var(--primary-color);
     color: #fff;
     text-align: center;
-    padding: 10px;
-    border: none;
+    padding: var(--spacing-sm) 0;
 }
-
-/* ################# Social links in the footer ################# */
 .social-links a {
     color: #fff;
-    text-decoration: none;
-    position: relative;
+    font-size: 1.5em;
+    margin: 0 var(--spacing-xs);
+    display: inline-block;
+    transition: transform 0.2s, opacity 0.2s;
+}
+.social-links a:hover,
+.social-links a:focus {
+    transform: scale(1.1);
+    opacity: 0.8;
 }
 
-.social-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #fff;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+/* ################# Responsive Breakpoints ################# */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    #aboutText {
+        padding: var(--spacing-sm);
+    }
+}
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    #aboutText {
+        font-size: 0.95em;
+    }
 }
 
-.social-links a:hover::after {
-    transform: scaleX(1);
-}
-
-.fa {
-    padding: 20px;
-    font-size: 30px;
-    width: 50px;
-    text-align: center;
-    text-decoration: none;
-    margin: 5px 2px;
-}
-
-.fa:hover {
-    opacity: 0.7;
-}
-
-.fa-linkedin,
-.fa-github {
-    background: #333;
-    color: white;
-}
 
 
 
