@@ -1,173 +1,70 @@
-/* ################# Global reset and font ################# */
+:root {
+    /* Design tokens */
+    --primary-color: #333;
+    --accent-color: #0077cc;
+    --bg-light: #f9f9f9;
+    --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-heading: 'Open Sans', sans-serif;
+    --radius: 8px;
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+}
+
+/* ################# Global Reset ################# */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Palatino', 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif; 
+    font-family: var(--font-body);
+}
+body {
+    background-color: #fff;
+    color: #252424;
+    line-height: 1.6;
+}
+
+/* ################# Layout Container ################# */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
 }
 
 /* ################# Header ################# */
 header {
-    background-color: #333;
+    background-color: var(--primary-color);
     color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    font-size: large;
     text-align: center;
+    padding: var(--spacing-md) 0;
+    margin-bottom: var(--spacing-md);
+}
+header h1 {
+    font-family: var(--font-heading);
+    font-size: 2em;
 }
 
-/* ################# Navigation styles ################# */
+/* ################# Navigation ################# */
 nav ul {
-    text-align: center;
-    list-style-type: none;
-    font-size: medium;
-    margin-bottom: 10px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
 }
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li:last-child {
-    margin-right: 0;
-}
-
 nav ul li a {
     color: #fff;
     text-decoration: none;
-    position: relative; 
+    font-family: var(--font-heading);
+    position: relative;
+    padding: var(--spacing-xs) 0;
 }
-
 nav ul li a::after {
     content: '';
     position: absolute;
-    bottom: -3px; 
-    left: 0;
-    width: 100%;
-    height: 2px; 
-    background-color: #fff; 
-    transform: scaleX(0); 
-    transition: transform 0.3s ease; 
-}
-
-nav ul li a:hover::after {
-    transform: scaleX(1); 
-}
-
-/* ################# Section, paragraphs, and titles ################# */
-section {
-    padding: 5px;
-    margin-bottom: 20px;
-}
-
-#intro {
-    text-align: center;
-    font-size: large;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-#intro p {
-    font-style: italic;
-}
-
-h2 {
-    color: rgb(12, 67, 12); 
-    border-bottom: 2px solid rgb(12, 67, 12); 
-    margin-bottom: 5px;
-    margin-left: 15px;
-}
-
-h3 {
-    margin-bottom: 8px;
-    margin-top: 8px;
-    margin-left: 15px;
-}
-
-p {
-    margin-bottom: 5px;
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 30px;
-}
-
-ul li {
-    list-style-type: square;
-    margin-bottom: 3px;
-}
-
-section#smallList p {
-    margin-left: 30px; 
-}
-
-#afterword p {
-    font-style: italic;
-    font-size: small;
-    text-align: right;
-    margin-right: 15px;
-}
-
-/* ################# Banner styles and animation ################# */
-section.banner {
-    height: 300px;
-    width: 100%;
-    position: relative;
-    margin: 5px auto;
-    border: 5px solid white;
-    overflow: hidden; 
-}
-
-section.banner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    display: block;
-    opacity: 0; /* Initially invisible */
-    animation: fade-in 3s forwards; /* Fade-in animation */
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* ################# Embed styles ################# */
-section.pdf embed {
-    width: 80%; 
-    height: 700px; 
-    margin-left: 10%;
-    margin-right: 10%;
-    max-width: 100%; 
-    text-align: center;
-}
-
-/* ################# Footer ################# */
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    border: none;
-}
-
-/* ################# Social links in the footer ################# */
-.social-links a {
-    color: #fff;
-    text-decoration: none;
-    position: relative;
-}
-
-.social-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
+    bottom: -2px;
     left: 0;
     width: 100%;
     height: 2px;
@@ -175,26 +72,83 @@ footer {
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
-
-.social-links a:hover::after {
+nav ul li a:hover::after,
+nav ul li a:focus::after {
     transform: scaleX(1);
 }
 
-.fa {
-    padding: 20px;
-    font-size: 30px;
-    width: 50px;
+/* ################# Banner ################# */
+section.banner {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+section.banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    opacity: 0;
+    animation: fade-in 2s forwards;
+}
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ################# PDF Embed ################# */
+section.pdf embed {
+    width: 100%;
+    height: 700px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+/* ################# Afterword ################# */
+#afterword p {
+    font-style: italic;
+    font-size: 0.9em;
+    text-align: right;
+    margin: var(--spacing-md) var(--spacing-sm) 0 0;
+}
+
+/* ################# Footer ################# */
+footer {
+    background-color: var(--primary-color);
+    color: #fff;
     text-align: center;
-    text-decoration: none;
-    margin: 5px 2px;
+    padding: var(--spacing-sm) 0;
+}
+.social-links a {
+    color: #fff;
+    font-size: 1.5em;
+    margin: 0 var(--spacing-xs);
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.social-links a:hover,
+.social-links a:focus {
+    transform: scale(1.1);
+    opacity: 0.8;
 }
 
-.fa:hover {
-    opacity: 0.7;
+/* ################# Responsive ################# */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    section.pdf embed {
+        height: 500px;
+    }
+}
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    section.pdf embed {
+        height: 300px;
+    }
 }
 
-.fa-linkedin,
-.fa-github {
-    background: #333;
-    color: white;
-}
