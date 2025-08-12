@@ -1,62 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Document metadata -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Me</title>
-    
-    <!-- External stylesheets -->
-    <link rel="stylesheet" href="../stylesheets/contact_style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Me</title>
+
+  <link rel="stylesheet" href="../stylesheets/contact_style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+  <!-- hCaptcha (replace data-sitekey value below with your real key) -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 </head>
 <body>
-    <header class="site-header">
-      <div class="header-inner container">
-        <a class="brand" href="../index.html">Nishwal Gora</a>
-        <nav class="site-nav">
-          <ul class="nav-pill">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="cv.html">CV</a></li>
-            <li><a href="about.html">About Me</a></li>
-            <li><a class="active" href="contact.html">Contact</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    
-    <h1 class="page-title">Contact Me</h1>
 
-
-    <section class="banner">
-        <img src="../assets/contact_1.png" alt="Slide 1">       
-    </section>
-   
-      <section id="contactText">
-        <h2>Get in Touch</h2>
-        <p>
-            The best ways to reach me are by email or phone. Feel free to connect with me at any time!
-        </p>
-        <p>
-            I’m always happy to chat about research, collaborations, or anything else you’d like to discuss.
-        </p>
-
-        <ul style="list-style: none; padding: 0;">
-            <li><strong>Email (Personal):</strong> <a href="mailto:yourpersonal@email.com">nishwalgora@gmail.com</a></li>
-            <li><strong>Email (University):</strong> <a href="mailto:youruni@email.ac.uk">N.Gora@ed.ac.uk</a></li>
-            <li><strong>Phone Number:</strong> <a href="tel:+441234567890">+44 7877 880067</a></li>
-            <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/nishwal-gora/" target="_blank">linkedin.com/in/nishwal-gora/</a></li>
-            <li><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=ka6DBeQAAAAJ&hl=en" target="_blank">Nishwal Gora</a></li>
+  <!-- Header / pill nav -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">Nishwal Gora</a>
+      <nav class="site-nav">
+        <ul class="nav-pill">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="about.html">About Me</a></li>
+          <li><a class="active" href="contact.html">Contact</a></li>
         </ul>
-    </section>
+      </nav>
+    </div>
+  </header>
 
-    <footer>
-        <!-- Social media links -->
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin"target="_blank" rel="noopener noreferrer"></a>
-            <a href="https://github.com/Nishwal-G" class="fa fa-github"target="_blank" rel="noopener noreferrer"></a>
+  <!-- Hero title -->
+  <section class="contact-hero">
+    <h1>Contact me</h1>
+    <p>Feel free to reach out to me using the form below.</p>
+  </section>
+
+  <!-- Contact form -->
+  <!-- ACTION options:
+       1) Use Formspree/Netlify/etc. Replace the action with your endpoint.
+       2) Keep "#" for now; nothing gets sent.
+  -->
+  <main class="contact-wrap">
+    <form class="contact-form" action="#" method="post" novalidate>
+      <div class="grid two">
+        <div class="field">
+          <label for="firstName">First Name</label>
+          <input id="firstName" name="firstName" type="text" autocomplete="given-name" required>
         </div>
-    </footer>
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" name="lastName" type="text" autocomplete="family-name" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel">
+      </div>
+
+      <div class="field">
+        <label for="subject">Subject</label>
+        <input id="subject" name="subject" type="text" required>
+      </div>
+
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="8" required></textarea>
+      </div>
+
+      <div class="captcha-row">
+        <div class="h-captcha" data-sitekey="YOUR_HCAPTCHA_SITE_KEY"></div>
+      </div>
+
+      <button class="btn-primary" type="submit">Send</button>
+    </form>
+  </main>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
+      <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
+    </div>
+  </footer>
+
 </body>
 </html>
+
