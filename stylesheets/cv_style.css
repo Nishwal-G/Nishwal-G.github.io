@@ -282,4 +282,22 @@ footer {
   section.pdf embed { height: 340px; }
 }
 
+/* Center the courses heading and remove any stray left margin */
+#courses h2 {
+  text-align: center;
+  margin-left: 0 !important;
+}
 
+/* Keep the decorative underline centered */
+#courses h2::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 3px;
+  background: var(--primary-color);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 2px;
+}
+
+/* Make sure Year subheadings aren't left-indented either */
+.year h3 { margin-left: 0 !important; }
