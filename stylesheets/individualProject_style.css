@@ -1,6 +1,6 @@
 :root{
   --primary-color:#333;
-  --accent-color:#7a1fa2;
+  --accent-color:#7a1fa2; /* purple vibe */
   --bg-light:#f9f9f9;
   --font-body:'Palatino Linotype','Book Antiqua',Georgia,serif;
   --font-heading:'Open Sans',sans-serif;
@@ -9,7 +9,6 @@
   --spacing-sm:16px;
   --spacing-md:24px;
   --spacing-lg:32px;
-  --content-width: 900px; /* match CV width */
 }
 
 /* ========= Base + background ========= */
@@ -23,14 +22,10 @@ body{
     linear-gradient(135deg,#ffdee9 0%,#b5fffc 100%);
 }
 
-/* container width same as CV */
-.container{
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-sm);
-}
+/* Optional content container */
+.container{max-width:1100px;margin:0 auto;padding:0 var(--spacing-sm)}
 
-/* ========= Header ========= */
+/* ========= Slick pill header ========= */
 .site-header{
   background:linear-gradient(90deg,#4a148c,#0077cc);
   box-shadow:0 2px 6px rgba(0,0,0,.15);
@@ -73,48 +68,62 @@ body{
   margin:var(--spacing-xs) auto 0;border-radius:2px;
 }
 
-/* ========= Download link ========= */
-.cv-actions{
-  max-width: 100%;
-  margin: 0 auto var(--spacing-sm);
-  text-align: right;
-}
-.download-link{
-  color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
-  font-family: var(--font-heading);
-}
-.download-link::after{
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 2px;
-  background: var(--accent-color);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-.download-link:hover::after,
-.download-link:focus::after { transform: scaleX(1); }
-
-/* ========= PDF Card ========= */
+/* ========= Card ========= */
 .card{
-  background: var(--bg-light);
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  padding: var(--spacing-md);
+  background:var(--bg-light);
+  border:1px solid #ccc;
+  border-radius:var(--radius);
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  padding:var(--spacing-md);
 }
-section.pdf{
-  max-width: 100%;
-  margin: 0 auto var(--spacing-lg);
+
+/* ========= Pretty CTA buttons ========= */
+.btn-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 18px;border-radius:9999px;text-decoration:none;
+  font-family:var(--font-heading);font-weight:700;letter-spacing:.2px;
+  color:#fff;background:linear-gradient(135deg,#7a1fa2,#4a148c);
+  box-shadow:0 6px 16px rgba(74,20,140,.25);
+  transition:transform .15s ease, box-shadow .2s ease, filter .2s ease;
 }
-section.pdf embed{
-  display: block;
-  width: 100%;
-  height: clamp(420px, 70vh, 820px);
-  border-radius: calc(var(--radius) - 2px);
+.btn-cta i{font-size:1.05em}
+.btn-cta:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(74,20,140,.32);filter:brightness(1.03)}
+.btn-cta:active{transform:translateY(0)}
+.btn-cta:focus-visible{outline:3px solid rgba(122,31,162,.4);outline-offset:2px}
+
+/* outline variant (for secondary action) */
+.btn-outline{
+  background:#fff;color:#4a148c;
+  border:2px solid #4a148c;
+  box-shadow:none;
 }
+.btn-outline:hover{filter:none;transform:translateY(-1px);box-shadow:0 6px 16px rgba(74,20,140,.18)}
+.btn-outline i{color:#4a148c}
+
+/* ========= Nice one-liner CTA block (your “click here” line) ========= */
+section.main_text{text-align:center;margin-bottom:var(--spacing-md)}
+section.main_text p{margin:0}
+section.main_text .btn-cta{margin-top:8px}
+
+/* ========= Two-download row ========= */
+.cv-actions{max-width:900px;margin:0 auto var(--spacing-sm)}
+.download-row{
+  display:flex;flex-wrap:wrap;gap:12px;
+  justify-content:center; /* centered looks best with two buttons */
+}
+
+/* ========= Project Description ========= */
+.project-description{
+  max-width:900px;margin:var(--spacing-md) auto var(--spacing-lg);
+}
+.project-description h2{
+  font-family:var(--font-heading);
+  font-size:1.4rem;margin-bottom:var(--spacing-sm);
+}
+.project-description .bullets{
+  margin-top:var(--spacing-sm);padding-left:1.1rem;
+}
+.project-description .bullets li{margin:6px 0}
 
 /* ========= Footer ========= */
 footer{
@@ -135,10 +144,7 @@ footer{
   .header-inner{flex-direction:column;gap:10px}
   .site-nav .nav-pill{flex-wrap:wrap;justify-content:center;padding:6px 10px}
   .site-nav .nav-pill a{padding:8px 12px}
-  .cv-actions{text-align:center}
-  section.pdf embed{height:500px;}
+  .download-row{justify-content:center}
 }
-@media (max-width:480px){
-  section.pdf embed{height:340px;}
-}
+
 
