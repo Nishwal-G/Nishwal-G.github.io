@@ -13,67 +13,79 @@
 }
 
 /* ============ Global Reset ============ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font-body);
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
 body {
   background-color: #fff;
   color: #252424;
   line-height: 1.6;
 }
 
-/* ============ Layout Container ============ */
-.container {
-  max-width: 900px;
+/* Optional shared container */
+.container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
+
+/* ============ Slick Header (pill nav) ============ */
+/* Use these if your HTML header uses: .site-header > .header-inner > .site-nav .nav-pill */
+.site-header {
+  background: linear-gradient(90deg, #4a148c, #0077cc);
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 1100px;   /* a bit wider so the pill has breathing room */
   margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
-
-/* ============ Header & Nav ============ */
-header {
-  background-color: var(--primary-color);
-  color: #fff;
-  text-align: center;
-  padding: var(--spacing-md) 0;
-  margin-bottom: var(--spacing-md);
-}
-header h1 {
+.brand {
   font-family: var(--font-heading);
-  font-size: 2em;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s ease;
 }
+.brand:hover { opacity: 0.85; }
 
-nav ul {
+.site-nav .nav-pill {
   list-style: none;
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
+  align-items: center;
+  gap: clamp(8px, 2vw, 18px);
+  padding: 8px 12px;
+  margin: 0;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(4px);
 }
-nav ul li a {
+.site-nav .nav-pill a {
   color: #fff;
   text-decoration: none;
   font-family: var(--font-heading);
-  position: relative;
-  padding: var(--spacing-xs) 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
 }
-nav ul li a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #fff;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+.site-nav .nav-pill a:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+.site-nav .nav-pill a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.site-nav .nav-pill a.active {
+  background: #fff;
+  color: #4a148c;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
 }
-nav ul li a:hover::after,
-nav ul li a:focus::after {
-  transform: scaleX(1);
+
+/* Optional page title (if you move <h1> out of header) */
+.page-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 2.25rem);
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+  color: #222;
 }
 
 /* ============ Banner ============ */
@@ -90,22 +102,11 @@ section.banner img {
   opacity: 0;
   animation: fade-in 2s forwards;
 }
-@keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
-/* ============ Cards & PDF ============ */
-.card {
-  background: var(--bg-light);
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  padding: var(--spacing-md);
-}
-
+/* ============ CV Actions (Download) ============ */
 .cv-actions {
-  max-width: 900px; /* matches .container */
+  max-width: 900px;           /* match .container */
   margin: 0 auto var(--spacing-sm);
   text-align: right;
 }
@@ -125,10 +126,16 @@ section.banner img {
   transition: transform 0.3s ease;
 }
 .download-link:hover::after,
-.download-link:focus::after {
-  transform: scaleX(1);
-}
+.download-link:focus::after { transform: scaleX(1); }
 
+/* ============ PDF Card ============ */
+.card {
+  background: var(--bg-light);
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: var(--spacing-md);
+}
 section.pdf {
   max-width: 900px;
   margin: 0 auto var(--spacing-lg);
@@ -149,9 +156,7 @@ section.pdf embed {
 }
 
 /* ============ Courses ============ */
-#courses {
-  margin: 0 auto var(--spacing-lg); /* same width as .container via HTML class */
-}
+#courses { margin: 0 auto var(--spacing-lg); }  /* use class="container" in HTML for width */
 
 /* Centered heading + decorative underline */
 #courses h2 {
@@ -171,7 +176,7 @@ section.pdf embed {
   border-radius: 2px;
 }
 
-/* Short intro paragraph under the H2 */
+/* Short intro paragraph under the H2 (optional) */
 .courses-intro {
   max-width: 70ch;
   margin: 0 auto var(--spacing-md);
@@ -211,10 +216,7 @@ section.pdf embed {
   background: var(--primary-color);
   margin-top: var(--spacing-xs);
 }
-.year ul {
-  list-style: none;
-  margin: 0; padding: 0;
-}
+.year ul { list-style: none; margin: 0; padding: 0; }
 .year li + li { margin-top: 6px; }
 
 /* Course links: code black, title accent; keep one line on wider screens */
@@ -267,16 +269,16 @@ footer {
 
 /* ============ Responsive Tweaks ============ */
 @media (max-width: 768px) {
-  nav ul {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
+  .header-inner { flex-direction: column; gap: 10px; }
+  .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .site-nav .nav-pill a { padding: 8px 12px; }
+
   .cv-actions { text-align: center; }
   section.pdf { margin-bottom: var(--spacing-md); }
   section.pdf embed { height: 500px; }
 }
 @media (max-width: 480px) {
-  header h1 { font-size: 1.5em; }
+  .page-title { font-size: 1.6rem; }
   section.pdf embed { height: 340px; }
 }
 
@@ -284,4 +286,5 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
 
