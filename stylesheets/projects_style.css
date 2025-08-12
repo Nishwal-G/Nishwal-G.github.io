@@ -302,15 +302,6 @@ body {
   line-height: 1.6;
 }
 
-.project-image {
-  display: block;
-  max-width: 900px;
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius);
-  margin-bottom: var(--spacing-sm);
-}
-
 
 
 
