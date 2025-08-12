@@ -151,9 +151,6 @@ section.pdf embed {
 }
 
 /* ################# Courses ################# */
-#courses.container {            /* make courses section wider than default container */
-  max-width: 1100px;
-}
 #courses {
   margin: 0 auto var(--spacing-lg);
 }
