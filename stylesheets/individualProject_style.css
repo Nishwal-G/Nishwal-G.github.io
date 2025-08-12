@@ -176,4 +176,54 @@ footer{
   .cv-actions{text-align:center}
 }
 
+/* ---- Fancy “download code” CTA inside .main_text ---- */
+section.main_text { text-align: center; }           /* center the whole line */
+section.main_text p { margin: 0; }                  /* remove extra gap */
+
+section.main_text a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: .2px;
+
+  /* colors + effects */
+  color: #fff;
+  background: linear-gradient(135deg, #7a1fa2, #4a148c);
+  box-shadow: 0 6px 16px rgba(74, 20, 140, 0.25);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+/* little download icon (uses your Font Awesome 4.7 include) */
+section.main_text a::before {
+  content: "\f019";               /* fa-download */
+  font-family: "FontAwesome";
+  font-weight: normal;
+  font-style: normal;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* hover / focus states */
+section.main_text a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(74, 20, 140, 0.32);
+  filter: brightness(1.03);
+}
+section.main_text a:active { transform: translateY(0); }
+section.main_text a:focus-visible {
+  outline: 3px solid rgba(122, 31, 162, .4);
+  outline-offset: 2px;
+}
+
+/* optional: make it breathe on small screens */
+@media (max-width: 420px) {
+  section.main_text a { padding: 10px 14px; }
+}
+
 
