@@ -21,14 +21,13 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 0 var(--spacing-sm);
+  padding: 0; /* Removed padding so header spans edge-to-edge */
 }
 
-/* Optional shared container */
+/* Optional shared container for page content */
 .container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
 
-/* ================= Slick Header (new structure) ================= */
-/* Use this if your HTML header uses: .site-header > .header-inner > .site-nav .nav-pill */
+/* ================= Slick Header (optional pill style) ================= */
 .site-header {
   background: linear-gradient(90deg, #4a148c, #0077cc);
   padding: 10px 0;
@@ -53,7 +52,6 @@ body {
   transition: opacity 0.2s ease;
 }
 .brand:hover { opacity: 0.85; }
-
 .site-nav .nav-pill {
   list-style: none;
   display: flex;
@@ -83,7 +81,7 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
 }
 
-/* ================= Legacy Header (your current structure) ================= */
+/* ================= Legacy Header (if not using pill style) ================= */
 header {
   background-color: var(--primary-color);
   color: #fff;
@@ -146,11 +144,9 @@ section.banner img {
   border: 1px solid #ccc;
   border-radius: var(--radius);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
   max-width: 800px;
   margin: 0 auto 30px;
   padding: 20px;
-
   text-align: justify;
 }
 #introText p {
@@ -175,19 +171,15 @@ section.banner img {
 #introText a:focus::after { transform: scaleX(1); }
 
 /* ================= Project Sections ================= */
-/* Note: you’re reusing the same ID multiple times; consider switching to a class.
-   For now, this styles each block anyway. */
 #projectHeader {
   padding: 0 var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
-/* Clearfix so floated images don’t overlap following content */
 #projectHeader::after {
   content: '';
   display: table;
   clear: both;
 }
-
 #projectHeader h2 a {
   font-family: var(--font-heading);
   font-size: 1.5em;
@@ -206,7 +198,6 @@ section.banner img {
 }
 #projectHeader h2 a:hover::after,
 #projectHeader h2 a:focus::after { transform: scaleX(1); }
-
 .project-image {
   float: left;
   width: 250px;
@@ -215,7 +206,6 @@ section.banner img {
   border-radius: var(--radius);
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
 }
-
 #projectHeader p { margin-bottom: var(--spacing-md); }
 
 /* ================= Footer ================= */
@@ -238,14 +228,10 @@ footer {
 
 /* ================= Responsive ================= */
 @media (max-width: 768px) {
-  /* pill-nav tweaks */
   .header-inner { flex-direction: column; gap: 10px; }
   .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
   .site-nav .nav-pill a { padding: 8px 12px; }
-
-  /* legacy nav stack */
   nav ul { flex-direction: column; gap: var(--spacing-xs); }
-
   .project-image {
     float: none;
     display: block;
@@ -263,6 +249,7 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
 
 
 
