@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="../stylesheets/contact_style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-  <!-- hCaptcha (replace data-sitekey value below with your real key) -->
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 </head>
 <body>
 
@@ -41,7 +39,7 @@
        2) Keep "#" for now; nothing gets sent.
   -->
   <main class="contact-wrap">
-    <form class="contact-form" action="#" method="post" novalidate>
+    <form class="contact-form" action="https://formspree.io/f/mjkolopl" method="post" novalidate>
       <div class="grid two">
         <div class="field">
           <label for="firstName">First Name</label>
@@ -71,10 +69,6 @@
       <div class="field">
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="8" required></textarea>
-      </div>
-
-      <div class="captcha-row">
-        <div class="h-captcha" data-sitekey="YOUR_HCAPTCHA_SITE_KEY"></div>
       </div>
 
       <button class="btn-primary" type="submit">Send</button>
