@@ -171,6 +171,28 @@ section.banner img {
 #introText a:focus::after { transform: scaleX(1); }
 
 /* ================= Project Sections ================= */
+/* Center the page title */
+.page-title {
+  font-family: var(--font-heading);
+  text-align: center;
+  margin: var(--spacing-md) auto var(--spacing-sm);
+  max-width: 900px;          /* match your content width */
+  padding: 0 var(--spacing-sm);
+}
+
+/* optional: a neat underline */
+.page-title::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 3px;
+  background: var(--primary-color);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 2px;
+}
+
+
+
 #projectHeader {
   padding: 0 var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
