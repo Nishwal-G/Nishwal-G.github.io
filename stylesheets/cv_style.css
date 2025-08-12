@@ -12,7 +12,7 @@
   --spacing-lg: 32px;
 }
 
-/* ################# Global Reset ################# */
+/* ============ Global Reset ============ */
 * {
   margin: 0;
   padding: 0;
@@ -25,14 +25,14 @@ body {
   line-height: 1.6;
 }
 
-/* ################# Layout Container ################# */
+/* ============ Layout Container ============ */
 .container {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 var(--spacing-sm);
 }
 
-/* ################# Header ################# */
+/* ============ Header & Nav ============ */
 header {
   background-color: var(--primary-color);
   color: #fff;
@@ -45,7 +45,6 @@ header h1 {
   font-size: 2em;
 }
 
-/* ################# Navigation ################# */
 nav ul {
   list-style: none;
   display: flex;
@@ -77,7 +76,7 @@ nav ul li a:focus::after {
   transform: scaleX(1);
 }
 
-/* ################# Banner ################# */
+/* ============ Banner ============ */
 section.banner {
   width: 100%;
   margin-bottom: var(--spacing-md);
@@ -96,7 +95,7 @@ section.banner img {
   to   { opacity: 1; }
 }
 
-/* ################# PDF Card & Actions ################# */
+/* ============ Cards & PDF ============ */
 .card {
   background: var(--bg-light);
   border: 1px solid #ccc;
@@ -106,7 +105,7 @@ section.banner img {
 }
 
 .cv-actions {
-  max-width: 900px;   /* matches .container */
+  max-width: 900px; /* matches .container */
   margin: 0 auto var(--spacing-sm);
   text-align: right;
 }
@@ -130,7 +129,6 @@ section.banner img {
   transform: scaleX(1);
 }
 
-/* Centered PDF container */
 section.pdf {
   max-width: 900px;
   margin: 0 auto var(--spacing-lg);
@@ -142,7 +140,7 @@ section.pdf embed {
   border-radius: calc(var(--radius) - 2px);
 }
 
-/* ################# Afterword ################# */
+/* ============ Afterword ============ */
 #afterword p {
   font-style: italic;
   font-size: 0.9em;
@@ -150,22 +148,32 @@ section.pdf embed {
   margin: var(--spacing-md) var(--spacing-sm) 0 0;
 }
 
-/* ################# Courses ################# */
+/* ============ Courses ============ */
 #courses {
-  margin: 0 auto var(--spacing-lg);
+  margin: 0 auto var(--spacing-lg); /* same width as .container via HTML class */
+}
+
+/* Centered heading + decorative underline */
+#courses h2 {
+  font-family: var(--font-heading);
+  font-size: 1.75em;
+  color: var(--primary-color);
+  text-align: center;
+  margin-left: 0; /* guard against stray global margins */
 }
 #courses h2::after {
   content: '';
   display: block;
-  width: 120px;                 /* thickness length; tweak as you like */
-  height: 3px;                  /* line thickness */
+  width: 120px;
+  height: 3px;
   background: var(--primary-color);
-  margin: var(--spacing-xs) auto 0;  /* centers the line */
+  margin: var(--spacing-xs) auto 0;
   border-radius: 2px;
 }
 
+/* Short intro paragraph under the H2 */
 .courses-intro {
-  max-width: 70ch;              /* comfy reading width */
+  max-width: 70ch;
   margin: 0 auto var(--spacing-md);
   color: #555;
   font-size: 1.05em;
@@ -173,15 +181,14 @@ section.pdf embed {
   line-height: 1.6;
 }
 
+/* Grid of year cards */
 .courses-grid {
   display: grid;
   gap: var(--spacing-md);
-  grid-template-columns: 1fr;    /* 1 column on mobile */
+  grid-template-columns: 1fr;  /* mobile */
 }
-
-/* Wider cards so long titles fit on one line on desktop */
 @media (min-width: 720px) {
-  .courses-grid { grid-template-columns: repeat(2, 1fr); }  /* 2 columns on tablet/desktop */
+  .courses-grid { grid-template-columns: repeat(2, 1fr); } /* wider cards on tablet/desktop */
 }
 
 .year {
@@ -208,11 +215,9 @@ section.pdf embed {
   list-style: none;
   margin: 0; padding: 0;
 }
-.year li + li {
-  margin-top: 6px;
-}
+.year li + li { margin-top: 6px; }
 
-/* Link formatting: keep code black, title accent-colored */
+/* Course links: code black, title accent; keep one line on wider screens */
 .year a {
   color: var(--accent-color);
   text-decoration: none;
@@ -221,9 +226,7 @@ section.pdf embed {
   align-items: baseline;
   gap: 8px;
 }
-@media (min-width: 720px) {
-  .year a { white-space: nowrap; }   /* keep one line on wider screens */
-}
+@media (min-width: 720px) { .year a { white-space: nowrap; } }
 .year a::after {
   content: '';
   position: absolute;
@@ -234,20 +237,15 @@ section.pdf embed {
   transition: transform 0.3s ease;
 }
 .year a:hover::after,
-.year a:focus::after {
-  transform: scaleX(1);
-}
+.year a:focus::after { transform: scaleX(1); }
+
 .year a .code {
   color: #000;
   font-weight: 600;
   letter-spacing: 0.2px;
 }
-.year a:hover .code,
-.year a:focus .code {
-  color: #000;  /* keep code black on hover */
-}
 
-/* ################# Footer ################# */
+/* ============ Footer ============ */
 footer {
   background-color: var(--primary-color);
   color: #fff;
@@ -267,7 +265,7 @@ footer {
   opacity: 0.8;
 }
 
-/* ################# Responsive Tweaks ################# */
+/* ============ Responsive Tweaks ============ */
 @media (max-width: 768px) {
   nav ul {
     flex-direction: column;
@@ -282,22 +280,8 @@ footer {
   section.pdf embed { height: 340px; }
 }
 
-/* Center the courses heading and remove any stray left margin */
-#courses h2 {
-  text-align: center;
-  margin-left: 0 !important;
+/* ============ Reduced Motion ============ */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
 }
 
-/* Keep the decorative underline centered */
-#courses h2::after {
-  content: '';
-  display: block;
-  width: 120px;
-  height: 3px;
-  background: var(--primary-color);
-  margin: var(--spacing-xs) auto 0;
-  border-radius: 2px;
-}
-
-/* Make sure Year subheadings aren't left-indented either */
-.year h3 { margin-left: 0 !important; }
