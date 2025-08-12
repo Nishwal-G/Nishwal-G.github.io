@@ -1,180 +1,169 @@
 :root {
-    /* Match your index tokens */
-    --primary-color: #333;
-    --accent-color: #0077cc;
-    --bg-light: #f9f9f9;
-    --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    --font-heading: 'Open Sans', sans-serif;
-    --radius: 8px;
-    --spacing-xs: 8px;
-    --spacing-sm: 16px;
-    --spacing-md: 24px;
+  /* Design tokens (match site) */
+  --primary-color: #333;
+  --accent-color: #0077cc;
+  --bg-light: #f9f9f9;
+  --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --font-heading: 'Open Sans', sans-serif;
+  --radius: 8px;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
 }
 
-/* ################# Global reset ################# */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--font-body);
+/* ============ Global reset ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
+body { color: #252424; line-height: 1.6; background: #fff; }
+
+/* ============ Layout container ============ */
+.container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
+
+/* ============ Slick header (pill nav) ============ */
+.site-header {
+  background: linear-gradient(90deg, #4a148c, #0077cc);
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
-body {
-    color: #252424;
-    line-height: 1.6;
-    background: #fff;
+.header-inner {
+  max-width: 1100px;            /* a bit wider so the pill can breathe */
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s ease;
+}
+.brand:hover { opacity: 0.85; }
+
+/* Pill container */
+.nav-pill {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 18px);
+  padding: 8px 12px;
+  margin: 0;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(4px);
 }
 
-/* ################# Layout Container ################# */
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-sm);
+/* Links inside pill */
+.nav-pill a {
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+}
+.nav-pill a:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+.nav-pill a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* Active page chip */
+.nav-pill a.active {
+  background: #fff;
+  color: #4a148c;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
 }
 
-/* ################# Header ################# */
-header {
-    background: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: var(--spacing-md) 0;
-    margin-bottom: var(--spacing-md);
-}
-header h1 {
-    font-family: var(--font-heading);
-    font-size: 2em;
-    margin-top: var(--spacing-xs);
+/* Page title below header */
+.page-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 2.25rem);
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+  color: #222;
 }
 
-/* ################# Navigation ################# */
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-}
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-family: var(--font-heading);
-    position: relative;
-    padding: var(--spacing-xs) 0;
-}
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #fff;
-    transform: scaleX(0);
-    transition: transform 0.3s;
-}
-nav ul li a:hover::after,
-nav ul li a:focus::after {
-    transform: scaleX(1);
-}
+/* ============ Banner ============ */
+section.banner { width: 100%; overflow: hidden; margin-bottom: var(--spacing-md); }
+section.banner img { display: block; width: 100%; height: auto; }
 
-/* ################# Banner ################# */
-section.banner {
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: var(--spacing-md);
-}
-section.banner img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-/* ################# About Text (card) ################# */
+/* ============ About text card ============ */
 #aboutText {
-    background: var(--bg-light);
-    border: 1px solid #ccc;
-    border-radius: var(--radius);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    text-align: justify;
+  background: var(--bg-light);
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: var(--spacing-md);
+  margin: 0 auto var(--spacing-lg);
+  text-align: justify;
+  max-width: 900px;
 }
 #aboutText h2 {
-    text-align: center;
-    font-family: var(--font-heading);
-    margin-bottom: var(--spacing-sm);
-    position: relative;
+  text-align: center;
+  font-family: var(--font-heading);
+  margin-bottom: var(--spacing-sm);
+  position: relative;
 }
 #aboutText h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 3px;
-    background: var(--primary-color);
-    margin: var(--spacing-xs) auto 0;
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 2px;
 }
-#aboutText p + p {
-    margin-top: var(--spacing-md);
-}
+#aboutText p + p { margin-top: var(--spacing-md); }
 #aboutText a {
-    color: var(--accent-color);
-    position: relative;
-    text-decoration: none;
+  color: var(--accent-color);
+  text-decoration: none;
+  position: relative;
 }
 #aboutText a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--accent-color);
-    transform: scaleX(0);
-    transition: transform 0.3s;
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 2px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 #aboutText a:hover::after,
-#aboutText a:focus::after {
-    transform: scaleX(1);
-}
+#aboutText a:focus::after { transform: scaleX(1); }
 
-/* ################# Footer ################# */
+/* ============ Footer ============ */
 footer {
-    background: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: var(--spacing-sm) 0;
+  background: var(--primary-color);
+  color: #fff;
+  text-align: center;
+  padding: var(--spacing-sm) 0;
 }
 .social-links a {
-    color: #fff;
-    font-size: 1.5em;
-    margin: 0 var(--spacing-xs);
-    display: inline-block;
-    transition: transform 0.2s, opacity 0.2s;
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 var(--spacing-xs);
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 .social-links a:hover,
-.social-links a:focus {
-    transform: scale(1.1);
-    opacity: 0.8;
+.social-links a:focus { transform: scale(1.1); opacity: 0.8; }
+
+/* ============ Responsive ============ */
+@media (max-width: 640px) {
+  .header-inner { flex-direction: column; gap: 10px; }
+  .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .nav-pill a { padding: 8px 12px; }
+  #aboutText { padding: var(--spacing-sm); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
 }
 
-/* ################# Responsive Breakpoints ################# */
-@media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        gap: var(--spacing-xs);
-    }
-    #aboutText {
-        padding: var(--spacing-sm);
-    }
-}
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.5em;
-    }
-    #aboutText {
-        font-size: 0.95em;
-    }
-}
 
 
 
