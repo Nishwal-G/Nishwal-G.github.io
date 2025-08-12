@@ -188,4 +188,9 @@ footer {
   * { transition: none !important; animation: none !important; }
 }
 
+body {
+  background: linear-gradient(135deg, #4a148c 0%, #d81b60 100%);
+  background-attachment: fixed;
+}
+
 
