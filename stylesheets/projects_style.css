@@ -298,7 +298,6 @@ body {
 
 .current-project {
   margin-bottom: var(--spacing-lg);
-  text-align: center;
 }
 
 .current-project h2 {
