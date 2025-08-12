@@ -1,224 +1,269 @@
 :root {
-    /* Design tokens */
-    --primary-color: #333;
-    --accent-color: #0077cc;
-    --bg-light: #f9f9f9;
-    --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    --font-heading: 'Open Sans', sans-serif;
-    --radius: 8px;
-    --spacing-xs: 8px;
-    --spacing-sm: 16px;
-    --spacing-md: 24px;
+  /* Design tokens */
+  --primary-color: #333;
+  --accent-color: #0077cc;
+  --bg-light: #f9f9f9;
+  --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --font-heading: 'Open Sans', sans-serif;
+  --radius: 8px;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
 }
 
-/* ################# Global Reset ################# */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--font-body);
-}
+/* ================= Global Reset ================= */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
 body {
-    background-color: #fff;
-    color: #252424;
-    line-height: 1.6;
-    padding: 0 var(--spacing-sm);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  background-color: #fff;
+  color: #252424;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 var(--spacing-sm);
 }
 
-/* ################# Header ################# */
+/* Optional shared container */
+.container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
+
+/* ================= Slick Header (new structure) ================= */
+/* Use this if your HTML header uses: .site-header > .header-inner > .site-nav .nav-pill */
+.site-header {
+  background: linear-gradient(90deg, #4a148c, #0077cc);
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s ease;
+}
+.brand:hover { opacity: 0.85; }
+
+.site-nav .nav-pill {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 18px);
+  padding: 8px 12px;
+  margin: 0;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(4px);
+}
+.site-nav .nav-pill a {
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+}
+.site-nav .nav-pill a:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+.site-nav .nav-pill a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.site-nav .nav-pill a.active {
+  background: #fff;
+  color: #4a148c;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
+}
+
+/* ================= Legacy Header (your current structure) ================= */
 header {
-    background-color: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: var(--spacing-md) 0;
-    margin-bottom: var(--spacing-md);
+  background-color: var(--primary-color);
+  color: #fff;
+  text-align: center;
+  padding: var(--spacing-md) 0;
+  margin-bottom: var(--spacing-md);
 }
 header h1 {
-    font-family: var(--font-heading);
-    font-size: 2em;
+  font-family: var(--font-heading);
+  font-size: 2em;
+  margin-top: var(--spacing-xs);
 }
-
-/* ################# Navigation ################# */
 nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-family: var(--font-heading);
-    position: relative;
-    padding: var(--spacing-xs) 0;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  position: relative;
+  padding: var(--spacing-xs) 0;
 }
 nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #fff;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 100%; height: 2px;
+  background-color: #fff;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 nav ul li a:hover::after,
-nav ul li a:focus::after {
-    transform: scaleX(1);
-}
+nav ul li a:focus::after { transform: scaleX(1); }
 
-/* ################# Banner ################# */
+/* ================= Banner ================= */
 section.banner {
-    width: 100%;
-    margin-bottom: var(--spacing-md);
-    overflow: hidden;
+  width: 100%;
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+  border-radius: var(--radius);
 }
 section.banner img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    opacity: 0;
-    animation: fade-in 2s forwards;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  opacity: 0;
+  animation: fade-in 2s forwards;
 }
-@keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
-/* ################# Intro Text ################# */
+/* ================= Intro Text (card) ================= */
 #introText {
-    /* box styling */
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: var(--bg-light);
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
-    /* sizing & centering */
-    max-width: 800px;
-    margin: 0 auto 30px;
-    padding: 20px;
+  max-width: 800px;
+  margin: 0 auto 30px;
+  padding: 20px;
 
-    /* text formatting */
-    text-align: justify;
+  text-align: justify;
 }
-
-
 #introText p {
-    font-size: 1.125em;
-    margin-bottom: var(--spacing-md);
+  font-size: 1.125em;
+  margin-bottom: var(--spacing-md);
 }
 #introText a {
-    color: var(--accent-color);
-    text-decoration: none;
-    position: relative;
+  color: var(--accent-color);
+  text-decoration: none;
+  position: relative;
 }
 #introText a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--accent-color);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 100%; height: 2px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 #introText a:hover::after,
-#introText a:focus::after {
-    transform: scaleX(1);
+#introText a:focus::after { transform: scaleX(1); }
+
+/* ================= Project Sections ================= */
+/* Note: you’re reusing the same ID multiple times; consider switching to a class.
+   For now, this styles each block anyway. */
+#projectHeader {
+  padding: 0 var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+/* Clearfix so floated images don’t overlap following content */
+#projectHeader::after {
+  content: '';
+  display: table;
+  clear: both;
 }
 
-/* ################# Project Sections ################# */
-#projectHeader {
-    padding: 0 var(--spacing-sm);
-    margin-bottom: var(--spacing-lg);
-}
 #projectHeader h2 a {
-    font-family: var(--font-heading);
-    font-size: 1.5em;
-    color: var(--primary-color);
-    text-decoration: none;
-    position: relative;
+  font-family: var(--font-heading);
+  font-size: 1.5em;
+  color: var(--primary-color);
+  text-decoration: none;
+  position: relative;
 }
 #projectHeader h2 a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--primary-color);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 100%; height: 2px;
+  background-color: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 #projectHeader h2 a:hover::after,
-#projectHeader h2 a:focus::after {
-    transform: scaleX(1);
-}
+#projectHeader h2 a:focus::after { transform: scaleX(1); }
 
 .project-image {
-    float: left;
-    width: 250px;
-    height: auto;
-    margin: 0 var(--spacing-md) var(--spacing-md) 0;
-    border-radius: var(--radius);
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  float: left;
+  width: 250px;
+  height: auto;
+  margin: 0 var(--spacing-md) var(--spacing-md) 0;
+  border-radius: var(--radius);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
 }
 
-#projectHeader p {
-    margin-bottom: var(--spacing-md);
-}
+#projectHeader p { margin-bottom: var(--spacing-md); }
 
-/* ################# Footer ################# */
+/* ================= Footer ================= */
 footer {
-    margin-top: auto;
-    background-color: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: var(--spacing-sm) 0;
+  margin-top: auto;
+  background-color: var(--primary-color);
+  color: #fff;
+  text-align: center;
+  padding: var(--spacing-sm) 0;
 }
 .social-links a {
-    color: #fff;
-    font-size: 1.5em;
-    margin: 0 var(--spacing-xs);
-    display: inline-block;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 var(--spacing-xs);
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 .social-links a:hover,
-.social-links a:focus {
-    transform: scale(1.1);
-    opacity: 0.8;
-}
+.social-links a:focus { transform: scale(1.1); opacity: 0.8; }
 
-/* ################# Responsive ################# */
+/* ================= Responsive ================= */
 @media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        gap: var(--spacing-xs);
-    }
-    .project-image {
-        float: none;
-        display: block;
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto var(--spacing-md);
-    }
+  /* pill-nav tweaks */
+  .header-inner { flex-direction: column; gap: 10px; }
+  .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .site-nav .nav-pill a { padding: 8px 12px; }
+
+  /* legacy nav stack */
+  nav ul { flex-direction: column; gap: var(--spacing-xs); }
+
+  .project-image {
+    float: none;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto var(--spacing-md);
+  }
 }
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 1.75em;
-    }
-    #introText p {
-        font-size: 1em;
-    }
+  header h1 { font-size: 1.75em; }
+  #introText p { font-size: 1em; }
 }
+
+/* ================= Reduced Motion ================= */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
 
 
 
