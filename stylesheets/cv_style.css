@@ -144,7 +144,7 @@ section.pdf embed {
 #afterword p {
   font-style: italic;
   font-size: 0.9em;
-  text-align: right;
+  text-align: center;
   margin: var(--spacing-md) var(--spacing-sm) 0 0;
 }
 
