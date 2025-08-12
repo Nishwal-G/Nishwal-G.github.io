@@ -226,4 +226,34 @@ section.main_text a:focus-visible {
   section.main_text a { padding: 10px 14px; }
 }
 
+/* ======== Make project PDFs match CV page width ======== */
+
+/* Set a shared max width so download link + PDF align */
+:root {
+  --content-width: 1100px; /* can bump to 1200px if you want even wider */
+}
+
+.cv-actions,
+section.pdf {
+  max-width: var(--content-width);
+  margin: 0 auto var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
+}
+
+/* PDF embed style */
+section.pdf embed {
+  display: block;
+  width: 100%; /* fills container width */
+  height: clamp(480px, 75vh, 900px); /* slightly taller for desktop */
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* Match responsive behavior for smaller screens */
+@media (max-width: 768px) {
+  section.pdf { margin-bottom: var(--spacing-md); }
+  section.pdf embed { height: 500px; }
+}
+@media (max-width: 480px) {
+  section.pdf embed { height: 360px; }
+}
 
