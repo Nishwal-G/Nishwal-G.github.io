@@ -9,6 +9,7 @@
 </head>
 <body>
 
+  <!-- Header / pill nav -->
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../../index.html">Nishwal Gora</a>
@@ -24,26 +25,57 @@
     </div>
   </header>
 
+  <!-- Title -->
   <h1 class="page-title container">Kepler Simulation</h1>
 
-  <section class="main_text">
-    <p>
-      To download the code used,
-      <a href="../../assets/solar_system_code.zip" download><strong>click here</strong></a>.
-    </p>
-  </section>
+  <main class="container">
 
-  <section class="cv-actions">
-    <a class="download-link" href="../../assets/Solar_System_Simulation.pdf" download>
-      <i class="fa fa-download" aria-hidden="true"></i>
-      Click here to download this project PDF
-    </a>
-  </section>
+    <!-- Nice CTA for code download -->
+    <section class="main_text">
+      <p>
+        To download the code used,
+        <a class="btn-cta" href="../../assets/solar_system_code.zip" download>
+          <i class="fa fa-file-archive-o" aria-hidden="true"></i>
+          <strong>Get the source (.zip)</strong>
+        </a>
+      </p>
+    </section>
 
-  <section class="pdf card">
-    <embed src="../../assets/Solar_System_Simulation.pdf" type="application/pdf">
-  </section>
+    <!-- Two download buttons (PDF + Code) -->
+    <section class="cv-actions">
+      <div class="download-row">
+        <a class="btn-cta" href="../../assets/Solar_System_Simulation.pdf" download>
+          <i class="fa fa-download" aria-hidden="true"></i>
+          Download Project PDF
+        </a>
+        <a class="btn-cta btn-outline" href="../../assets/solar_system_code.zip" download>
+          <i class="fa fa-file-archive-o" aria-hidden="true"></i>
+          Download Code (.zip)
+        </a>
+      </div>
+    </section>
 
+    <!-- Learning Outcomes Card -->
+    <section class="card project-description">
+      <h2>What I Learned</h2>
+      <p>
+        I built an N-body style simulation (Sun + planets) using Newtonian gravity and a Verlet integrator,
+        then explored numerical stability (time-step choice vs. energy drift) and long-term orbital accuracy.
+        Over multi-century runs the model correctly reproduced orbital periods and aphelion/perihelion values,
+        and qualitatively captured Mercury’s apsidal precession. I also stress-tested Kepler’s Third Law by
+        altering planetary masses and comparing period–semi-major axis scaling.
+      </p>
+      <ul class="bullets">
+        <li>Set up stable time steps to keep total energy fluctuations &lt; 0.01%.</li>
+        <li>Verified period–radius scaling consistent with Kepler’s Third Law.</li>
+        <li>Practiced profiling, data logging, and visualising orbits.</li>
+        <li>Sharpened numerical methods intuition (error sources, integrator choice).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
   <footer>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
@@ -53,4 +85,5 @@
 
 </body>
 </html>
+
 
