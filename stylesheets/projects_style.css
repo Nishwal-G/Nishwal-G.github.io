@@ -311,6 +311,54 @@ body {
   line-height: 1.6;
 }
 
+/* --- Currently Working On: readable layout --- */
+#currentWork {
+  padding: 0 var(--spacing-sm);
+}
+
+.current-project {
+  /* constrain the whole entry and center it on the page */
+  max-width: 900px;                  /* or try 780px */
+  margin: 0 auto var(--spacing-lg);
+  text-align: center;                /* centers the heading + date only */
+}
+
+/* date line */
+.current-project .when {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: #5b5b5b;
+  text-transform: uppercase;         /* or: font-variant: all-small-caps; */
+  letter-spacing: .06em;
+}
+
+/* heading stays centered */
+.current-project h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  margin: 4px 0 var(--spacing-sm);
+}
+
+/* paragraphs are limited in width and left-aligned for readability */
+.current-project p {
+  max-width: 65ch;                   /* ~65 characters per line is comfy */
+  margin: 0 auto var(--spacing-xs);  /* center the block itself */
+  text-align: left;                  /* left-align the text */
+  line-height: 1.65;
+}
+
+/* optional: image inside current-project */
+.current-project .project-image {
+  display: block;
+  width: 100%;
+  max-width: 720px;                  /* keep images from getting too wide */
+  height: auto;
+  border-radius: var(--radius);
+  margin: 0 auto var(--spacing-sm);
+}
+
 
 
 
