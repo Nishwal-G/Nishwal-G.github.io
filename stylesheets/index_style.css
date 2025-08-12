@@ -121,47 +121,65 @@ body {
 /* ================= Banners ================= */
 section.banner {
   position: relative;
-  background-color: #000; /* fallback if image missing */
-  border: 0;              /* remove white frame */
-  border-radius: 0;       /* edge-to-edge */
+  max-width: 1200px;                     /* centered card width */
+  margin: var(--spacing-md) auto;        /* space around each banner */
+  height: clamp(180px, 26vw, 320px);     /* responsive height */
+  border-radius: 16px;                   /* rounded corners */
   overflow: hidden;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  margin: 0;              /* no gaps */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-section.banner:hover,
-section.banner:focus-within {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-}
-section.banner a {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%; height: 100%;
-  text-decoration: none;
-}
-section.banner h2 {
-  font-family: var(--font-heading);
-  font-size: 2em;
-  margin: 0;
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  background: #000;                      /* fallback if image missing */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  transform: translateZ(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
-/* Background images */
+/* dark overlay so white text always reads well */
+section.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.28), rgba(0,0,0,0.35));
+  pointer-events: none;
+}
+
+section.banner:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+}
+
+section.banner a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+section.banner h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: clamp(1.25rem, 4vw, 2.25rem);
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Background images (leave these, just ensure file paths are right) */
 #projectsBanner { background: url('../assets/projectsHomeBanner.png') center / cover no-repeat; }
 #cvBanner       { background: url('../assets/cvHomeBanner.png') center / cover no-repeat; }
 #aboutBanner    { background: url('../assets/aboutHomeBanner.png') center / cover no-repeat; }
 #contactBanner  { background: url('../assets/contactHomeBanner.png') center / cover no-repeat; }
 
-/* Ensure contrast on contact banner if image is bright */
-#contactBanner h2 { color: #000; text-shadow: none; }
+/* No special color override needed now that we have an overlay */
+#contactBanner h2 { color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+
+/* Small screens */
+@media (max-width: 640px) {
+  section.banner { height: clamp(160px, 30vw, 240px); }
+}
+
 
 /* ================= Footer ================= */
 footer {
