@@ -157,12 +157,23 @@ section.pdf embed {
 #courses {
   margin: 0 auto var(--spacing-lg);
 }
-#courses h2 {
-  font-family: var(--font-heading);
-  font-size: 1.75em;
-  color: var(--primary-color);
-  margin-bottom: var(--spacing-sm);
+#courses h2::after {
+  content: '';
+  display: block;
+  width: 120px;                 /* thickness length; tweak as you like */
+  height: 3px;                  /* line thickness */
+  background: var(--primary-color);
+  margin: var(--spacing-xs) auto 0;  /* centers the line */
+  border-radius: 2px;
+}
+
+.courses-intro {
+  max-width: 70ch;              /* comfy reading width */
+  margin: 0 auto var(--spacing-md);
+  color: #555;
+  font-size: 1.05em;
   text-align: center;
+  line-height: 1.6;
 }
 
 .courses-grid {
