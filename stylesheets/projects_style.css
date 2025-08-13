@@ -81,6 +81,26 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
 }
 
+/* ===== Mobile header fixes (match CV) ===== */
+@media (max-width: 768px){
+  .header-inner{
+    flex-direction: column;
+    gap: 10px;
+  }
+  .site-nav .nav-pill{
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 6px 10px;
+  }
+  .site-nav .nav-pill a{
+    padding: 8px 12px;
+  }
+}
+
+/* Safety: prevent accidental horizontal scroll from any element */
+html, body { overflow-x: hidden; }
+
+
 /* ================= Legacy Header (if not using pill style) ================= */
 header {
   background-color: var(--primary-color);
