@@ -232,19 +232,19 @@ section.banner img {
 
 .project-date {
   font-size: 0.85rem;
-  color: #666;
+  color: #333;
   margin: 0 0 4px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .project-separator {
-  width: 80px;              /* controls the length */
-  height: 2px;              /* thickness */
-  background-color: #999;   /* color of the line */
+  width: 200px;              /* controls the length */
+  height: 3px;              /* thickness */
+  background-color: #222;   /* color of the line */
   margin: 30px auto;        /* centers and adds spacing */
   border-radius: 1px;       /* smooth ends */
-  opacity: 0.6;             /* subtle look */
+  opacity: 0.8;             /* subtle look */
 }
 
 
