@@ -247,6 +247,12 @@ section.banner img {
   opacity: 0.8;             /* subtle look */
 }
 
+.projects-divider {
+  border: none; /* remove default browser style */
+  border-top: 3px dotted #444; /* thicker & darker dotted line */
+  margin: var(--spacing-lg) auto;
+  width: 100%; /* spans the whole page */
+}
 
 /* ================= Footer ================= */
 footer {
