@@ -190,6 +190,23 @@ section.banner img {
 #introText a:hover::after,
 #introText a:focus::after { transform: scaleX(1); }
 
+.intro-list {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.intro-list li {
+  margin-bottom: 0.75rem;
+  text-align: justify;
+}
+
+.main-interests {
+  margin-top: var(--spacing-sm);
+  font-style: italic;
+  color: #444;
+}
+
 /* ================= Project Sections ================= */
 /* Center the page title */
 .page-title {
