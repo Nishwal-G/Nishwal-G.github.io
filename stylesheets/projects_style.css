@@ -238,6 +238,15 @@ section.banner img {
   letter-spacing: 0.5px;
 }
 
+.project-separator {
+  width: 80px;              /* controls the length */
+  height: 2px;              /* thickness */
+  background-color: #999;   /* color of the line */
+  margin: 30px auto;        /* centers and adds spacing */
+  border-radius: 1px;       /* smooth ends */
+  opacity: 0.6;             /* subtle look */
+}
+
 
 /* ================= Footer ================= */
 footer {
