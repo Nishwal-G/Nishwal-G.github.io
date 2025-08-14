@@ -12,12 +12,11 @@
 </head>
 <body>
     <div id="scroll-progress"></div>
-    <header class="site-header">
+
+    <!-- Header fades in -->
+    <header class="site-header fade-in">
       <div class="header-inner container">
-        <!-- Brand / name -->
         <a class="brand" href="../index.html">Nishwal Gora</a>
-    
-        <!-- Navigation -->
         <nav class="site-nav">
           <ul class="nav-pill">
             <li><a href="../index.html">Home</a></li>
@@ -30,16 +29,16 @@
       </div>
     </header>
 
-<!-- Page title (moved out of header so it’s part of page content) -->
-<h1 class="page-title">About Me</h1>
+    <!-- Page title fades in -->
+    <h1 class="page-title fade-in">About Me</h1>
 
-
-    <section class="banner">
+    <!-- Banner fades in -->
+    <section class="banner fade-in">
         <img src="../assets/aboutHomeBanner.png" alt="Slide 1">       
     </section>    
   
-    <section id="aboutText">
-        <!-- About me text -->
+    <!-- About text fades in -->
+    <section id="aboutText" class="fade-in">
         <h2>Some Words</h2>
         <p>
             Hi! I am currently a 5th year Physics Student at the University of Edinburgh, pursuing an Integrated Masters undergraudate programme. 
@@ -73,26 +72,42 @@
            necessity and step into the realm of real freedom, where everyone can explore what they love and discover who they truly want to be, no matter the circumstances of their birth. To recall the quote by 
              Aim&eacute; C&eacute;saire which the Trinidadian author C.L.R. James was fond of: "<strong>...there is a place for everyone at the rendezvous of victory</strong>"
        </p>
-       
-
-        
     </section>
 
+    <!-- Footer does NOT fade -->
     <footer>
-        <!-- Social media links -->
         <div class="social-links">
             <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin"target="_blank" rel="noopener noreferrer"></a>
             <a href="https://github.com/Nishwal-G" class="fa fa-github"target="_blank" rel="noopener noreferrer"></a>
         </div>
     </footer>
 
-      <script>
-      window.addEventListener("scroll", () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const progress = (scrollTop / scrollHeight) * 100;
-        document.getElementById("scroll-progress").style.width = progress + "%";
-      });
-      </script>
+    <!-- Scroll progress bar -->
+    <script>
+    window.addEventListener("scroll", () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      document.getElementById("scroll-progress").style.width = progress + "%";
+    });
+    </script>
+
+    <!-- Fade-in animation script -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            entry.target.style.willChange = "opacity, transform";
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
+    </script>
 </body>
 </html>
+
