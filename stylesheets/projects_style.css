@@ -314,7 +314,7 @@ footer {
   .header-inner { flex-direction: column; gap: 10px; }
   .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
   .site-nav .nav-pill a { padding: 8px 12px; }
-  nav ul { flex-direction: column; gap: var(--spacing-xs); }
+
   .project-image {
     float: none;
     display: block;
