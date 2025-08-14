@@ -10,8 +10,9 @@
 
 <body>
   <div id="scroll-progress"></div>
+
   <!-- Slick header -->
-  <header class="site-header">
+  <header class="site-header fade-in">
     <div class="header-inner">
       <a class="brand" href="./index.html">Nishwal Gora</a>
       <nav class="site-nav" aria-label="Primary">
@@ -27,9 +28,9 @@
   </header>
 
   <!-- Optional page title under header -->
-  <h1 class="page-title">Welcome to my Homepage!</h1>
+  <h1 class="page-title fade-in">Welcome to my Homepage!</h1>
 
-  <section id="homeText">
+  <section id="homeText" class="fade-in">
     <p>
       Hi! It's Nish and welcome to my website! It is still in an early stage of development and I am using this mainly to learn HTML.  
       But it should act as a place where I record all my major academic activity of the past five years that is worth sharing! 
@@ -37,31 +38,31 @@
     </p>
   </section>
 
-  <section class="banner" id="projectsBanner">
+  <section class="banner fade-in" id="projectsBanner">
     <a href="pages/projects.html">
       <h2>RESEARCH AND OTHER PROJECTS</h2>
     </a>
   </section>
 
-  <section class="banner" id="cvBanner">
+  <section class="banner fade-in" id="cvBanner">
     <a href="pages/cv.html">
       <h2>CURRICULUM VITAE</h2>
     </a>
   </section>
 
-  <section class="banner" id="aboutBanner">
+  <section class="banner fade-in" id="aboutBanner">
     <a href="pages/about.html">
       <h2>ABOUT ME</h2>
     </a>
   </section>
 
-  <section class="banner" id="contactBanner">
+  <section class="banner fade-in" id="contactBanner">
     <a href="pages/contact.html">
       <h2>CONTACT</h2>
     </a>
   </section>
 
-  <footer>
+  <footer class="fade-in">
     <div class="social-links">
       <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
       <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
@@ -76,6 +77,22 @@
     document.getElementById("scroll-progress").style.width = progress + "%";
   });
   </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+  </script>
 </body>
 </html>
+
 
