@@ -411,7 +411,16 @@ body {
   margin: 0 auto var(--spacing-sm);
 }
 
-
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;  /* thickness of the bar */
+  background: linear-gradient(90deg, #4a148c, #0077cc);
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.15s ease-out;
+}
 
 
 
