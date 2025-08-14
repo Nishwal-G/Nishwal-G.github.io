@@ -28,7 +28,7 @@
 <h1 class="page-title">Research and Projects</h1>
 
 
-    <section id="introText">
+    <section id="introText" class="fade-in">
       <h2>Overview</h2>
       <ul class="intro-list">
         <li>
@@ -72,11 +72,11 @@
     </section>
 
  
-    <section id="projectHeader">
+    <section id="projectHeader" class="fade-in">
         <p class="project-date">June 2024 – August 2024 · with Chris Stock and Tiberiu Popescu </p>
         <h2><a href="../projects/projectOne/projectOne.html">Zeeman Split Kramers Doublets in Spin-Supersolid Candidate Na<sub>2</sub>BaCo(PO<sub>4</sub>)<sub>2</sub></a></h2>
 
-        <img src="../assets/zeeman.png" alt="Na2BaCoPO4 project image" class="project-image">
+        <img src="../assets/zeeman.png" alt="Na2BaCoPO4 project image" class="project-image fade-in">
         
         <p>
             Na<sub>2</sub>BaCo(PO<sub>4</sub>)<sub>2</sub> is a triangular 
@@ -92,11 +92,11 @@
 
     <div class="project-separator"></div> <!-- separator here -->
 
-    <section id="projectHeader">
+    <section id="projectHeader" class="fade-in">
         <p class="project-date">January 2025 – March 2025</p>
         <h2><a href="../projects/projectTwo/projectTwo.html">Understanding Bond-Dependent Exchange in CoTiO<sub>3</sub></a></h2>
 
-        <img src="../assets/SHP.png" alt="Na2BaCoPO4 project image" class="project-image">
+        <img src="../assets/SHP.png" alt="Na2BaCoPO4 project image" class="project-image fade-in">
         <p>
             This study applies a Green’s function response model to spin-wave excitations in CoTiO<sub>3</sub>, developing a novel mathematical framework 
             incorporating a rotating frame and single-ion Co<sup>2+</sup> physics; findings emphasize strong bond-dependent 
@@ -109,11 +109,11 @@
 
     <div class="project-separator"></div> <!-- separator here -->
     
-    <section id="projectHeader">
+    <section id="projectHeader" class="fade-in">
         <p class="project-date">January 2024 – March 2024</p>
         <h2><a href="../projects/projectThree/projectThree.html">Testing the Validity of Kepler’s Third Law</a></h2>
        
-       <img src="../assets/kepler.png" alt="Na2BaCoPO4 project image" class="project-image"> 
+       <img src="../assets/kepler.png" alt="Na2BaCoPO4 project image" class="project-image fade-in" > 
         
         <p>
             <p> By simulating the Solar System with Newtonian dynamics and the Verlet method, this project determined an optimal time step 
@@ -127,7 +127,7 @@
 
     <hr class="projects-divider">
     
-    <section id="currentWork">
+    <section id="currentWork" class="fade-in">
         
       <h1 class="page-title">Currently Working On</h1>
 
@@ -185,6 +185,20 @@
         document.getElementById("scroll-progress").style.width = progress + "%";
       });
       </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            obs.unobserve(entry.target); // run once
+          }
+        });
+      }, { threshold: 0.1 });
+    
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
+    </script>
 
 </body>
 </html>
