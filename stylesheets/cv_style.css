@@ -156,7 +156,9 @@ section.pdf embed {
 }
 
 /* ============ Courses ============ */
-#courses { margin: 0 auto var(--spacing-lg); }  /* use class="container" in HTML for width */
+#courses {
+  margin: 0 auto var(--spacing-lg);
+}
 
 /* Centered heading + decorative underline */
 #courses h2 {
@@ -164,7 +166,7 @@ section.pdf embed {
   font-size: 1.75em;
   color: var(--primary-color);
   text-align: center;
-  margin-left: 0; /* guard against stray global margins */
+  margin-left: 0;
 }
 #courses h2::after {
   content: '';
@@ -176,7 +178,7 @@ section.pdf embed {
   border-radius: 2px;
 }
 
-/* Short intro paragraph under the H2 (optional) */
+/* Short intro paragraph under the H2 */
 .courses-intro {
   max-width: 70ch;
   margin: 0 auto var(--spacing-md);
@@ -186,23 +188,25 @@ section.pdf embed {
   line-height: 1.6;
 }
 
-/* Grid of year cards */
+/* Centered row of year cards */
 .courses-grid {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-md);
-  grid-template-columns: 1fr;  /* mobile */
-}
-@media (min-width: 720px) {
-  .courses-grid { grid-template-columns: repeat(2, 1fr); } /* wider cards on tablet/desktop */
+  justify-content: center;       /* this is what centers the boxes */
 }
 
+/* Individual year card */
 .year {
   background: var(--bg-light);
   border: 1px solid #ccc;
   border-radius: var(--radius);
   box-shadow: 0 2px 5px rgba(0,0,0,0.06);
   padding: var(--spacing-md);
+  flex: 1 1 260px;               /* base width per card */
+  max-width: 360px;              /* keeps them from becoming too wide */
 }
+
 .year h3 {
   font-family: var(--font-heading);
   margin-bottom: var(--spacing-sm);
@@ -216,7 +220,12 @@ section.pdf embed {
   background: var(--primary-color);
   margin-top: var(--spacing-xs);
 }
-.year ul { list-style: none; margin: 0; padding: 0; }
+
+.year ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .year li + li { margin-top: 6px; }
 
 /* Course links: code black, title accent; keep one line on wider screens */
