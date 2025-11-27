@@ -237,7 +237,6 @@ section.pdf embed {
   align-items: baseline;
   gap: 8px;
 }
-@media (min-width: 720px) { .year a { white-space: nowrap; } }
 .year a::after {
   content: '';
   position: absolute;
