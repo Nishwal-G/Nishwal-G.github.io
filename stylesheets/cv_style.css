@@ -233,10 +233,21 @@ section.pdf embed {
   color: var(--accent-color);
   text-decoration: none;
   position: relative;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
+  display: inline-block;   /* allow wrapping inside the card */
+  max-width: 100%;
+  white-space: normal;     /* explicitly allow wrapping */
+  overflow-wrap: anywhere; /* break very long words if needed */
 }
+
+/* code part of the link */
+.year a .code {
+  color: #000;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
 .year a::after {
   content: '';
   position: absolute;
