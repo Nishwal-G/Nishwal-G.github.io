@@ -1,127 +1,283 @@
-/* =========================================
-   MORE PAGE — page-specific styling
-   Works with base.css
-   Safe, accessible, no JS dependency
-   ========================================= */
+:root{
+  /* =========================
+     Minimal + accessible theme
+     ========================= */
 
-/* Slightly wider reading layout for tutorials */
-.more-content {
-  max-width: 900px;
+  /* Colors (colorblind-safe, high contrast) */
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --muted: #475569;
+  --border: #E2E8F0;
+
+  --accent: #1D4ED8;
+  --accent-hover: #1E40AF;
+
+  --header-bg: #0B1220;
+  --header-text: #FFFFFF;
+
+  /* Typography */
+  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+               "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+                  "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Sizing */
+  --radius: 12px;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+
+  --container: 980px;
+}
+
+/* ================= Global Reset ================= */
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x: hidden; }
+body{
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+
+/* Container */
+.container{
+  max-width: var(--container);
   margin: 0 auto;
+  padding: 0 var(--spacing-sm);
 }
 
-/* Improve long-form readability */
-.more-content p,
-.more-content li {
-  font-size: 1.02rem;
-  line-height: 1.75;
+/* ================= Header (same as other pages) ================= */
+.site-header{
+  background: var(--header-bg);
+  padding: 12px 0;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-
-/* Section spacing rhythm */
-.more-content section {
-  margin-bottom: var(--s4);
+.header-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
 }
-
-/* Headings inside cards */
-.more-content h2 {
-  font-size: 1.45rem;
-  font-weight: 750;
-  margin-bottom: var(--s2);
-}
-
-.more-content h3 {
+.brand{
+  font-family: var(--font-heading);
   font-size: 1.15rem;
-  font-weight: 700;
-  margin: var(--s3) 0 var(--s1);
+  font-weight: 800;
+  color: var(--header-text);
+  text-decoration:none;
+  letter-spacing: 0.2px;
+  transition: opacity 0.2s ease;
+}
+.brand:hover{ opacity: 0.88; }
+
+.site-nav .nav-pill{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 6px 8px;
+  margin: 0;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.06);
+}
+.site-nav .nav-pill a{
+  color: var(--header-text);
+  text-decoration:none;
+  font-family: var(--font-heading);
+  font-weight: 650;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  opacity: 0.92;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+}
+.site-nav .nav-pill a:hover{
+  background: rgba(255,255,255,0.10);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+.site-nav .nav-pill a:focus-visible{
+  outline: 3px solid rgba(255,255,255,0.75);
+  outline-offset: 2px;
+}
+.site-nav .nav-pill a.active{
+  background: rgba(255,255,255,0.16);
+  opacity: 1;
+  outline: 1px solid rgba(255,255,255,0.18);
 }
 
-/* Lists for step-by-step guides */
-.more-content ul,
-.more-content ol {
-  padding-left: 1.4rem;
-  margin-top: var(--s2);
+/* Mobile header */
+@media (max-width: 768px){
+  .header-inner{ flex-direction: column; gap: 10px; align-items:flex-start; }
+  .site-nav .nav-pill{ flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .site-nav .nav-pill a{ padding: 8px 12px; }
 }
 
-.more-content li + li {
-  margin-top: 0.6rem;
+/* ================= Titles ================= */
+.page-title{
+  font-family: var(--font-heading);
+  text-align:center;
+  margin: var(--spacing-lg) auto var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+  max-width: var(--container);
+  font-weight: 850;
+  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+  letter-spacing: -0.01em;
+}
+.page-title::after{
+  content:'';
+  display:block;
+  width: 96px;
+  height: 2px;
+  background: var(--border);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 999px;
 }
 
-/* Code blocks */
-.more-content pre {
-  background: #0f172a;
-  color: #e5e7eb;
+/* ================= Cards ================= */
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  max-width: var(--container);
+  margin: 0 auto var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+/* Text sizing for tutorial readability */
+.card p, .card li{
+  font-size: 1.05rem;
+}
+
+/* Links (underline on hover/focus so not color-only) */
+a{
+  color: var(--accent);
+  text-decoration:none;
+  position: relative;
+}
+a:hover{
+  color: var(--accent-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+a:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Lists */
+.card ul, .card ol{
+  max-width: 70ch;
+  margin: 12px auto 0;
+  padding-left: 1.3rem;
+}
+.card li{ margin-bottom: 0.7rem; }
+
+/* Code blocks for templates */
+pre{
+  max-width: 70ch;
+  margin: 12px auto 0;
+  padding: 14px;
   border-radius: 12px;
-  padding: var(--s3);
-  overflow-x: auto;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
+  border: 1px solid var(--border);
+  overflow: auto;
 
-.more-content code {
+  background: #0B1220;
+  color: #E5E7EB;
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+code{
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-               "Liberation Mono", "Courier New", monospace;
+               "Liberation Mono","Courier New", monospace;
 }
 
 /* Inline code */
-.more-content p code,
-.more-content li code {
+p code, li code{
   background: rgba(15, 23, 42, 0.06);
+  color: var(--text);
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.95em;
 }
 
-/* Subtle callouts (optional helper blocks) */
-.more-callout {
-  background: #f1f5f9;
+/* Optional callout blocks (you can add class="callout") */
+.callout{
+  max-width: 70ch;
+  margin: 12px auto 0;
+  padding: 12px 14px;
   border-left: 4px solid var(--accent);
-  padding: var(--s2) var(--s3);
+  background: #F1F5F9;
   border-radius: 10px;
-  margin: var(--s3) 0;
+  color: var(--text);
 }
 
-/* Buttons inside tutorial */
-.more-content .btn {
-  margin-top: var(--s2);
+/* ================= Footer ================= */
+footer{
+  margin-top:auto;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  text-align:center;
+  padding: var(--spacing-md) 0;
+}
+.social-links a{
+  color: var(--text);
+  font-size: 1.5em;
+  margin: 0 var(--spacing-xs);
+  display:inline-block;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.social-links a:hover,
+.social-links a:focus{ transform: scale(1.1); opacity: 1; text-decoration:none; }
+
+/* ================= Scroll progress bar ================= */
+#scroll-progress{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 9999;
+  transition: width 0.15s ease-out;
 }
 
-/* -----------------------------------------
-   Fade-in SAFETY OVERRIDE
-   -----------------------------------------
-   Content is visible by default.
-   Animations only apply if JS adds .visible
-*/
-.fade-in {
+/* ================= Fade-in (SAFE) ================= */
+/* Visible by default (so the page never "goes white") */
+.fade-in{
   opacity: 1;
   transform: none;
 }
 
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Optional gentle animation (progressive enhancement) */
-.js .fade-in {
+/* If JS adds <html class="js">, enable fade effect */
+html.js .fade-in{
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(16px);
+  will-change: opacity, transform;
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
-.js .fade-in.visible {
+html.js .fade-in.visible{
   opacity: 1;
   transform: translateY(0);
 }
 
-/* -----------------------------------------
-   Responsive tweaks
-   ----------------------------------------- */
-@media (max-width: 760px) {
-  .more-content {
-    max-width: 100%;
-  }
-
-  .more-content pre {
-    font-size: 0.85rem;
-  }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  * { transition: none !important; animation: none !important; }
 }
+
