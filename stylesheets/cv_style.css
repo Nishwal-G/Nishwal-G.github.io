@@ -1,338 +1,418 @@
-:root {
-  /* Design tokens */
-  --primary-color: #333;
-  --accent-color: #0077cc;
-  --bg-light: #f9f9f9;
-  --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-  --font-heading: 'Open Sans', sans-serif;
-  --radius: 8px;
+:root{
+  /* =========================
+     CV page — minimalist + accessible
+     (keeps your hover + fade + scroll bar)
+     ========================= */
+
+  /* Colors (colorblind-safe, high contrast) */
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --muted: #475569;
+  --border: #E2E8F0;
+
+  /* Accent (deep blue) */
+  --accent: #1D4ED8;
+  --accent-hover: #1E40AF;
+
+  /* Header */
+  --header-bg: #0B1220;
+  --header-text: #FFFFFF;
+
+  /* Typography */
+  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+               "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+                  "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Sizing */
+  --radius: 12px;
   --spacing-xs: 8px;
   --spacing-sm: 16px;
   --spacing-md: 24px;
-  --spacing-lg: 32px;
+  --spacing-lg: 40px;
+
+  --container: 980px;
 }
 
 /* ============ Global Reset ============ */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
-body {
-  background-color: #fff;
-  color: #252424;
-  line-height: 1.6;
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body{ overflow-x:hidden; }
+body{
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display:flex;
+  flex-direction:column;
 }
 
 /* Optional shared container */
-.container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
+.container{ max-width: var(--container); margin: 0 auto; padding: 0 var(--spacing-sm); }
 
-/* ============ Slick Header (pill nav) ============ */
-/* Use these if your HTML header uses: .site-header > .header-inner > .site-nav .nav-pill */
-.site-header {
-  background: linear-gradient(90deg, #4a148c, #0077cc);
-  padding: 10px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+/* ============ Header (minimal, consistent) ============ */
+.site-header{
+  background: var(--header-bg);
+  padding: 12px 0;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-.header-inner {
-  max-width: 1100px;   /* a bit wider so the pill has breathing room */
+.header-inner{
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
-.brand {
+.brand{
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  letter-spacing: 0.3px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--header-text);
+  text-decoration:none;
+  letter-spacing: 0.2px;
   transition: opacity 0.2s ease;
 }
-.brand:hover { opacity: 0.85; }
+.brand:hover{ opacity: 0.88; }
 
-.site-nav .nav-pill {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, 2vw, 18px);
-  padding: 8px 12px;
+.site-nav .nav-pill{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 6px 8px;
   margin: 0;
   border-radius: 9999px;
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.06);
 }
-.site-nav .nav-pill a {
-  color: #fff;
-  text-decoration: none;
+.site-nav .nav-pill a{
+  color: var(--header-text);
+  text-decoration:none;
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 650;
   font-size: 0.95rem;
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: 9999px;
-  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+  opacity: 0.92;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
 }
-.site-nav .nav-pill a:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
-.site-nav .nav-pill a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-.site-nav .nav-pill a.active {
-  background: #fff;
-  color: #4a148c;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
+.site-nav .nav-pill a:hover{
+  background: rgba(255,255,255,0.10);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+.site-nav .nav-pill a:focus-visible{
+  outline: 3px solid rgba(255,255,255,0.75);
+  outline-offset: 2px;
+}
+.site-nav .nav-pill a.active{
+  background: rgba(255,255,255,0.16);
+  opacity: 1;
+  outline: 1px solid rgba(255,255,255,0.18);
 }
 
-/* Optional page title (if you move <h1> out of header) */
-.page-title {
-  text-align: center;
+/* ============ Page title ============ */
+.page-title{
+  text-align:center;
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3.5vw, 2.25rem);
-  margin: var(--spacing-md) 0 var(--spacing-sm);
-  color: #222;
+  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+  font-weight: 850;
+  margin: var(--spacing-lg) 0 var(--spacing-md);
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.page-title::after{
+  content:'';
+  display:block;
+  width: 96px;
+  height: 2px;
+  background: var(--border);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 999px;
 }
 
 /* ============ Banner ============ */
-section.banner {
+section.banner{
   width: 100%;
   margin-bottom: var(--spacing-md);
-  overflow: hidden;
+  overflow:hidden;
+  border-radius: var(--radius);
 }
-section.banner img {
-  display: block;
-  width: 100%;
-  height: auto;
+section.banner img{
+  display:block;
+  width:100%;
+  height:auto;
   object-fit: cover;
   opacity: 0;
-  animation: fade-in 2s forwards;
+  animation: banner-fade 1.6s forwards;
 }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes banner-fade{ from{opacity:0;} to{opacity:1;} }
 
 /* ============ CV Actions (Download) ============ */
-.cv-actions {
-  max-width: 900px;           /* match .container */
+.cv-actions{
+  max-width: var(--container);
   margin: 0 auto var(--spacing-sm);
   text-align: right;
+  padding: 0 var(--spacing-sm);
 }
-.download-link {
-  color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
+
+/* Use this if your HTML uses <a class="download-link"> */
+.download-link{
+  color: var(--accent);
+  text-decoration:none;
+  position:relative;
   font-family: var(--font-heading);
+  font-weight: 700;
 }
-.download-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 2px;
-  background: var(--accent-color);
+.download-link::after{
+  content:'';
+  position:absolute;
+  bottom:-2px; left:0;
+  width:100%; height:2px;
+  background: var(--accent);
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 .download-link:hover::after,
-.download-link:focus::after { transform: scaleX(1); }
+.download-link:focus::after{ transform: scaleX(1); }
+.download-link:hover{ color: var(--accent-hover); }
+.download-link:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* If you used .btn-cta on CV instead, support it too */
+.btn-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 18px;
+  border-radius:9999px;
+  text-decoration:none;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: .2px;
+  color:#fff;
+  background: var(--accent);
+  box-shadow: 0 10px 22px rgba(29, 78, 216, 0.18);
+  transition: transform .15s ease, box-shadow .2s ease, background .15s ease;
+}
+.btn-cta:hover{
+  transform: translateY(-1px);
+  background: var(--accent-hover);
+  box-shadow: 0 16px 30px rgba(29, 78, 216, 0.22);
+}
+.btn-cta:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 3px;
+}
 
 /* ============ PDF Card ============ */
-.card {
-  background: var(--bg-light);
-  border: 1px solid #ccc;
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
   padding: var(--spacing-md);
 }
-section.pdf {
-  max-width: 900px;
+section.pdf{
+  max-width: var(--container);
   margin: 0 auto var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
 }
-section.pdf embed {
-  display: block;
-  width: 100%;
+section.pdf embed{
+  display:block;
+  width:100%;
   height: clamp(420px, 70vh, 820px);
   border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--border);
 }
 
 /* ============ Afterword ============ */
-#afterword p {
+#afterword p{
   font-style: italic;
-  font-size: 0.9em;
+  font-size: 0.95rem;
   text-align: center;
+  color: var(--muted);
   margin: var(--spacing-md) var(--spacing-sm) 0 0;
 }
 
 /* ============ Courses ============ */
-#courses {
+#courses{
   margin: 0 auto var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
+  max-width: var(--container);
 }
 
-/* Centered heading + decorative underline */
-#courses h2 {
+/* Centered heading + subtle underline */
+#courses h2{
   font-family: var(--font-heading);
-  font-size: 1.75em;
-  color: var(--primary-color);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  color: var(--text);
   text-align: center;
-  margin-left: 0;
+  font-weight: 850;
 }
-#courses h2::after {
-  content: '';
-  display: block;
-  width: 120px;
-  height: 3px;
-  background: var(--primary-color);
+#courses h2::after{
+  content:'';
+  display:block;
+  width: 96px;
+  height: 2px;
+  background: var(--border);
   margin: var(--spacing-xs) auto 0;
-  border-radius: 2px;
+  border-radius: 999px;
 }
 
-/* Short intro paragraph under the H2 */
-.courses-intro {
+/* Short intro under the H2 */
+.courses-intro{
   max-width: 70ch;
   margin: 0 auto var(--spacing-md);
-  color: #555;
-  font-size: 1.05em;
+  color: var(--muted);
+  font-size: 1.05rem;
   text-align: center;
   line-height: 1.6;
 }
 
 /* Centered row of year cards */
-.courses-grid {
-  display: flex;
-  flex-wrap: wrap;
+.courses-grid{
+  display:flex;
+  flex-wrap:wrap;
   gap: var(--spacing-md);
-  justify-content: center;       /* this is what centers the boxes */
+  justify-content:center;
 }
 
 /* Individual year card */
-.year {
-  background: var(--bg-light);
-  border: 1px solid #ccc;
+.year{
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
   padding: var(--spacing-md);
-  flex: 1 1 260px;               /* base width per card */
-  max-width: 360px;              /* keeps them from becoming too wide */
+  flex: 1 1 260px;
+  max-width: 360px;
 }
-
-.year h3 {
+.year h3{
   font-family: var(--font-heading);
   margin-bottom: var(--spacing-sm);
-  position: relative;
+  font-weight: 850;
+  color: var(--text);
 }
-.year h3::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 3px;
-  background: var(--primary-color);
+.year h3::after{
+  content:'';
+  display:block;
+  width: 64px;
+  height: 2px;
+  background: var(--border);
   margin-top: var(--spacing-xs);
+  border-radius: 999px;
 }
+.year ul{ list-style:none; margin:0; padding:0; }
+.year li + li{ margin-top: 6px; }
 
-.year ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Course links (keep your “code black, title accent” idea) */
+.year a{
+  color: var(--accent);
+  text-decoration:none;
+  position:relative;
+  display:inline-block;
+  max-width:100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
-.year li + li { margin-top: 6px; }
-
-/* Course links: code black, title accent; keep one line on wider screens */
-.year a {
-  color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
-  display: inline-block;   /* allow wrapping inside the card */
-  max-width: 100%;
-  white-space: normal;     /* explicitly allow wrapping */
-  overflow-wrap: anywhere; /* break very long words if needed */
-}
-
-/* code part of the link */
-.year a .code {
-  color: #000;
-  font-weight: 600;
+.year a .code{
+  color: var(--text);
+  font-weight: 750;
   letter-spacing: 0.2px;
-  display: inline-block;
+  display:inline-block;
   margin-right: 8px;
 }
-
-.year a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 2px;
-  background: var(--accent-color);
+.year a::after{
+  content:'';
+  position:absolute;
+  bottom:-2px; left:0;
+  width:100%; height:2px;
+  background: var(--accent);
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 .year a:hover::after,
-.year a:focus::after { transform: scaleX(1); }
-
-.year a .code {
-  color: #000;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+.year a:focus::after{ transform: scaleX(1); }
+.year a:hover{ color: var(--accent-hover); }
+.year a:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* ============ Footer ============ */
-footer {
-  background-color: var(--primary-color);
-  color: #fff;
-  text-align: center;
-  padding: var(--spacing-sm) 0;
+/* ============ Footer (minimal) ============ */
+footer{
+  margin-top: auto;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align:center;
+  padding: var(--spacing-md) 0;
 }
-.social-links a {
-  color: #fff;
+.social-links a{
+  color: var(--text);
   font-size: 1.5em;
   margin: 0 var(--spacing-xs);
-  display: inline-block;
+  display:inline-block;
+  opacity: 0.75;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 .social-links a:hover,
-.social-links a:focus {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
+.social-links a:focus{ transform: scale(1.1); opacity: 1; }
 
 /* ============ Responsive Tweaks ============ */
-@media (max-width: 768px) {
-  .header-inner { flex-direction: column; gap: 10px; }
-  .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
-  .site-nav .nav-pill a { padding: 8px 12px; }
+@media (max-width: 768px){
+  .header-inner{ flex-direction: column; gap: 10px; }
+  .site-nav .nav-pill{ flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .site-nav .nav-pill a{ padding: 8px 12px; }
 
-  .cv-actions { text-align: center; }
-  section.pdf { margin-bottom: var(--spacing-md); }
-  section.pdf embed { height: 500px; }
+  .cv-actions{ text-align: center; }
+  section.pdf{ margin-bottom: var(--spacing-md); }
+  section.pdf embed{ height: 500px; }
 }
-@media (max-width: 480px) {
-  .page-title { font-size: 1.6rem; }
-  section.pdf embed { height: 340px; }
-}
-
-/* ============ Reduced Motion ============ */
-@media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+@media (max-width: 480px){
+  .page-title{ font-size: 1.6rem; }
+  section.pdf embed{ height: 340px; }
 }
 
-body {
-  background: linear-gradient(to bottom, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-  background-attachment: fixed;
-}
-
-#scroll-progress {
+/* ============ Scroll progress bar (keep) ============ */
+#scroll-progress{
   position: fixed;
   top: 0;
   left: 0;
-  height: 5px;  /* thickness of the bar */
-  background: linear-gradient(90deg, #4a148c, #0077cc);
+  height: 3px;
+  background: var(--accent);
   width: 0%;
   z-index: 9999;
   transition: width 0.15s ease-out;
 }
 
-/* ================= Fade in ================= */
-
-.fade-in {
+/* ================= Fade in (keep) ================= */
+.fade-in{
   opacity: 0;
-  transform: translateY(20px); /* slight slide up */
+  transform: translateY(16px);
   will-change: opacity, transform;
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
-.fade-in.visible {
+.fade-in.visible{
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ============ Reduced Motion ============ */
+@media (prefers-reduced-motion: reduce){
+  * { animation: none !important; transition: none !important; }
+}
+
 
