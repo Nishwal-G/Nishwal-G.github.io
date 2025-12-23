@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>More • Build a Website with GitHub Pages</title>
 
-  <!-- Use your shared stylesheet -->
+  <!-- Uses your shared site stylesheet -->
   <link rel="stylesheet" href="../stylesheets/base.css"/>
 
-  <!-- Optional: font-awesome if you want icons -->
+  <!-- Optional icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body>
@@ -19,7 +19,6 @@
   <header class="site-header fade-in">
     <div class="header-inner">
       <a class="brand" href="../index.html">Nishwal Gora</a>
-
       <nav class="site-nav">
         <ul class="nav-pill">
           <li><a href="../index.html">Home</a></li>
@@ -35,89 +34,56 @@
 
   <main class="container">
 
-    <h1 class="page-title fade-in">More</h1>
+    <h1 class="page-title fade-in">Build Your Own Website</h1>
 
-    <!-- ======= Intro / Mission ======= -->
+    <!-- ================= Intro / Mission ================= -->
     <section class="card fade-in">
       <h2 style="margin-bottom:10px;">Open access website building</h2>
 
       <p style="max-width:70ch;">
         All of the files for this website are free to view and download via the GitHub link on this site.
-        I’m also providing beginner-friendly templates and a step-by-step guide here so that anyone can build
-        their own website with little to no prior experience.
+        I’m also providing a full set of beginner templates and a step-by-step guide here so you can build your own
+        website with little to no experience.
       </p>
 
       <p style="max-width:70ch; margin-top:14px;">
-        Website building is often made to feel difficult, hidden behind paywalls, or locked behind tools that
-        require subscriptions. That means many people are excluded from having a personal website through no fault
-        of their own. My aim here is to make the basics clear, slow, and accessible — and to help you leave with a
-        working site you can control yourself.
-      </p>
-
-      <p style="max-width:70ch; margin-top:14px;">
-        If you spot something confusing, inaccessible, or unclear, please get in touch — I’m happy to improve this page.
+        Website building is often presented as difficult, or hidden behind paywalls and subscriptions. That can lock people
+        out of having a website of their own through no fault of their own. My goal is to make the basics clear, slow, and
+        genuinely beginner-friendly — so you can leave with a working site you control. This was in a sense a goal of making
+        this website, the other uses are incidental.
       </p>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= What you will build ======= -->
+    <!-- ================= Big picture ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">What you will build</h2>
-
+      <h2 style="margin-bottom:10px;">What you are making</h2>
       <p style="max-width:70ch;">
-        You will build a small multi-page website hosted for free using <strong>GitHub Pages</strong>. Your site will have:
+        You are making a multi-page website hosted for free using <strong>GitHub Pages</strong>.
+        The website is just a collection of files (mostly HTML and CSS) stored in a GitHub repository.
       </p>
 
       <ul style="max-width:70ch; margin:12px auto 0; padding-left:1.2rem;">
-        <li>A homepage (<code>index.html</code>)</li>
-        <li>Extra pages (About, Projects, CV, More)</li>
-        <li>A shared stylesheet (<code>.css</code>) so the whole site has one consistent look</li>
-        <li>Optional JavaScript for nice extras (scroll progress bar, fade-in effects)</li>
-      </ul>
-    </section>
-
-    <div style="height:16px;"></div>
-
-    <!-- ======= Absolute beginner definitions ======= -->
-    <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">Key ideas (in simple terms)</h2>
-
-      <p style="max-width:70ch;">
-        If you’ve never built a site before, here are the only concepts you need at the start:
-      </p>
-
-      <ul style="max-width:70ch; margin:12px auto 0; padding-left:1.2rem;">
-        <li>
-          <strong>HTML files</strong> (ending in <code>.html</code>) are the <strong>content</strong> of your site:
-          the words, headings, links, and page structure.
-        </li>
-        <li>
-          <strong>CSS files</strong> (ending in <code>.css</code>) are the <strong>style</strong>:
-          colours, fonts, spacing, layouts, and how things look.
-        </li>
-        <li>
-          <strong>Folders</strong> keep things organised (for example: images in <code>assets/</code>).
-        </li>
-        <li>
-          <strong>GitHub Pages</strong> is a free service that turns your files into a public website.
-        </li>
+        <li><strong>HTML</strong> files (<code>.html</code>) = the content and structure (text, headings, links)</li>
+        <li><strong>CSS</strong> files (<code>.css</code>) = how it looks (fonts, colours, spacing, layout)</li>
+        <li><strong>JavaScript</strong> files (<code>.js</code>) = optional behaviour (scroll bar, animations)</li>
       </ul>
 
       <p style="max-width:70ch; margin-top:14px;">
-        You can think of it like this:
-        <strong>HTML = the building</strong>, <strong>CSS = the paint and interior design</strong>.
+        Think of it like:
+        <strong>HTML = the building</strong>, <strong>CSS = the design</strong>, <strong>JS = the moving parts</strong>.
       </p>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= Structure on GitHub ======= -->
+    <!-- ================= Folder structure ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">How your website will be structured</h2>
+      <h2 style="margin-bottom:10px;">Your website folder structure</h2>
 
       <p style="max-width:70ch;">
-        When you’re done, your GitHub repository (your online folder) will look roughly like this:
+        Your GitHub repository (your online folder) will look like this:
       </p>
 
       <pre style="max-width:70ch; margin:12px auto 0; padding:12px; border:1px solid var(--border); border-radius:12px; overflow:auto;"><code>your-website/
@@ -136,16 +102,16 @@
     cv.pdf</code></pre>
 
       <p style="max-width:70ch; margin-top:14px;">
-        The most important file is <code>index.html</code> because it is the “front door”.
-        GitHub Pages looks for <code>index.html</code> first when someone visits your site.
+        The most important file is <code>index.html</code>. It is your homepage.
+        GitHub Pages looks for it first.
       </p>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= Step by step GitHub pages ======= -->
+    <!-- ================= Beginner GitHub Pages guide ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">Step-by-step: publish your first website (beginner version)</h2>
+      <h2 style="margin-bottom:10px;">Step-by-step: GitHub Pages (absolute beginner)</h2>
 
       <ol style="max-width:70ch; margin:0 auto; padding-left:1.2rem;">
         <li>
@@ -154,232 +120,703 @@
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Create a new repository</strong><br/>
-          On GitHub, click the <strong>+</strong> in the top-right → <strong>New repository</strong>.
+          <strong>Create a repository (this is your website folder)</strong><br/>
+          On GitHub, click the <strong>+</strong> top-right → <strong>New repository</strong>.
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Name the repository</strong><br/>
-          You have two common options:
+          <strong>Name it</strong><br/>
+          Two options:
           <ul style="margin-top:8px; padding-left:1.2rem;">
-            <li>
-              <strong>Option A (recommended for beginners):</strong>
-              name it anything (e.g. <code>my-website</code>) and then enable GitHub Pages in Settings.
-            </li>
-            <li>
-              <strong>Option B (classic personal site):</strong>
-              name it <code>yourusername.github.io</code>.
-              This creates a website directly at that address.
-            </li>
+            <li><strong>Easy option:</strong> call it <code>my-website</code> (or anything).</li>
+            <li><strong>Classic personal site option:</strong> call it <code>yourusername.github.io</code>.</li>
           </ul>
+          Either works — you can still use a custom domain later.
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Make the repository public</strong><br/>
-          Choose <strong>Public</strong> so GitHub Pages can host it for free.
+          <strong>Set it to Public</strong><br/>
+          Public repositories can be hosted for free with GitHub Pages.
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Create your first file: <code>index.html</code></strong><br/>
-          Inside the repository:
+          <strong>Create <code>index.html</code></strong><br/>
+          In your repository:
           <ul style="margin-top:8px; padding-left:1.2rem;">
             <li>Click <strong>Add file</strong> → <strong>Create new file</strong></li>
             <li>Name it exactly: <code>index.html</code></li>
-            <li>Paste in a template (provided below)</li>
-            <li>Scroll down and click <strong>Commit changes</strong></li>
+            <li>Copy/paste the template from below</li>
+            <li>Scroll down → click <strong>Commit changes</strong></li>
           </ul>
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Create folders (directories) on GitHub in your browser</strong><br/>
-          GitHub doesn’t have a “New Folder” button in the simple view — instead you create a folder by typing it into the filename.
+          <strong>Create folders in GitHub (in Chrome)</strong><br/>
+          There isn’t always a “New folder” button. Instead:
           <ul style="margin-top:8px; padding-left:1.2rem;">
             <li>Click <strong>Add file</strong> → <strong>Create new file</strong></li>
-            <li>In the filename box, type something like: <code>pages/about.html</code></li>
-            <li>GitHub will create the folder (<code>pages</code>) automatically</li>
-            <li>Paste template content, then commit</li>
+            <li>In the filename box type: <code>pages/about.html</code></li>
+            <li>This creates a folder called <code>pages</code> automatically</li>
+            <li>Paste the template → commit changes</li>
           </ul>
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Create your stylesheet folder</strong><br/>
-          Repeat the same trick:
+          <strong>Create your CSS file</strong><br/>
+          Make <code>stylesheets/base.css</code> using the same method:
           <ul style="margin-top:8px; padding-left:1.2rem;">
-            <li>Create <code>stylesheets/base.css</code> and paste the CSS template</li>
+            <li>Create new file: <code>stylesheets/base.css</code></li>
+            <li>Paste the CSS template from below</li>
             <li>Commit changes</li>
           </ul>
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Create your JavaScript file (optional)</strong><br/>
-          Repeat again:
+          <strong>Create JavaScript (optional)</strong><br/>
+          Make <code>js/main.js</code>:
           <ul style="margin-top:8px; padding-left:1.2rem;">
-            <li>Create <code>js/main.js</code> and paste the JS template</li>
+            <li>Create new file: <code>js/main.js</code></li>
+            <li>Paste the JS template from below</li>
             <li>Commit changes</li>
           </ul>
         </li>
 
         <li style="margin-top:12px;">
-          <strong>Enable GitHub Pages</strong><br/>
-          In your repository:
+          <strong>Turn on GitHub Pages</strong><br/>
+          In the repository:
           <ul style="margin-top:8px; padding-left:1.2rem;">
-            <li>Click <strong>Settings</strong></li>
-            <li>Find <strong>Pages</strong> in the sidebar</li>
-            <li>Under <strong>Build and deployment</strong>, choose:
-              <strong>Deploy from a branch</strong></li>
-            <li>Select your branch (usually <code>main</code>) and the folder (<code>/ (root)</code>)</li>
+            <li>Go to <strong>Settings</strong></li>
+            <li>Click <strong>Pages</strong> in the left sidebar</li>
+            <li>Under <strong>Build and deployment</strong>, select <strong>Deploy from a branch</strong></li>
+            <li>Select branch: <code>main</code> and folder: <code>/ (root)</code></li>
             <li>Click <strong>Save</strong></li>
           </ul>
-          After this, GitHub will show you the link to your website.
         </li>
 
         <li style="margin-top:12px;">
           <strong>Visit your website</strong><br/>
-          It may take a minute or two to appear. Once it’s live, refresh the page and you should see your homepage.
+          GitHub will show a website link in the Pages settings.
+          It may take a minute to go live, then refresh.
         </li>
       </ol>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= Editing basics ======= -->
+    <!-- ================= Custom domain guide ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">How to edit your site (the simplest workflow)</h2>
-
-      <ol style="max-width:70ch; margin:0 auto; padding-left:1.2rem;">
-        <li><strong>Click the file</strong> you want to edit in your repository (e.g. <code>index.html</code>).</li>
-        <li style="margin-top:10px;"><strong>Click the pencil icon</strong> (Edit).</li>
-        <li style="margin-top:10px;"><strong>Change the text</strong> (or links, headings, etc.).</li>
-        <li style="margin-top:10px;"><strong>Commit changes</strong> at the bottom.</li>
-        <li style="margin-top:10px;">Refresh your website to see the update.</li>
-      </ol>
-
-      <p style="max-width:70ch; margin-top:14px;">
-        If your update doesn’t appear immediately, wait a moment and refresh again — GitHub Pages can take a short time to redeploy.
-      </p>
-    </section>
-
-    <div style="height:16px;"></div>
-
-    <!-- ======= Custom domain ======= -->
-    <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">Custom domain (yourname.com instead of github.io)</h2>
+      <h2 style="margin-bottom:10px;">Optional: yourname.com instead of github.io</h2>
 
       <p style="max-width:70ch;">
-        You can keep the free GitHub address, or you can buy a custom domain like <code>yourname.com</code>.
-        Buying a domain is optional — your website will work either way.
+        Your site works perfectly on a free GitHub address. If you want, you can buy a domain like <code>yourname.com</code>
+        and connect it to GitHub Pages.
       </p>
 
       <h3 style="margin-top:14px;">Step 1: buy a domain</h3>
       <p style="max-width:70ch;">
-        You can buy domains from many providers (for example: Namecheap, Google Domains alternatives, GoDaddy, Cloudflare Registrar, etc.).
-        Choose a provider you trust and search for the domain you want.
+        Buy a domain from a provider you trust (examples: Namecheap, GoDaddy, Cloudflare Registrar, etc.).
+        Search for the domain you want and purchase it.
       </p>
 
-      <h3 style="margin-top:14px;">Step 2: tell GitHub Pages your domain</h3>
+      <h3 style="margin-top:14px;">Step 2: add the domain to GitHub Pages</h3>
       <ol style="max-width:70ch; margin:0 auto; padding-left:1.2rem;">
-        <li>Go to your repository <strong>Settings → Pages</strong></li>
+        <li>Repository → <strong>Settings</strong> → <strong>Pages</strong></li>
         <li>Find <strong>Custom domain</strong></li>
-        <li>Type your domain (e.g. <code>yourname.com</code>) and save</li>
+        <li>Type: <code>yourname.com</code> (or <code>www.yourname.com</code>)</li>
+        <li>Save</li>
       </ol>
 
       <h3 style="margin-top:14px;">Step 3: update DNS at your domain provider</h3>
       <p style="max-width:70ch;">
-        DNS is the system that points your domain name to GitHub’s servers. Your domain provider will have a “DNS” or “Manage DNS” page.
-      </p>
-
-      <p style="max-width:70ch;">
-        GitHub Pages typically uses:
+        DNS is what “points” your domain to GitHub. Your domain provider has a DNS page. GitHub Pages will show you exactly what to add.
+        Commonly you add:
       </p>
 
       <ul style="max-width:70ch; margin:12px auto 0; padding-left:1.2rem;">
-        <li><strong>A records</strong> for the root domain (<code>yourname.com</code>)</li>
-        <li><strong>CNAME</strong> for <code>www.yourname.com</code> pointing to your GitHub Pages address</li>
+        <li><strong>A records</strong> for <code>yourname.com</code></li>
+        <li><strong>CNAME</strong> record for <code>www</code> pointing to your GitHub Pages address</li>
       </ul>
 
       <p style="max-width:70ch; margin-top:14px;">
-        After updating DNS, it can take some time to “propagate” (spread across the internet).
-        GitHub Pages will show when your domain is correctly connected.
+        DNS changes can take time to spread across the internet. GitHub will confirm when it’s connected.
       </p>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= Downloads / templates ======= -->
+    <!-- ================= Templates intro ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">Templates and downloads</h2>
+      <h2 style="margin-bottom:10px;">Templates (copy and paste)</h2>
 
       <p style="max-width:70ch;">
-        The templates below are designed to be reused and edited. They contain no personal content — they are meant as a starting point.
+        Below are starter templates for every file. They contain no personal content and are designed to be reused.
+        Copy each block into the matching file in your repository.
       </p>
 
-      <p style="max-width:70ch; margin-top:12px;">
-        If you upload a ZIP file (for example <code>assets/site-starter.zip</code>), you can enable a one-click download here:
-      </p>
-
-      <p style="margin-top:12px;">
-        <a class="btn" href="../assets/site-starter.zip" download>Download starter template (ZIP)</a>
-      </p>
-
-      <p style="max-width:70ch; margin-top:12px; color:var(--muted);">
-        If the ZIP link doesn’t work yet, it just means the file hasn’t been uploaded to <code>assets/</code>.
-      </p>
-
-      <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;"/>
-
-      <h3 style="margin-bottom:10px;">What is inside the template?</h3>
-      <ul style="max-width:70ch; margin:0 auto; padding-left:1.2rem;">
-        <li><code>index.html</code> (homepage)</li>
-        <li><code>pages/about.html</code></li>
-        <li><code>pages/projects.html</code></li>
-        <li><code>pages/cv.html</code></li>
-        <li><code>pages/more.html</code> (this guide)</li>
-        <li><code>stylesheets/base.css</code> (shared styling)</li>
-        <li><code>js/main.js</code> (scroll bar + fade-in)</li>
-      </ul>
-
-      <p style="max-width:70ch; margin-top:14px;">
-        In the next section, I provide starter code for each file so you can copy and paste it directly.
+      <p style="max-width:70ch; margin-top:10px;">
+        Recommended order:
+        <strong>1)</strong> <code>index.html</code>,
+        <strong>2)</strong> <code>stylesheets/base.css</code>,
+        <strong>3)</strong> pages in <code>pages/</code>,
+        <strong>4)</strong> <code>js/main.js</code>.
       </p>
     </section>
 
     <div style="height:16px;"></div>
 
-    <!-- ======= Next steps (templates live below) ======= -->
+    <!-- ================= TEMPLATE: index.html ================= -->
     <section class="card fade-in">
-      <h2 style="margin-bottom:10px;">Next: copy-and-paste templates</h2>
-
+      <h2 style="margin-bottom:10px;">Template 1 — <code>index.html</code> (homepage)</h2>
       <p style="max-width:70ch;">
-        I recommend doing this in order:
+        This file goes in the <strong>root</strong> of your repository (not inside <code>pages/</code>).
+        It links to the shared CSS and JavaScript using paths that work from the root.
       </p>
 
-      <ol style="max-width:70ch; margin:0 auto; padding-left:1.2rem;">
-        <li>Create <code>index.html</code> (homepage)</li>
-        <li>Create <code>stylesheets/base.css</code> (styling)</li>
-        <li>Create the pages inside <code>pages/</code> (About, Projects, CV, More)</li>
-        <li>Create <code>js/main.js</code> (optional animations)</li>
-      </ol>
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;Home&lt;/title&gt;
+  &lt;link rel="stylesheet" href="stylesheets/base.css"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-      <p style="max-width:70ch; margin-top:14px;">
-        If you want, I can include the full templates directly below this section (as copyable blocks) —
-        or keep them as a downloadable ZIP only. Both approaches work.
-      </p>
+  &lt;div id="scroll-progress"&gt;&lt;/div&gt;
+
+  &lt;header class="site-header fade-in"&gt;
+    &lt;div class="header-inner"&gt;
+      &lt;a class="brand" href="index.html"&gt;Your Name&lt;/a&gt;
+
+      &lt;nav class="site-nav"&gt;
+        &lt;ul class="nav-pill"&gt;
+          &lt;li&gt;&lt;a class="active" href="index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="pages/projects.html"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="pages/cv.html"&gt;CV&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="pages/about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="pages/more.html"&gt;More&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;h1 class="page-title fade-in"&gt;Welcome&lt;/h1&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        This is a simple starter website you can host for free using GitHub Pages.
+        Replace this text with your own introduction.
+      &lt;/p&gt;
+
+      &lt;p style="max-width:70ch; margin-top:14px;"&gt;
+        Tip: keep paragraphs short and readable. Use clear headings and consistent navigation.
+      &lt;/p&gt;
+
+      &lt;p style="margin-top:14px;"&gt;
+        &lt;a class="btn" href="pages/more.html"&gt;Learn how to build this&lt;/a&gt;
+      &lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;div&gt;© Your Name&lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;script src="js/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
     </section>
 
-    <!-- Spacing -->
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: pages/about.html ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 2 — <code>pages/about.html</code></h2>
+      <p style="max-width:70ch;">
+        This file goes inside the <code>pages/</code> folder. Because it is one folder deeper,
+        it links to CSS/JS using <code>../</code>.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;About&lt;/title&gt;
+  &lt;link rel="stylesheet" href="../stylesheets/base.css"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;div id="scroll-progress"&gt;&lt;/div&gt;
+
+  &lt;header class="site-header fade-in"&gt;
+    &lt;div class="header-inner"&gt;
+      &lt;a class="brand" href="../index.html"&gt;Your Name&lt;/a&gt;
+
+      &lt;nav class="site-nav"&gt;
+        &lt;ul class="nav-pill"&gt;
+          &lt;li&gt;&lt;a href="../index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="projects.html"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="cv.html"&gt;CV&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class="active" href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="more.html"&gt;More&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;h1 class="page-title fade-in"&gt;About&lt;/h1&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        Write a short introduction here: who you are, what you do, and what you care about.
+      &lt;/p&gt;
+
+      &lt;p style="max-width:70ch; margin-top:14px;"&gt;
+        You can add links, a short CV summary, interests, or anything else.
+      &lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;div&gt;© Your Name&lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;script src="../js/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </section>
+
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: pages/projects.html ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 3 — <code>pages/projects.html</code></h2>
+      <p style="max-width:70ch;">
+        This is a simple projects page that uses repeated “project cards”. You can add as many as you want.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;Projects&lt;/title&gt;
+  &lt;link rel="stylesheet" href="../stylesheets/base.css"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;div id="scroll-progress"&gt;&lt;/div&gt;
+
+  &lt;header class="site-header fade-in"&gt;
+    &lt;div class="header-inner"&gt;
+      &lt;a class="brand" href="../index.html"&gt;Your Name&lt;/a&gt;
+
+      &lt;nav class="site-nav"&gt;
+        &lt;ul class="nav-pill"&gt;
+          &lt;li&gt;&lt;a href="../index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class="active" href="projects.html"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="cv.html"&gt;CV&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="more.html"&gt;More&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;h1 class="page-title fade-in"&gt;Projects&lt;/h1&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;h2 style="margin-bottom:8px;"&gt;Project Title&lt;/h2&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        Write 3–6 sentences explaining what you did, what tools you used, and the result.
+      &lt;/p&gt;
+      &lt;p style="margin-top:12px;"&gt;
+        &lt;a href="#"&gt;Optional link&lt;/a&gt;
+      &lt;/p&gt;
+    &lt;/section&gt;
+
+    &lt;div style="height:16px;"&gt;&lt;/div&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;h2 style="margin-bottom:8px;"&gt;Another Project&lt;/h2&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        Add more project cards like this. Keep the layout consistent.
+      &lt;/p&gt;
+    &lt;/section&gt;
+
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;div&gt;© Your Name&lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;script src="../js/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </section>
+
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: pages/cv.html ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 4 — <code>pages/cv.html</code></h2>
+      <p style="max-width:70ch;">
+        This page includes a button to download a CV PDF. If you don’t have a PDF yet, remove the button.
+        If you do, place it in <code>assets/</code> as <code>cv.pdf</code>.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;CV&lt;/title&gt;
+  &lt;link rel="stylesheet" href="../stylesheets/base.css"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;div id="scroll-progress"&gt;&lt;/div&gt;
+
+  &lt;header class="site-header fade-in"&gt;
+    &lt;div class="header-inner"&gt;
+      &lt;a class="brand" href="../index.html"&gt;Your Name&lt;/a&gt;
+
+      &lt;nav class="site-nav"&gt;
+        &lt;ul class="nav-pill"&gt;
+          &lt;li&gt;&lt;a href="../index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="projects.html"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class="active" href="cv.html"&gt;CV&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="more.html"&gt;More&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;h1 class="page-title fade-in"&gt;CV&lt;/h1&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        Add a short summary of your background here.
+      &lt;/p&gt;
+
+      &lt;p style="margin-top:14px;"&gt;
+        &lt;a class="btn" href="../assets/cv.pdf" download&gt;Download CV (PDF)&lt;/a&gt;
+      &lt;/p&gt;
+
+      &lt;p style="max-width:70ch; margin-top:14px; color: var(--muted);"&gt;
+        Tip: if the download button does not work, check the file path and make sure your PDF is inside the assets folder.
+      &lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;div&gt;© Your Name&lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;script src="../js/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </section>
+
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: pages/more.html (minimal) ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 5 — <code>pages/more.html</code> (minimal page)</h2>
+      <p style="max-width:70ch;">
+        If you’re copying this guide, you already have a <code>more.html</code>.
+        But if you want a clean “More” page without the big tutorial, use this minimal template.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;More&lt;/title&gt;
+  &lt;link rel="stylesheet" href="../stylesheets/base.css"/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;div id="scroll-progress"&gt;&lt;/div&gt;
+
+  &lt;header class="site-header fade-in"&gt;
+    &lt;div class="header-inner"&gt;
+      &lt;a class="brand" href="../index.html"&gt;Your Name&lt;/a&gt;
+      &lt;nav class="site-nav"&gt;
+        &lt;ul class="nav-pill"&gt;
+          &lt;li&gt;&lt;a href="../index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="projects.html"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="cv.html"&gt;CV&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a class="active" href="more.html"&gt;More&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/nav&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;h1 class="page-title fade-in"&gt;More&lt;/h1&gt;
+
+    &lt;section class="card fade-in"&gt;
+      &lt;p style="max-width:70ch;"&gt;
+        Add anything you want here: links, resources, FAQs, guides, etc.
+      &lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;div&gt;© Your Name&lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;script src="../js/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </section>
+
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: stylesheets/base.css ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 6 — <code>stylesheets/base.css</code> (shared styling)</h2>
+      <p style="max-width:70ch;">
+        This single CSS file controls the look of every page (fonts, colours, layout).
+        All pages link to it. When you change this file, your whole website updates.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>:root{
+  --bg:#F8FAFC;
+  --surface:#FFFFFF;
+  --text:#0F172A;
+  --muted:#475569;
+  --border:#E2E8F0;
+
+  --accent:#1D4ED8;
+  --accent-hover:#1E40AF;
+
+  --header-bg:#0B1220;
+  --header-text:#FFFFFF;
+
+  --radius:14px;
+  --container:980px;
+
+  --s1:8px;
+  --s2:16px;
+  --s3:24px;
+  --s4:40px;
+
+  --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+          "Apple Color Emoji","Segoe UI Emoji";
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+}
+
+.container{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:0 var(--s2);
+}
+
+.site-header{
+  background:var(--header-bg);
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 1px 0 rgba(255,255,255,0.08);
+}
+.header-inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.brand{
+  color:var(--header-text);
+  text-decoration:none;
+  font-weight:800;
+  letter-spacing:.2px;
+}
+.site-nav .nav-pill{
+  list-style:none;
+  display:flex;
+  gap:10px;
+  padding:6px 8px;
+  border-radius:9999px;
+  background:rgba(255,255,255,0.06);
+}
+.site-nav .nav-pill a{
+  color:var(--header-text);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:9999px;
+  opacity:.92;
+  font-weight:650;
+  transition:background .2s ease, transform .15s ease, opacity .2s ease;
+}
+.site-nav .nav-pill a:hover{
+  background:rgba(255,255,255,0.10);
+  transform:translateY(-1px);
+  opacity:1;
+}
+.site-nav .nav-pill a.active{
+  background:rgba(255,255,255,0.16);
+  opacity:1;
+  outline:1px solid rgba(255,255,255,0.18);
+}
+
+.page-title{
+  text-align:center;
+  font-size:clamp(1.9rem,3.2vw,2.4rem);
+  font-weight:900;
+  letter-spacing:-0.01em;
+  margin:var(--s4) 0 var(--s3);
+}
+.page-title::after{
+  content:"";
+  display:block;
+  width:96px;
+  height:2px;
+  background:var(--border);
+  margin:var(--s1) auto 0;
+  border-radius:999px;
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 12px 30px rgba(15,23,42,0.08);
+  padding:var(--s3);
+}
+
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline;text-decoration-thickness:2px}
+a:focus-visible{
+  outline:3px solid rgba(29,78,216,0.25);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:9999px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:850;
+  text-decoration:none;
+  border:1px solid transparent;
+  box-shadow:0 12px 26px rgba(29,78,216,0.18);
+  transition:transform .15s ease, background .15s ease;
+}
+.btn:hover{background:var(--accent-hover);transform:translateY(-1px);text-decoration:none}
+.btn:active{transform:translateY(0)}
+
+footer{
+  margin-top:var(--s4);
+  padding:var(--s3) 0;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  text-align:center;
+}
+
+/* scroll progress bar */
+#scroll-progress{
+  position:fixed;
+  top:0;left:0;
+  height:3px;
+  width:0%;
+  background:var(--accent);
+  z-index:2000;
+  transition:width .15s ease-out;
+}
+
+/* fade-in */
+.fade-in{
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity .6s ease-out, transform .6s ease-out;
+  will-change:opacity,transform;
+}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+@media (max-width:760px){
+  .header-inner{flex-direction:column;align-items:flex-start}
+  .site-nav .nav-pill{flex-wrap:wrap}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important; animation:none !important;}
+}</code></pre>
+    </section>
+
+    <div style="height:16px;"></div>
+
+    <!-- ================= TEMPLATE: js/main.js ================= -->
+    <section class="card fade-in">
+      <h2 style="margin-bottom:10px;">Template 7 — <code>js/main.js</code> (scroll bar + fade-in)</h2>
+      <p style="max-width:70ch;">
+        This file controls the scroll progress bar and fade-in animation. If you don’t want animations,
+        you can delete this file and remove the script tags from your HTML pages.
+      </p>
+
+      <pre style="margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:12px; overflow:auto;"><code>// Scroll progress bar
+window.addEventListener("scroll", () =&gt; {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = scrollHeight &gt; 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+  const bar = document.getElementById("scroll-progress");
+  if (bar) bar.style.width = progress + "%";
+});
+
+// Fade-in on scroll
+document.addEventListener("DOMContentLoaded", () =&gt; {
+  const observer = new IntersectionObserver((entries, obs) =&gt; {
+    entries.forEach(entry =&gt; {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(".fade-in").forEach(el =&gt; observer.observe(el));
+});</code></pre>
+    </section>
+
     <div style="height:24px;"></div>
 
   </main>
 
   <footer>
     <div class="social-links">
+      <!-- Replace # with your GitHub repo/profile link -->
       <a href="#" class="fa fa-github" aria-label="GitHub" target="_blank" rel="noopener noreferrer"></a>
     </div>
     <div style="margin-top:8px;">If you have suggestions for improving this guide, please contact me.</div>
   </footer>
 
-  <!-- Keep your JS behaviour -->
   <script src="../js/main.js"></script>
 
 </body>
 </html>
+
