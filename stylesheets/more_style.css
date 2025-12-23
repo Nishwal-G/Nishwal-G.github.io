@@ -1,0 +1,127 @@
+/* =========================================
+   MORE PAGE — page-specific styling
+   Works with base.css
+   Safe, accessible, no JS dependency
+   ========================================= */
+
+/* Slightly wider reading layout for tutorials */
+.more-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Improve long-form readability */
+.more-content p,
+.more-content li {
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+/* Section spacing rhythm */
+.more-content section {
+  margin-bottom: var(--s4);
+}
+
+/* Headings inside cards */
+.more-content h2 {
+  font-size: 1.45rem;
+  font-weight: 750;
+  margin-bottom: var(--s2);
+}
+
+.more-content h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: var(--s3) 0 var(--s1);
+}
+
+/* Lists for step-by-step guides */
+.more-content ul,
+.more-content ol {
+  padding-left: 1.4rem;
+  margin-top: var(--s2);
+}
+
+.more-content li + li {
+  margin-top: 0.6rem;
+}
+
+/* Code blocks */
+.more-content pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: var(--s3);
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.more-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "Courier New", monospace;
+}
+
+/* Inline code */
+.more-content p code,
+.more-content li code {
+  background: rgba(15, 23, 42, 0.06);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.95em;
+}
+
+/* Subtle callouts (optional helper blocks) */
+.more-callout {
+  background: #f1f5f9;
+  border-left: 4px solid var(--accent);
+  padding: var(--s2) var(--s3);
+  border-radius: 10px;
+  margin: var(--s3) 0;
+}
+
+/* Buttons inside tutorial */
+.more-content .btn {
+  margin-top: var(--s2);
+}
+
+/* -----------------------------------------
+   Fade-in SAFETY OVERRIDE
+   -----------------------------------------
+   Content is visible by default.
+   Animations only apply if JS adds .visible
+*/
+.fade-in {
+  opacity: 1;
+  transform: none;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional gentle animation (progressive enhancement) */
+.js .fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.js .fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -----------------------------------------
+   Responsive tweaks
+   ----------------------------------------- */
+@media (max-width: 760px) {
+  .more-content {
+    max-width: 100%;
+  }
+
+  .more-content pre {
+    font-size: 0.85rem;
+  }
+}
