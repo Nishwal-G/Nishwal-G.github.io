@@ -1,439 +1,409 @@
-:root {
-  /* Design tokens */
-  --primary-color: #333;
-  --accent-color: #0077cc;
-  --bg-light: #f9f9f9;
-  --font-body: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-  --font-heading: 'Open Sans', sans-serif;
-  --radius: 8px;
+:root{
+  /* =========================
+     Minimal + accessible theme
+     (keeps hover + fade + scroll bar)
+     ========================= */
+
+  /* Colors (colorblind-safe, high contrast) */
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --text: #0F172A;
+  --muted: #475569;
+  --border: #E2E8F0;
+
+  --accent: #1D4ED8;
+  --accent-hover: #1E40AF;
+
+  --header-bg: #0B1220;
+  --header-text: #FFFFFF;
+
+  /* Typography */
+  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+               "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+                  "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Sizing */
+  --radius: 12px;
   --spacing-xs: 8px;
   --spacing-sm: 16px;
   --spacing-md: 24px;
-  --spacing-lg: 32px;
+  --spacing-lg: 40px;
+
+  --container: 980px;
 }
 
 /* ================= Global Reset ================= */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
-body {
-  background-color: #fff;
-  color: #252424;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 0; /* Removed padding so header spans edge-to-edge */
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x: hidden; }
+body{
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
 }
 
 /* Optional shared container for page content */
-.container { max-width: 900px; margin: 0 auto; padding: 0 var(--spacing-sm); }
-
-/* ================= Slick Header (optional pill style) ================= */
-.site-header {
-  background: linear-gradient(90deg, #4a148c, #0077cc);
-  padding: 10px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
 }
-.header-inner {
+
+/* ================= Header (minimal, consistent) ================= */
+.site-header{
+  background: var(--header-bg);
+  padding: 12px 0;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.header-inner{
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap: 12px;
 }
-.brand {
+.brand{
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  letter-spacing: 0.3px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--header-text);
+  text-decoration:none;
+  letter-spacing: 0.2px;
   transition: opacity 0.2s ease;
 }
-.brand:hover { opacity: 0.85; }
-.site-nav .nav-pill {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, 2vw, 18px);
-  padding: 8px 12px;
+.brand:hover{ opacity: 0.88; }
+
+.site-nav .nav-pill{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 6px 8px;
   margin: 0;
   border-radius: 9999px;
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.06);
 }
-.site-nav .nav-pill a {
-  color: #fff;
-  text-decoration: none;
+.site-nav .nav-pill a{
+  color: var(--header-text);
+  text-decoration:none;
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 650;
   font-size: 0.95rem;
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: 9999px;
-  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+  opacity: 0.92;
+  transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
 }
-.site-nav .nav-pill a:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
-.site-nav .nav-pill a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-.site-nav .nav-pill a.active {
-  background: #fff;
-  color: #4a148c;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12) inset, 0 3px 10px rgba(0,0,0,0.12);
+.site-nav .nav-pill a:hover{
+  background: rgba(255,255,255,0.10);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+.site-nav .nav-pill a:focus-visible{
+  outline: 3px solid rgba(255,255,255,0.75);
+  outline-offset: 2px;
+}
+.site-nav .nav-pill a.active{
+  background: rgba(255,255,255,0.16);
+  opacity: 1;
+  outline: 1px solid rgba(255,255,255,0.18);
 }
 
-/* ===== Mobile header fixes (match CV) ===== */
+/* ===== Mobile header fixes ===== */
 @media (max-width: 768px){
-  .header-inner{
-    flex-direction: column;
-    gap: 10px;
-  }
-  .site-nav .nav-pill{
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 6px 10px;
-  }
-  .site-nav .nav-pill a{
-    padding: 8px 12px;
-  }
+  .header-inner{ flex-direction: column; gap: 10px; }
+  .site-nav .nav-pill{ flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
+  .site-nav .nav-pill a{ padding: 8px 12px; }
 }
-
-/* Safety: prevent accidental horizontal scroll from any element */
-html, body { overflow-x: hidden; }
-
-
-/* ================= Legacy Header (if not using pill style) ================= */
-header {
-  background-color: var(--primary-color);
-  color: #fff;
-  text-align: center;
-  padding: var(--spacing-md) 0;
-  margin-bottom: var(--spacing-md);
-}
-header h1 {
-  font-family: var(--font-heading);
-  font-size: 2em;
-  margin-top: var(--spacing-xs);
-}
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
-}
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-  font-family: var(--font-heading);
-  position: relative;
-  padding: var(--spacing-xs) 0;
-}
-nav ul li a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 2px;
-  background-color: #fff;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-nav ul li a:hover::after,
-nav ul li a:focus::after { transform: scaleX(1); }
 
 /* ================= Banner ================= */
-section.banner {
+section.banner{
   width: 100%;
   margin-bottom: var(--spacing-md);
   overflow: hidden;
   border-radius: var(--radius);
 }
-section.banner img {
-  display: block;
-  width: 100%;
-  height: auto;
+section.banner img{
+  display:block;
+  width:100%;
+  height:auto;
   object-fit: cover;
   opacity: 0;
-  animation: fade-in 2s forwards;
+  animation: banner-fade 1.6s forwards;
 }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes banner-fade{ from{opacity:0;} to{opacity:1;} }
+
+/* ================= Titles ================= */
+.page-title{
+  font-family: var(--font-heading);
+  text-align:center;
+  margin: var(--spacing-lg) auto var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+  max-width: var(--container);
+  font-weight: 850;
+  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
+  letter-spacing: -0.01em;
+}
+.page-title::after{
+  content:'';
+  display:block;
+  width: 96px;
+  height: 2px;
+  background: var(--border);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 999px;
+}
 
 /* ================= Intro Text (card) ================= */
-#introText {
-  background-color: var(--bg-light);
-  border: 1px solid #ccc;
+#introText{
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  max-width: 800px;
-  margin: 0 auto 30px;
-  padding: 20px;
-  text-align: justify;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  max-width: var(--container);
+  margin: 0 auto var(--spacing-lg);
+  padding: var(--spacing-md);
 }
-#introText p {
-  font-size: 1.125em;
-  margin-bottom: var(--spacing-md);
+#introText p{
+  max-width: 70ch;
+  margin: 0 auto var(--spacing-md);
+  font-size: 1.05rem;
 }
-#introText a {
-  color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
+#introText p:last-child{ margin-bottom: 0; }
+
+#introText a{
+  color: var(--accent);
+  text-decoration:none;
+  position:relative;
 }
-#introText a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 2px;
-  background-color: var(--accent-color);
+#introText a::after{
+  content:'';
+  position:absolute;
+  bottom:-2px; left:0;
+  width:100%; height:2px;
+  background: var(--accent);
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 #introText a:hover::after,
-#introText a:focus::after { transform: scaleX(1); }
+#introText a:focus::after{ transform: scaleX(1); }
+#introText a:hover{ color: var(--accent-hover); }
+#introText a:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
 
-.intro-list {
+.intro-list{
   list-style: disc;
   padding-left: 1.4rem;
-  margin-bottom: var(--spacing-sm);
+  margin: 0 auto var(--spacing-sm);
+  max-width: 70ch;
 }
-
-.intro-list li {
+.intro-list li{
   margin-bottom: 0.75rem;
-  text-align: justify;
+  color: var(--text);
 }
-
-.main-interests {
+.main-interests{
   margin-top: var(--spacing-sm);
   font-style: italic;
-  color: #444;
+  color: var(--muted);
+  max-width: 70ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* ================= Project Sections ================= */
-/* Center the page title */
-.page-title {
-  font-family: var(--font-heading);
-  text-align: center;
-  margin: var(--spacing-md) auto var(--spacing-sm);
-  max-width: 900px;          /* match your content width */
+/* ================= Project Blocks ================= */
+#projectHeader{
   padding: 0 var(--spacing-sm);
+  margin: 0 auto var(--spacing-lg);
+  max-width: var(--container);
 }
-
-/* optional: a neat underline */
-.page-title::after {
-  content: '';
-  display: block;
-  width: 120px;
-  height: 3px;
-  background: var(--primary-color);
-  margin: var(--spacing-xs) auto 0;
-  border-radius: 2px;
-}
-
-
-
-#projectHeader {
-  padding: 0 var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-}
-#projectHeader::after {
-  content: '';
+#projectHeader::after{
+  content:'';
   display: table;
   clear: both;
 }
-#projectHeader h2 a {
+
+/* Title links with animated underline (keep your vibe) */
+#projectHeader h2 a{
   font-family: var(--font-heading);
-  font-size: 1.5em;
-  color: var(--primary-color);
-  text-decoration: none;
-  position: relative;
+  font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+  font-weight: 850;
+  color: var(--text);
+  text-decoration:none;
+  position:relative;
+  line-height: 1.25;
 }
-#projectHeader h2 a::after {
-  content: '';
-  position: absolute;
-  bottom: -3px; left: 0;
-  width: 100%; height: 2px;
-  background-color: var(--primary-color);
+#projectHeader h2 a::after{
+  content:'';
+  position:absolute;
+  bottom:-3px; left:0;
+  width:100%;
+  height:2px;
+  background: var(--accent);
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 #projectHeader h2 a:hover::after,
-#projectHeader h2 a:focus::after { transform: scaleX(1); }
-.project-image {
-  float: left;
-  width: 250px;
-  height: auto;
+#projectHeader h2 a:focus::after{ transform: scaleX(1); }
+#projectHeader h2 a:hover{ color: var(--accent-hover); }
+#projectHeader h2 a:focus-visible{
+  outline: 3px solid rgba(29, 78, 216, 0.25);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* Images: lighter shadow + subtle border */
+.project-image{
+  float:left;
+  width: 260px;
+  height:auto;
   margin: 0 var(--spacing-md) var(--spacing-md) 0;
   border-radius: var(--radius);
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
 }
-#projectHeader p { margin-bottom: var(--spacing-md); }
 
-.project-date {
+/* Paragraph spacing */
+#projectHeader p{
+  margin: var(--spacing-sm) 0;
+  max-width: 70ch;
+}
+
+/* (Optional) If you still have .project-date in HTML, keep it subtle */
+.project-date{
   font-size: 0.85rem;
-  color: #333;
-  margin: 0 0 4px 0;
+  color: var(--muted);
+  margin: 0 0 6px 0;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
-.project-separator {
-  width: 200px;              /* controls the length */
-  height: 3px;              /* thickness */
-  background-color: #222;   /* color of the line */
-  margin: 30px auto;        /* centers and adds spacing */
-  border-radius: 1px;       /* smooth ends */
-  opacity: 0.8;             /* subtle look */
-}
-
-.projects-divider {
-  border: none; /* remove default browser style */
-  border-top: 3px dotted #444; /* thicker & darker dotted line */
+/* Separators (minimal) */
+.project-separator{
+  width: 160px;
+  height: 2px;
+  background: var(--border);
   margin: var(--spacing-lg) auto;
-  width: 100%; /* spans the whole page */
+  border-radius: 999px;
+}
+.projects-divider{
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--spacing-lg) auto;
+  width: min(1100px, 92%);
 }
 
-/* ================= Footer ================= */
-footer {
-  margin-top: auto;
-  background-color: var(--primary-color);
-  color: #fff;
-  text-align: center;
-  padding: var(--spacing-sm) 0;
-}
-.social-links a {
-  color: #fff;
-  font-size: 1.5em;
-  margin: 0 var(--spacing-xs);
-  display: inline-block;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.social-links a:hover,
-.social-links a:focus { transform: scale(1.1); opacity: 0.8; }
-
-/* ================= Responsive ================= */
-@media (max-width: 768px) {
-  .header-inner { flex-direction: column; gap: 10px; }
-  .site-nav .nav-pill { flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
-  .site-nav .nav-pill a { padding: 8px 12px; }
-
-  .project-image {
-    float: none;
-    display: block;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto var(--spacing-md);
-  }
-}
-@media (max-width: 480px) {
-  header h1 { font-size: 1.75em; }
-  #introText p { font-size: 1em; }
-}
-
-/* ================= Reduced Motion ================= */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
-
-body {
-  background: linear-gradient(to bottom, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-  background-attachment: fixed;
-}
-
-/* === Currently Working On Section === */
-#currentWork {
+/* ================= Currently Working On ================= */
+#currentWork{
   margin-top: var(--spacing-lg);
   padding: 0 var(--spacing-sm);
 }
-
-#currentWork .page-title {
+#currentWork .page-title{
   margin-bottom: var(--spacing-md);
 }
 
-.current-project {
-  margin-bottom: var(--spacing-lg);
-}
-
-.current-project h2 {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  margin-bottom: var(--spacing-xs);
-}
-
-.current-project p {
-  max-width: 900px;
-  line-height: 1.6;
-}
-
-/* --- Currently Working On: readable layout --- */
-#currentWork {
-  padding: 0 var(--spacing-sm);
-}
-
-.current-project {
-  /* constrain the whole entry and center it on the page */
-  max-width: 900px;                  /* or try 780px */
+/* readable layout */
+.current-project{
+  max-width: var(--container);
   margin: 0 auto var(--spacing-lg);
-  text-align: center;                /* centers the heading + date only */
+  text-align: center;
 }
-
-/* date line */
-.current-project .when {
-  display: block;
-  margin-bottom: 8px;
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  color: #5b5b5b;
-  text-transform: uppercase;         /* or: font-variant: all-small-caps; */
-  letter-spacing: .06em;
-}
-
-/* heading stays centered */
-.current-project h2 {
+.current-project h2{
   font-family: var(--font-heading);
   font-size: clamp(1.2rem, 2.4vw, 1.6rem);
   margin: 4px 0 var(--spacing-sm);
+  font-weight: 850;
 }
-
-/* paragraphs are limited in width and left-aligned for readability */
-.current-project p {
-  max-width: 65ch;                   /* ~65 characters per line is comfy */
-  margin: 0 auto var(--spacing-xs);  /* center the block itself */
-  text-align: left;                  /* left-align the text */
+.current-project p{
+  max-width: 65ch;
+  margin: 0 auto var(--spacing-xs);
+  text-align: left;
   line-height: 1.65;
+  color: var(--text);
 }
 
 /* optional: image inside current-project */
-.current-project .project-image {
-  display: block;
-  width: 100%;
-  max-width: 720px;                  /* keep images from getting too wide */
-  height: auto;
-  border-radius: var(--radius);
+.current-project .project-image{
+  display:block;
+  float:none;
+  width:100%;
+  max-width: 720px;
   margin: 0 auto var(--spacing-sm);
 }
 
-#scroll-progress {
+/* ================= Footer ================= */
+footer{
+  margin-top:auto;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  text-align:center;
+  padding: var(--spacing-md) 0;
+}
+.social-links a{
+  color: var(--text);
+  font-size: 1.5em;
+  margin: 0 var(--spacing-xs);
+  display:inline-block;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.social-links a:hover,
+.social-links a:focus{ transform: scale(1.1); opacity: 1; }
+
+/* ================= Responsive ================= */
+@media (max-width: 768px){
+  .project-image{
+    float:none;
+    display:block;
+    width:100%;
+    max-width: 460px;
+    margin: 0 auto var(--spacing-md);
+  }
+  #projectHeader p{ max-width: 100%; }
+}
+
+/* ================= Scroll progress bar (keep, minimalist) ================= */
+#scroll-progress{
   position: fixed;
   top: 0;
   left: 0;
-  height: 5px;  /* thickness of the bar */
-  background: linear-gradient(90deg, #4a148c, #0077cc);
+  height: 3px;
+  background: var(--accent);
   width: 0%;
   z-index: 9999;
   transition: width 0.15s ease-out;
 }
 
-/* ================= Fade in ================= */
-
-.fade-in {
+/* ================= Fade in (keep) ================= */
+.fade-in{
   opacity: 0;
-  transform: translateY(20px); /* slight slide up */
+  transform: translateY(16px);
   will-change: opacity, transform;
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
-.fade-in.visible {
+.fade-in.visible{
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ================= Reduced Motion ================= */
+@media (prefers-reduced-motion: reduce){
+  * { transition: none !important; animation: none !important; }
+}
+
 
 
