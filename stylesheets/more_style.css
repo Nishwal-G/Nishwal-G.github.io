@@ -281,29 +281,35 @@ html.js .fade-in.visible{
   * { transition: none !important; animation: none !important; }
 }
 
+/* Keep everything contained on the viewport */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Code blocks: wrap so they never force the page wider than the screen */
 pre {
   max-width: 100%;
-  overflow-x: auto;                   /* desktop: horizontal scroll if needed */
-  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;                 /* no sideways overflow */
+  white-space: pre-wrap;              /* keep line breaks but allow wrapping */
+  word-break: break-word;             /* break long chunks */
+  overflow-wrap: anywhere;            /* break very long URLs/strings */
 }
 
+/* Make sure <code> doesn't re-introduce nowrap */
 pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
   display: block;
-  white-space: pre;                   /* desktop: preserve formatting */
 }
 
-/* On phones: wrap instead of scroll */
-@media (max-width: 768px) {
-  html, body { overflow-x: hidden; }
-
-  pre { overflow-x: hidden; }
-
-  pre code {
-    white-space: pre-wrap;            /* wrap on phone */
-    word-break: break-word;
-    overflow-wrap: anywhere;
-  }
+/* Also protect normal text (long links can break mobile too) */
+p, li, a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
+
 
 
 
