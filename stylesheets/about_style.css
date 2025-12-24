@@ -222,27 +222,74 @@ footer {
 
 /* ============ Favourite Books ============ */
 
-#favouriteBooks {
-  max-width: 900px;
+#favouriteBooks{
+  /* make it look like your other content blocks */
+  max-width: 980px;
   margin: 0 auto var(--spacing-lg);
-  padding: 0 var(--spacing-sm);
+  padding: var(--spacing-md);
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
-#favouriteBooks p {
+#favouriteBooks h2{
+  text-align: center;
+  font-family: var(--font-heading);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  position: relative;
+}
+
+#favouriteBooks h2::after{
+  content: '';
+  display: block;
+  width: 64px;
+  height: 2px;
+  background: var(--border);
+  margin: var(--spacing-xs) auto 0;
+  border-radius: 999px;
+}
+
+#favouriteBooks p{
   max-width: 70ch;
-  margin-bottom: var(--spacing-md);
+  margin: 0 auto var(--spacing-md);
+  color: var(--text);
 }
 
-.book-list {
+/* list styling consistent with your intro lists */
+#favouriteBooks .book-list{
   max-width: 70ch;
   margin: 0 auto;
-  padding-left: 1.2rem;
+  padding-left: 1.25rem;
+  list-style: disc;
 }
 
-.book-list li {
-  margin-bottom: 0.6rem;
-  line-height: 1.6;
+#favouriteBooks .book-list li{
+  margin-bottom: 0.75rem;
+  line-height: 1.65;
+  color: var(--text);
 }
+
+/* subtle emphasis without changing the whole look */
+#favouriteBooks .book-list em{
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 640px){
+  #favouriteBooks{
+    padding: var(--spacing-sm);
+  }
+  #favouriteBooks p,
+  #favouriteBooks .book-list{
+    max-width: 100%;
+  }
+}
+
 
 
 /* ============ Scroll progress bar (keep, but minimalist) ============ */
