@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIPS Explainer | Nishwal Gora</title>
+  <title>DNA → Chromatin → BIPS | Nishwal Gora</title>
   <link rel="stylesheet" href="../stylesheets/bips_style.css" />
 </head>
 
 <body class="dark">
 
-  <!-- Header -->
+  <!-- Header (keeps your site consistent) -->
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../index.html">Nishwal Gora</a>
@@ -26,758 +26,627 @@
     </div>
   </header>
 
-  <!-- Fullscreen stage -->
-  <main class="stage">
+  <!-- Fixed canvas stage -->
+  <div class="stage">
     <canvas id="stageCanvas"></canvas>
 
-    <!-- Minimal caption (changes per slide) -->
-    <div class="caption">
-      <div class="cap-title" id="capTitle">DNA</div>
-      <div class="cap-text" id="capText">DNA is a double helix made from A, C, G, T.</div>
+    <!-- tiny floating HUD (minimal) -->
+    <div class="miniHUD">
+      <div class="miniTitle" id="miniTitle">DNA</div>
+      <div class="miniSub" id="miniSub">Hover words to highlight parts of the helix.</div>
     </div>
+  </div>
 
-    <!-- Controls (ONLY visible on TF/BIPS slides) -->
-    <div class="controls" id="controls">
-      <div class="control-row">
-        <label class="slider">
-          <span>Stickiness</span>
-          <input id="stickiness" type="range" min="0" max="100" value="45" />
-          <span class="val" id="stickVal">0.45</span>
-        </label>
+  <!-- Content (scrollable) -->
+  <main class="content">
+
+    <!-- ===================== SECTION 1: DNA ===================== -->
+    <section class="section" id="dnaSection">
+      <div class="card">
+        <h1>From DNA to Chromatin to BIPS</h1>
+        <p class="lead">
+          This is an interactive scroll-through explainer aimed at students who know basic science.
+          We’ll start with <strong>DNA</strong>, then zoom out to <strong>chromatin</strong>, and finally show
+          how “sticky” proteins can create <strong>clusters</strong> by physics alone (BIPS).
+        </p>
+
+        <h2>1) DNA: the information molecule</h2>
+        <p>
+          DNA is shaped like a <strong>double helix</strong>. It has two “rails” (the sugar-phosphate backbones)
+          and “rungs” connecting them.
+          Each rung is a <span class="term" data-highlight="basepair">base pair</span>.
+        </p>
+
+        <p>
+          DNA stores information because the rungs come in four letters: A, C, G, T.
+          They pair up in specific ways: A-T and C-G. The <em>order</em> of these letters is the code.
+        </p>
+
+        <p>
+          A <span class="term" data-highlight="gene">gene</span> is a stretch of DNA that can be “read” to make RNA
+          (and often proteins). Different cell types switch different genes ON/OFF.
+        </p>
+
+        <details class="expander">
+          <summary>Click to reveal more detail: what does “read a gene” mean?</summary>
+          <div class="expander-body">
+            <p>
+              Cells have molecular machines that move along DNA and copy a gene into RNA.
+              You can think of it like a scanner reading a section of a barcode. The RNA can then help build proteins.
+            </p>
+            <p>
+              Big idea: <strong>the same DNA</strong> exists in (almost) every cell, but cells behave differently because
+              they read different sets of genes.
+            </p>
+          </div>
+        </details>
+
+        <div class="bottomNav">
+          <button class="nextBtn" id="toChromatinBtn">Next → (Zoom out to Chromatin)</button>
+        </div>
       </div>
+    </section>
 
-      <div class="control-row">
-        <label class="slider">
-          <span>TF count</span>
-          <input id="tfCount" type="range" min="5" max="80" value="35" />
-          <span class="val" id="tfVal">35</span>
-        </label>
+    <!-- ===================== SECTION 2: CHROMATIN + BIPS ===================== -->
+    <section class="section" id="chromatinSection">
+      <div class="card">
+        <h2>2) Chromatin: DNA as a physical object</h2>
+        <p>
+          DNA is extremely long. In a human cell, if you stretched it out it’s about <strong>2 metres</strong>,
+          but it must fit inside a nucleus only a few micrometres wide.
+          So DNA is packaged with proteins into <strong>chromatin</strong>.
+        </p>
+
+        <p>
+          In our cartoon, chromatin is drawn as a chain of beads.
+          <strong>Each bead represents an enormous chunk of DNA</strong> —
+          you can imagine something like <strong>~3 million base pairs per bead</strong>
+          (a simplification, but it helps connect scales).
+        </p>
+
+        <h3>Genes are read by proteins (TFs)</h3>
+        <p>
+          To read genes, cells use proteins that diffuse around in the nucleus.
+          A famous class are <strong>transcription factors (TFs)</strong>.
+          They are “sticky” in a very specific way: they bind certain DNA regions more strongly than others.
+        </p>
+
+        <h3>Bridging-induced attraction</h3>
+        <p>
+          Here is the key physical idea:
+          if a protein can bind <strong>two places</strong> on chromatin, it can form a <strong>bridge</strong>.
+          Bridges pull distant parts of the chain closer together.
+        </p>
+
+        <p>
+          Once a region becomes slightly denser, it becomes easier for more proteins to bind there —
+          which makes it denser still. That is a <strong>positive feedback loop</strong>.
+          When this feedback produces stable clusters, we call it
+          <strong>Bridging-Induced Phase Separation (BIPS)</strong>.
+        </p>
+
+        <details class="expander">
+          <summary>Click to reveal more physics intuition (optional)</summary>
+          <div class="expander-body">
+            <p>
+              Think “Velcro balls on a string”. If the balls can grab two points on the string,
+              they create loops. Loops increase local density of string, which increases the chance
+              of more grabbing events. The system can self-organise into multiple hubs.
+            </p>
+            <p>
+              Importantly, you don’t need proteins to attract each other directly —
+              the clustering can be an <strong>emergent consequence</strong> of binding + polymer physics.
+            </p>
+          </div>
+        </details>
+
+        <div class="controlsRow">
+          <button class="playBtn" id="playBipsBtn">▶ Play BIPS animation</button>
+          <button class="ghostBtn" id="resetBipsBtn">Reset</button>
+        </div>
+
+        <p class="tinyNote">
+          In the animation, <span class="chip red"></span> red beads are special “hotspots” (TUs).
+          When BIPS starts, the chain forms <strong>2–3 clusters</strong> around these hotspots.
+        </p>
+
+        <div class="bottomNav">
+          <button class="ghostBtn" id="backToDnaBtn">← Back to DNA</button>
+        </div>
       </div>
+    </section>
 
-      <div class="control-row small">
-        <span id="statsLine">bridges: 0 • bound TFs: 0 • clusters: 0</span>
-      </div>
-
-      <div class="control-row">
-        <button id="resetBtn" type="button">Reset</button>
-        <button id="spawnBtn" type="button">Spawn TF</button>
-      </div>
-    </div>
-
-    <!-- Bottom navigation -->
-    <button class="next" id="nextBtn" type="button">Next →</button>
   </main>
 
   <script>
     // ============================================================
-    // Slide sequence (minimal text)
-    // ============================================================
-    const SLIDES = [
-      {
-        key: "dna",
-        title: "DNA",
-        text: "DNA is a double helix made from A, C, G, T.",
-        mode: "dna"
-      },
-      {
-        key: "genes",
-        title: "Genes",
-        text: "A gene is a short stretch of DNA you can “read”.",
-        mode: "genes"
-      },
-      {
-        key: "chromatin",
-        title: "Chromatin",
-        text: "DNA + proteins behaves like a flexible polymer. Drag it.",
-        mode: "chromatin"
-      },
-      {
-        key: "tfs",
-        title: "Transcription factors",
-        text: "TFs (red) diffuse and bind TU sites (green).",
-        mode: "tfs"
-      },
-      {
-        key: "bips",
-        title: "BIPS",
-        text: "Two-site binding makes bridges → local density → clusters.",
-        mode: "bips"
-      }
-    ];
-
-    let slideIndex = 0;
-    let scene = SLIDES[0].mode;
-
-    const capTitle = document.getElementById("capTitle");
-    const capText  = document.getElementById("capText");
-    const nextBtn  = document.getElementById("nextBtn");
-    const controls = document.getElementById("controls");
-
-    function applySlide(i){
-      slideIndex = (i + SLIDES.length) % SLIDES.length;
-      const s = SLIDES[slideIndex];
-      scene = s.mode;
-
-      capTitle.textContent = s.title;
-      capText.textContent  = s.text;
-
-      // Only show controls on TF/BIPS slides
-      const show = (scene === "tfs" || scene === "bips");
-      controls.classList.toggle("show", show);
-
-      // If we enter TF/BIPS, ensure we have TFs, and show TU sites
-      if (scene === "tfs" || scene === "bips") {
-        world.showTUs = true;
-        world.showTFs = true;
-      } else if (scene === "chromatin") {
-        world.showTUs = false;
-        world.showTFs = false;
-      } else {
-        world.showTUs = false;
-        world.showTFs = false;
-      }
-    }
-
-    nextBtn.addEventListener("click", () => applySlide(slideIndex + 1));
-
-    // ============================================================
-    // Canvas setup
+    // Canvas + global rendering state
     // ============================================================
     const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
 
-    function resizeCanvasToDisplaySize() {
+    const miniTitle = document.getElementById("miniTitle");
+    const miniSub   = document.getElementById("miniSub");
+
+    function resizeCanvas() {
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       const rect = canvas.getBoundingClientRect();
       const w = Math.floor(rect.width * dpr);
       const h = Math.floor(rect.height * dpr);
       if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w; canvas.height = h;
+        canvas.width = w;
+        canvas.height = h;
       }
     }
-    window.addEventListener("resize", resizeCanvasToDisplaySize);
+    window.addEventListener("resize", resizeCanvas);
+
+    // Modes:
+    //  - "dna": helix (with hover highlight)
+    //  - "chromatin": long chain, calm motion
+    //  - "bips": chain pulled into 2–3 clusters (animation)
+    let mode = "dna";
+
+    // Hover highlight state for DNA
+    let hoverHighlight = null; // "basepair" | "gene" | null
 
     // ============================================================
-    // UI controls
+    // Section navigation (buttons)
     // ============================================================
-    const resetBtn = document.getElementById("resetBtn");
-    const spawnBtn = document.getElementById("spawnBtn");
-    const stickSlider = document.getElementById("stickiness");
-    const stickVal = document.getElementById("stickVal");
-    const tfCountSlider = document.getElementById("tfCount");
-    const tfVal = document.getElementById("tfVal");
-    const statsLine = document.getElementById("statsLine");
+    const toChromatinBtn = document.getElementById("toChromatinBtn");
+    const backToDnaBtn   = document.getElementById("backToDnaBtn");
 
-    const params = {
-      stickiness: 0.45,
-      tfTargetCount: 35,
+    toChromatinBtn.addEventListener("click", () => {
+      document.getElementById("chromatinSection").scrollIntoView({ behavior: "smooth" });
+      setMode("chromatin");
+    });
 
-      // Polymer (long)
-      beadCount: 140,
-      restLen: 10,
-      kSpring: 0.18,
-      kBend: 0.012,
-      damping: 0.93,
-      brownianChain: 0.18,
+    backToDnaBtn.addEventListener("click", () => {
+      document.getElementById("dnaSection").scrollIntoView({ behavior: "smooth" });
+      setMode("dna");
+    });
 
-      // Excluded volume (IMPORTANT)
-      beadRadius: 4.8,
-      kRepel: 0.45,
+    // Switch mode depending on what section is mostly visible
+    const sections = [
+      { el: document.getElementById("dnaSection"), mode: "dna" },
+      { el: document.getElementById("chromatinSection"), mode: "chromatin" }
+    ];
 
-      // TF
-      tfRadius: 7.0,
-      brownianTF: 0.95,
-      tfDamping: 0.94,
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const m = e.target.id === "dnaSection" ? "dna" : "chromatin";
+          setMode(m);
+        }
+      });
+    }, { threshold: 0.55 });
 
-      // TF repulsion (prevents piling into one blob)
-      tfRepelRadius: 9.0,
-      kRepelTF: 0.35,
+    sections.forEach(s => observer.observe(s.el));
 
-      // binding
-      bindRadius: 15,
-      baseBindRate: 0.020,
-      baseUnbindRate: 0.004,
+    function setMode(m) {
+      // If currently playing bips, don’t forcibly interrupt unless leaving chromatin area
+      if (mode === "bips" && m === "chromatin") return;
+      mode = m;
 
-      // BIPS feedback (kept moderate!)
-      feedbackRadius: 100,
-      feedbackBoostMax: 2.4,
-
-      // LAMMPS-like ON/OFF switching (prevents one mega hub)
-      switchEveryFrames: 90,   // ~1.5s at 60fps
-      switchFrac: 0.02         // flip 2% per switch event
-    };
-
-    function updateUI(){
-      params.stickiness = Number(stickSlider.value) / 100;
-      params.tfTargetCount = Number(tfCountSlider.value);
-      stickVal.textContent = params.stickiness.toFixed(2);
-      tfVal.textContent = params.tfTargetCount.toString();
-    }
-    stickSlider.addEventListener("input", updateUI);
-    tfCountSlider.addEventListener("input", updateUI);
-    updateUI();
-
-    // ============================================================
-    // RNG
-    // ============================================================
-    function rand(){ return Math.random(); }
-    function randn(){
-      let u=0,v=0;
-      while(u===0) u=rand();
-      while(v===0) v=rand();
-      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+      if (mode === "dna") {
+        miniTitle.textContent = "DNA";
+        miniSub.textContent = "Hover ‘base pair’ or ‘gene’ in the text.";
+      } else if (mode === "chromatin") {
+        miniTitle.textContent = "Chromatin";
+        miniSub.textContent = "DNA packaged into a moving polymer chain.";
+      } else if (mode === "bips") {
+        miniTitle.textContent = "BIPS";
+        miniSub.textContent = "Watch clusters form around hotspots.";
+      }
     }
 
     // ============================================================
-    // World
+    // Hover interactions for terms ("base pair", "gene")
+    // ============================================================
+    document.querySelectorAll(".term").forEach(span => {
+      span.addEventListener("mouseenter", () => {
+        hoverHighlight = span.dataset.highlight;
+      });
+      span.addEventListener("mouseleave", () => {
+        hoverHighlight = null;
+      });
+    });
+
+    // ============================================================
+    // Chromatin / BIPS animation world
     // ============================================================
     const world = {
-      beads: [],   // {x,y,vx,vy,isTU}
-      tfs: [],     // {x,y,vx,vy,bindA,bindB,on}
-      bridges: [],
-      showTUs: false,
-      showTFs: false,
-      frame: 0
+      beads: [],
+      vx: [],
+      vy: [],
+      isHot: [],
+      frame: 0,
+      playing: false,
+      // cluster targets (computed at start)
+      clusterCenters: []
     };
 
-    function spawnTF(){
-      const W = canvas.width, H = canvas.height;
-      world.tfs.push({
-        x: W*(0.25 + 0.5*rand()),
-        y: H*(0.25 + 0.5*rand()),
-        vx: 0, vy: 0,
-        bindA: null, bindB: null,
-        on: true
-      });
-    }
+    const params = {
+      beadCount: 160,
+      restLen: 10,
+      kSpring: 0.18,
+      kBend: 0.010,
+      damping: 0.92,
+      brownian: 0.16,
 
-    function initWorld(){
-      resizeCanvasToDisplaySize();
+      // excluded volume (keeps it from collapsing into a single overlapped ball)
+      beadRadius: 4.6,
+      kRepel: 0.55,
+
+      // BIPS pull strength (toward cluster centers)
+      kClusterPull: 0.0030,
+      kHotPull: 0.0060,
+
+      // choose 3 cluster centres
+      clusterCount: 3
+    };
+
+    function initPolymer() {
+      resizeCanvas();
       const W = canvas.width, H = canvas.height;
-      world.beads = [];
-      world.tfs = [];
-      world.bridges = [];
       world.frame = 0;
+      world.playing = false;
 
-      // long polymer across the screen
-      const startX = W*0.08;
-      const midY = H*0.55;
+      world.beads = [];
+      world.vx = new Array(params.beadCount).fill(0);
+      world.vy = new Array(params.beadCount).fill(0);
+      world.isHot = new Array(params.beadCount).fill(false);
 
-      for (let i=0; i<params.beadCount; i++){
-        const x = startX + i*params.restLen;
-        const y = midY + (H*0.05)*Math.sin(i*0.20);
-        const isTU = (i % 12 === 0); // only visible later
-        world.beads.push({ x,y,vx:0,vy:0,isTU });
+      const startX = W * 0.10;
+      const midY   = H * 0.58;
+
+      for (let i=0; i<params.beadCount; i++) {
+        const x = startX + i * params.restLen;
+        const y = midY + (H * 0.05) * Math.sin(i * 0.20);
+        world.beads.push({ x, y });
       }
 
-      for (let i=0; i<params.tfTargetCount; i++) spawnTF();
-    }
-
-    resetBtn.addEventListener("click", initWorld);
-    spawnBtn.addEventListener("click", spawnTF);
-
-    function maintainTFCount(){
-      const target = params.tfTargetCount;
-      while(world.tfs.length < target) spawnTF();
-      while(world.tfs.length > target) world.tfs.pop();
-    }
-
-    // ============================================================
-    // Mouse drag (only for chromatin+)
-    // ============================================================
-    let mouse = {x:0,y:0,down:false};
-    let grab = {type:null,index:-1,offx:0,offy:0};
-
-    function getMousePos(evt){
-      const rect = canvas.getBoundingClientRect();
-      const dpr = canvas.width / rect.width;
-      return { x:(evt.clientX-rect.left)*dpr, y:(evt.clientY-rect.top)*dpr };
-    }
-
-    canvas.addEventListener("mousedown", (e)=>{
-      mouse.down = true;
-      const p = getMousePos(e);
-      mouse.x=p.x; mouse.y=p.y;
-
-      if (!(scene==="chromatin" || scene==="tfs" || scene==="bips")) return;
-
-      // grab TF first (only if TFs visible)
-      if (world.showTFs){
-        for (let i=world.tfs.length-1; i>=0; i--){
-          const tf = world.tfs[i];
-          const dx=p.x-tf.x, dy=p.y-tf.y;
-          if (dx*dx+dy*dy <= (params.tfRadius*2.6)**2){
-            grab.type="tf"; grab.index=i;
-            grab.offx=tf.x-p.x; grab.offy=tf.y-p.y;
-            return;
-          }
+      // mark "hotspots" (TUs) in red — only a few, grouped so we form 2–3 clusters
+      // pick 3 hotspot bands
+      const bands = [
+        Math.floor(params.beadCount * 0.25),
+        Math.floor(params.beadCount * 0.52),
+        Math.floor(params.beadCount * 0.78)
+      ];
+      for (const c of bands) {
+        for (let j = -3; j <= 3; j++) {
+          const idx = c + j;
+          if (idx >= 0 && idx < params.beadCount) world.isHot[idx] = true;
         }
       }
 
-      // grab bead
-      for (let i=world.beads.length-1; i>=0; i--){
-        const b = world.beads[i];
-        const dx=p.x-b.x, dy=p.y-b.y;
-        if (dx*dx+dy*dy <= (18)**2){
-          grab.type="bead"; grab.index=i;
-          grab.offx=b.x-p.x; grab.offy=b.y-p.y;
-          return;
-        }
-      }
-    });
-
-    canvas.addEventListener("mousemove", (e)=>{
-      const p=getMousePos(e);
-      mouse.x=p.x; mouse.y=p.y;
-      if(!mouse.down || grab.type===null) return;
-
-      if(grab.type==="bead"){
-        const b=world.beads[grab.index];
-        const tx=mouse.x+grab.offx, ty=mouse.y+grab.offy;
-        b.vx += 0.25*(tx-b.x);
-        b.vy += 0.25*(ty-b.y);
-      }
-      if(grab.type==="tf"){
-        const tf=world.tfs[grab.index];
-        const tx=mouse.x+grab.offx, ty=mouse.y+grab.offy;
-        tf.vx += 0.22*(tx-tf.x);
-        tf.vy += 0.22*(ty-tf.y);
-      }
-    });
-
-    window.addEventListener("mouseup", ()=>{
-      mouse.down=false; grab.type=null; grab.index=-1;
-    });
-
-    // ============================================================
-    // Forces
-    // ============================================================
-    function springForce(ax,ay,bx,by,rest,k){
-      const dx=bx-ax, dy=by-ay;
-      const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
-      const f=k*(r-rest);
-      return {fx:f*dx/r, fy:f*dy/r};
+      // cluster centers (fixed locations in space) — spread across the canvas
+      world.clusterCenters = [
+        { x: W * 0.34, y: H * 0.50 },
+        { x: W * 0.55, y: H * 0.60 },
+        { x: W * 0.70, y: H * 0.45 }
+      ];
     }
 
-    function bendForce(p0,p1,p2,kB){
-      const mx=0.5*(p0.x+p2.x);
-      const my=0.5*(p0.y+p2.y);
-      return {fx:kB*(mx-p1.x), fy:kB*(my-p1.y)};
+    function springForce(ax, ay, bx, by, rest, k) {
+      const dx = bx - ax, dy = by - ay;
+      const r = Math.sqrt(dx*dx + dy*dy) + 1e-6;
+      const f = k * (r - rest);
+      return { fx: f * dx / r, fy: f * dy / r };
     }
 
-    function repelPair(ax,ay,bx,by,minDist,k){
-      const dx=bx-ax, dy=by-ay;
-      const r2=dx*dx+dy*dy+1e-6;
-      const r=Math.sqrt(r2);
-      if(r>=minDist) return {fx:0,fy:0};
-      const overlap=(minDist-r);
-      const f=k*overlap;
-      return {fx:f*dx/r, fy:f*dy/r};
+    function bendForce(p0, p1, p2, kB) {
+      const mx = 0.5*(p0.x + p2.x);
+      const my = 0.5*(p0.y + p2.y);
+      return { fx: kB*(mx - p1.x), fy: kB*(my - p1.y) };
     }
 
-    function softWalls(p){
-      // keeps things inside without "sucking to centre"
-      const W=canvas.width, H=canvas.height;
-      const margin=60;
-      const k=0.0018;
-
-      if (p.x < margin) p.vx += k*(margin - p.x);
-      if (p.x > W - margin) p.vx -= k*(p.x - (W - margin));
-      if (p.y < margin) p.vy += k*(margin - p.y);
-      if (p.y > H - margin) p.vy -= k*(p.y - (H - margin));
+    function repelPair(ax, ay, bx, by, minDist, k) {
+      const dx = bx - ax, dy = by - ay;
+      const r2 = dx*dx + dy*dy + 1e-6;
+      const r = Math.sqrt(r2);
+      if (r >= minDist) return { fx: 0, fy: 0 };
+      const overlap = (minDist - r);
+      const f = k * overlap;
+      return { fx: f * dx / r, fy: f * dy / r };
     }
 
-    // ============================================================
-    // BIPS feedback (saturating)
-    // ============================================================
-    function feedbackBoostAt(x,y){
-      if (world.bridges.length===0) return 1.0;
-      let sum=0.0;
-      const R=params.feedbackRadius;
+    function softWalls(x, y, vx, vy) {
+      const W = canvas.width, H = canvas.height;
+      const margin = 70;
+      const k = 0.0018;
 
-      for (const br of world.bridges){
-        const a=world.beads[br.a], b=world.beads[br.b];
-        const cx=0.5*(a.x+b.x), cy=0.5*(a.y+b.y);
-        const dx=x-cx, dy=y-cy;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if (d<R) sum += (1.0 - d/R);
-      }
-      const sat = 1.0 - Math.exp(-sum);
-      return 1.0 + (params.feedbackBoostMax - 1.0)*sat;
+      if (x < margin) vx += k * (margin - x);
+      if (x > W - margin) vx -= k * (x - (W - margin));
+      if (y < margin) vy += k * (margin - y);
+      if (y > H - margin) vy -= k * (y - (H - margin));
+
+      return { vx, vy };
     }
 
-    function tryBind(i){
-      const tf = world.tfs[i];
-      if (!(scene==="tfs" || scene==="bips")) return;
-      if (!tf.on) return;
-
-      const hasA = (tf.bindA!==null);
-      const hasB = (tf.bindB!==null);
-      if (hasA && hasB) return;
-
-      // nearest TU
-      let best={idx:null,d2:Infinity};
-      for (let j=0;j<world.beads.length;j++){
-        const bead=world.beads[j];
-        if (!bead.isTU) continue;
-        if (tf.bindA===j || tf.bindB===j) continue;
-        const dx=bead.x-tf.x, dy=bead.y-tf.y;
-        const d2=dx*dx+dy*dy;
-        if (d2<best.d2) best={idx:j,d2};
-      }
-      if (best.idx===null) return;
-      if (best.d2 > params.bindRadius*params.bindRadius) return;
-
-      const localBoost = (scene==="bips") ? feedbackBoostAt(tf.x,tf.y) : 1.0;
-      const pBind = params.baseBindRate * params.stickiness * localBoost;
-
-      if (rand() < pBind){
-        if (!hasA) tf.bindA = best.idx;
-        else tf.bindB = best.idx;
-
-        if (scene==="bips" && tf.bindA!==null && tf.bindB!==null){
-          const a=Math.min(tf.bindA,tf.bindB);
-          const b=Math.max(tf.bindA,tf.bindB);
-          const exists = world.bridges.some(br=>br.a===a && br.b===b);
-          if (!exists) world.bridges.push({a,b,tfIndex:i});
-        }
-      }
-    }
-
-    function tryUnbind(i){
-      const tf=world.tfs[i];
-      if (!(scene==="tfs" || scene==="bips")) return;
-
-      const unbind = params.baseUnbindRate * (tf.on ? 1.0 : 3.0);
-      if (tf.bindA!==null && rand()<unbind) tf.bindA=null;
-      if (tf.bindB!==null && rand()<unbind) tf.bindB=null;
-
-      if (scene==="bips"){
-        world.bridges = world.bridges.filter(br=>{
-          const t = world.tfs[br.tfIndex];
-          return t && t.bindA!==null && t.bindB!==null;
-        });
-      }
-    }
-
-    function applyBindingConstraints(){
-      const tetherK=0.16;
-      for (const tf of world.tfs){
-        if (tf.bindA!==null){
-          const b=world.beads[tf.bindA];
-          tf.vx += tetherK*(b.x-tf.x);
-          tf.vy += tetherK*(b.y-tf.y);
-        }
-        if (tf.bindB!==null){
-          const b=world.beads[tf.bindB];
-          tf.vx += tetherK*(b.x-tf.x);
-          tf.vy += tetherK*(b.y-tf.y);
-        }
-      }
-    }
-
-    function applyBridgeForces(){
-      if (scene!=="bips") return;
-      const kBridge = 0.05 + 0.16*params.stickiness;
-      const rest = params.restLen*2.0;
-
-      for (const br of world.bridges){
-        const a=world.beads[br.a], b=world.beads[br.b];
-        const f=springForce(a.x,a.y,b.x,b.y,rest,kBridge);
-        a.vx += f.fx; a.vy += f.fy;
-        b.vx -= f.fx; b.vy -= f.fy;
-      }
-    }
-
-    function switchTFs(){
-      // LAMMPS-like ON/OFF flipping prevents permanent single mega-cluster
-      for (const tf of world.tfs){
-        if (rand() < params.switchFrac){
-          tf.on = !tf.on;
-          if (!tf.on){
-            tf.bindA=null; tf.bindB=null;
-          }
-        }
-      }
-    }
-
-    // ============================================================
-    // Step
-    // ============================================================
-    function step(){
+    function stepPolymer() {
+      const n = params.beadCount;
       world.frame++;
-      resizeCanvasToDisplaySize();
 
-      const polymerActive = (scene==="chromatin" || scene==="tfs" || scene==="bips");
-      const tfActive = (scene==="tfs" || scene==="bips");
+      // neighbour springs
+      for (let i=0; i<n-1; i++) {
+        const a = world.beads[i];
+        const b = world.beads[i+1];
+        const f = springForce(a.x,a.y,b.x,b.y, params.restLen, params.kSpring);
+        world.vx[i]   += f.fx; world.vy[i]   += f.fy;
+        world.vx[i+1] -= f.fx; world.vy[i+1] -= f.fy;
+      }
 
-      if (polymerActive){
-        // springs
-        for (let i=0;i<world.beads.length-1;i++){
-          const a=world.beads[i], b=world.beads[i+1];
-          const f=springForce(a.x,a.y,b.x,b.y,params.restLen,params.kSpring);
-          a.vx += f.fx; a.vy += f.fy;
-          b.vx -= f.fx; b.vy -= f.fy;
-        }
+      // bending
+      for (let i=1; i<n-1; i++) {
+        const f = bendForce(world.beads[i-1], world.beads[i], world.beads[i+1], params.kBend);
+        world.vx[i] += f.fx;
+        world.vy[i] += f.fy;
+      }
 
-        // bending
-        for (let i=1;i<world.beads.length-1;i++){
-          const f=bendForce(world.beads[i-1],world.beads[i],world.beads[i+1],params.kBend);
-          world.beads[i].vx += f.fx;
-          world.beads[i].vy += f.fy;
-        }
-
-        // excluded volume (local window for speed)
-        const minBB = 2*params.beadRadius;
-        for (let i=0;i<world.beads.length;i++){
-          const i0=Math.max(0,i-14);
-          const i1=Math.min(world.beads.length-1,i+14);
-          for (let j=i0;j<=i1;j++){
-            if (j===i) continue;
-            if (Math.abs(i-j)<=1) continue;
-            const a=world.beads[i], b=world.beads[j];
-            const f=repelPair(a.x,a.y,b.x,b.y,minBB,params.kRepel);
-            a.vx -= f.fx; a.vy -= f.fy;
-            b.vx += f.fx; b.vy += f.fy;
-          }
-        }
-
-        // integrate beads
-        for (const b of world.beads){
-          b.vx += params.brownianChain*randn();
-          b.vy += params.brownianChain*randn();
-          b.vx *= params.damping;
-          b.vy *= params.damping;
-          b.x += b.vx; b.y += b.vy;
-          softWalls(b);
+      // excluded volume (local window)
+      const minBB = 2 * params.beadRadius;
+      for (let i=0; i<n; i++) {
+        const i0 = Math.max(0, i - 14);
+        const i1 = Math.min(n - 1, i + 14);
+        for (let j=i0; j<=i1; j++) {
+          if (j === i) continue;
+          if (Math.abs(i - j) <= 1) continue;
+          const a = world.beads[i];
+          const b = world.beads[j];
+          const f = repelPair(a.x,a.y,b.x,b.y, minBB, params.kRepel);
+          world.vx[i] -= f.fx; world.vy[i] -= f.fy;
+          world.vx[j] += f.fx; world.vy[j] += f.fy;
         }
       }
 
-      if (tfActive && world.showTFs){
-        maintainTFCount();
+      // BIPS-like clustering pull ONLY when playing
+      if (mode === "bips" && world.playing) {
+        // pull every bead gently toward nearest cluster center
+        for (let i=0; i<n; i++) {
+          const p = world.beads[i];
 
-        // TF diffusion
-        for (const tf of world.tfs){
-          tf.vx += params.brownianTF*randn();
-          tf.vy += params.brownianTF*randn();
-          tf.vx *= params.tfDamping;
-          tf.vy *= params.tfDamping;
-          tf.x += tf.vx; tf.y += tf.vy;
-          softWalls(tf);
-        }
-
-        // TF-TF repulsion
-        const minTT = 2*params.tfRepelRadius;
-        for (let i=0;i<world.tfs.length;i++){
-          for (let j=i+1;j<world.tfs.length;j++){
-            const a=world.tfs[i], b=world.tfs[j];
-            const f=repelPair(a.x,a.y,b.x,b.y,minTT,params.kRepelTF);
-            a.vx -= f.fx; a.vy -= f.fy;
-            b.vx += f.fx; b.vy += f.fy;
+          // find nearest center
+          let best = { d2: Infinity, c: null };
+          for (const c of world.clusterCenters) {
+            const dx = c.x - p.x, dy = c.y - p.y;
+            const d2 = dx*dx + dy*dy;
+            if (d2 < best.d2) best = { d2, c };
           }
-        }
 
-        // binding kinetics
-        for (let i=0;i<world.tfs.length;i++){
-          tryUnbind(i);
-          tryBind(i);
-        }
+          const c = best.c;
+          const dx = c.x - p.x, dy = c.y - p.y;
+          world.vx[i] += params.kClusterPull * dx;
+          world.vy[i] += params.kClusterPull * dy;
 
-        applyBindingConstraints();
-        applyBridgeForces();
-
-        // ON/OFF switching (LAMMPS-like)
-        if (scene==="bips" && (world.frame % params.switchEveryFrames === 0)){
-          switchTFs();
+          // hotspots pull harder (these represent strong binding sites)
+          if (world.isHot[i]) {
+            world.vx[i] += params.kHotPull * dx;
+            world.vy[i] += params.kHotPull * dy;
+          }
         }
       }
 
-      render();
-      requestAnimationFrame(step);
+      // integrate
+      for (let i=0; i<n; i++) {
+        // brownian
+        world.vx[i] += params.brownian * randn();
+        world.vy[i] += params.brownian * randn();
+
+        // damping
+        world.vx[i] *= params.damping;
+        world.vy[i] *= params.damping;
+
+        // update
+        world.beads[i].x += world.vx[i];
+        world.beads[i].y += world.vy[i];
+
+        // soft walls
+        const out = softWalls(world.beads[i].x, world.beads[i].y, world.vx[i], world.vy[i]);
+        world.vx[i] = out.vx;
+        world.vy[i] = out.vy;
+      }
     }
 
     // ============================================================
-    // Rendering
+    // DNA drawing with hover highlights
     // ============================================================
-    function clearBG(){
-      ctx.fillStyle="#050507";
+    function drawBackground() {
+      ctx.fillStyle = "#050507";
       ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      // subtle noise points
+      ctx.fillStyle = "rgba(255,255,255,0.04)";
+      for (let i=0;i<120;i++){
+        const x=(i*97)%canvas.width;
+        const y=(i*181)%canvas.height;
+        ctx.fillRect(x,y,2,2);
+      }
     }
 
-    function glow(x,y,r,fill,blur=18){
+    function glow(x,y,r,color,blur=18){
       ctx.save();
-      ctx.shadowColor=fill;
-      ctx.shadowBlur=blur;
-      ctx.fillStyle=fill;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = blur;
+      ctx.fillStyle = color;
       ctx.beginPath();
       ctx.arc(x,y,r,0,Math.PI*2);
       ctx.fill();
       ctx.restore();
     }
 
-    // DNA helix + gene highlight
-    function drawDNA(highlight=false){
-      const W=canvas.width, H=canvas.height;
-      const cx=W*0.50, cy=H*0.55;
-      const amp=H*0.10;
-      const pitch=W*0.020;
-      const turns=36;
+    function drawDNA() {
+      const W = canvas.width, H = canvas.height;
+      const cx = W * 0.50, cy = H * 0.55;
+      const amp = H * 0.12;
+      const pitch = W * 0.020;
+      const turns = 40;
 
-      // segment to highlight for "genes"
-      const hi0 = 12, hi1 = 18;
+      // decide highlight ranges
+      const highlightBasePairs = (hoverHighlight === "basepair");
+      const highlightGene = (hoverHighlight === "gene");
 
-      for (let i=0;i<turns;i++){
-        const t = i*0.55 + world.frame*0.02;
+      const geneStart = 14;
+      const geneEnd   = 22;
+
+      for (let i=0; i<turns; i++){
+        const t = i*0.55 + (performance.now()*0.0016);
         const x = cx - (turns*pitch)/2 + i*pitch;
 
         const y1 = cy + amp*Math.sin(t);
         const y2 = cy + amp*Math.sin(t + Math.PI);
 
-        // base-pair ladder
-        const isHi = highlight && (i>=hi0 && i<=hi1);
+        const inGene = (i >= geneStart && i <= geneEnd);
+
+        // base-pair rung highlight
+        const isBasePairHi = highlightBasePairs && (i % 4 === 0);
+        const isGeneHi = highlightGene && inGene;
+
+        const rungCol = isBasePairHi ? "rgba(255,255,255,0.95)"
+                      : isGeneHi ? "rgba(0,255,140,0.95)"
+                      : "rgba(255,255,255,0.22)";
 
         ctx.save();
-        ctx.strokeStyle = isHi ? "rgba(0,255,140,0.95)" : "rgba(255,255,255,0.28)";
-        ctx.lineWidth = isHi ? 3.0 : 2.0;
+        ctx.strokeStyle = rungCol;
+        ctx.lineWidth = (isBasePairHi || isGeneHi) ? 3.0 : 2.0;
         ctx.beginPath();
         ctx.moveTo(x,y1);
         ctx.lineTo(x,y2);
         ctx.stroke();
         ctx.restore();
 
-        // backbones
-        glow(x,y1, 4.8, "rgba(255,255,255,0.65)", 18);
-        glow(x,y2, 4.8, "rgba(255,255,255,0.65)", 18);
+        // backbone beads
+        const backCol = isGeneHi ? "rgba(0,255,140,0.75)" : "rgba(255,255,255,0.55)";
+        glow(x, y1, 4.8, backCol, 18);
+        glow(x, y2, 4.8, backCol, 18);
       }
 
-      // subtle helix guides
+      // labels arrows (simple)
       ctx.save();
-      ctx.strokeStyle="rgba(255,255,255,0.12)";
-      ctx.lineWidth=2;
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "600 16px system-ui";
+
+      // base pair label
+      const lx = W*0.22, ly = H*0.32;
+      ctx.fillText("base pair (a rung)", lx, ly);
+
+      // draw arrow to a rung
+      ctx.strokeStyle = "rgba(255,255,255,0.30)";
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      for (let i=0;i<turns;i++){
-        const t=i*0.55 + world.frame*0.02;
-        const x=cx-(turns*pitch)/2 + i*pitch;
-        const y=cy + amp*Math.sin(t);
-        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-      }
+      ctx.moveTo(lx + 10, ly + 8);
+      ctx.lineTo(W*0.38, H*0.42);
       ctx.stroke();
+
+      // gene label
+      const gx = W*0.68, gy = H*0.72;
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.fillText("gene (a section)", gx, gy);
+      ctx.strokeStyle = "rgba(0,255,140,0.30)";
       ctx.beginPath();
-      for (let i=0;i<turns;i++){
-        const t=i*0.55 + world.frame*0.02 + Math.PI;
-        const x=cx-(turns*pitch)/2 + i*pitch;
-        const y=cy + amp*Math.sin(t);
-        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-      }
+      ctx.moveTo(gx + 10, gy + 8);
+      ctx.lineTo(W*0.60, H*0.58);
       ctx.stroke();
+
       ctx.restore();
     }
 
-    function drawPolymer(){
-      // chain
+    // ============================================================
+    // Polymer drawing + BIPS clusters
+    // ============================================================
+    function drawPolymer() {
+      // chain line
       ctx.save();
-      ctx.strokeStyle="rgba(255,255,255,0.30)";
-      ctx.lineWidth=3.0;
+      ctx.strokeStyle = "rgba(255,255,255,0.28)";
+      ctx.lineWidth = 3.0;
       ctx.beginPath();
-      world.beads.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+      world.beads.forEach((p,i) => {
+        if (i===0) ctx.moveTo(p.x,p.y);
+        else ctx.lineTo(p.x,p.y);
+      });
       ctx.stroke();
       ctx.restore();
 
       // beads
-      for (const b of world.beads){
-        if (b.isTU && world.showTUs){
-          glow(b.x,b.y,6.5,"rgba(0,255,140,0.95)",26);
+      for (let i=0; i<world.beads.length; i++){
+        const p = world.beads[i];
+        if (world.isHot[i]) {
+          // hotspots (TUs) are red (as you asked)
+          glow(p.x,p.y, 6.6, "rgba(255,60,60,0.95)", 28);
         } else {
-          glow(b.x,b.y,4.8,"rgba(255,255,255,0.55)",16);
+          glow(p.x,p.y, 4.8, "rgba(255,255,255,0.55)", 16);
         }
       }
-    }
 
-    function drawTFs(){
-      if (!world.showTFs) return;
-      for (const tf of world.tfs){
-        const bound = (tf.bindA!==null || tf.bindB!==null);
-        const on = tf.on;
-        const col = on
-          ? (bound ? "rgba(255,60,60,0.95)" : "rgba(255,60,60,0.75)")
-          : "rgba(255,60,60,0.25)";
-        glow(tf.x,tf.y,params.tfRadius,col, bound?28:18);
-      }
-    }
-
-    function drawBridges(){
-      if (scene!=="bips") return;
-      ctx.save();
-      ctx.strokeStyle="rgba(255,60,60,0.80)";
-      ctx.lineWidth=2.0;
-      for (const br of world.bridges){
-        const a=world.beads[br.a], b=world.beads[br.b];
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-
-    function countClusters(){
-      // very cheap “cluster” estimate: number of distinct bridge centers separated by >R
-      if (world.bridges.length===0) return 0;
-      const centers=[];
-      for (const br of world.bridges){
-        const a=world.beads[br.a], b=world.beads[br.b];
-        centers.push({x:0.5*(a.x+b.x), y:0.5*(a.y+b.y)});
-      }
-      const R=70;
-      const used=new Array(centers.length).fill(false);
-      let clusters=0;
-      for (let i=0;i<centers.length;i++){
-        if(used[i]) continue;
-        clusters++;
-        used[i]=true;
-        for (let j=i+1;j<centers.length;j++){
-          const dx=centers[j].x-centers[i].x, dy=centers[j].y-centers[i].y;
-          if(dx*dx+dy*dy < R*R) used[j]=true;
+      // cluster centers (subtle hint during bips)
+      if (mode === "bips") {
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        for (const c of world.clusterCenters) {
+          glow(c.x, c.y, 42, "rgba(255,255,255,0.015)", 60);
         }
+        ctx.restore();
       }
-      return clusters;
     }
 
-    function updateStats(){
-      let boundTF=0;
-      for (const tf of world.tfs){
-        if (tf.bindA!==null || tf.bindB!==null) boundTF++;
+    // ============================================================
+    // Animation loop
+    // ============================================================
+    function render() {
+      drawBackground();
+
+      if (mode === "dna") {
+        drawDNA();
+      } else {
+        // chromatin or bips
+        stepPolymer();
+        drawPolymer();
       }
-      const clusters = countClusters();
-      statsLine.textContent = `bridges: ${world.bridges.length} • bound TFs: ${boundTF} • clusters: ${clusters}`;
+
+      requestAnimationFrame(render);
     }
 
-    function render(){
-      clearBG();
+    // ============================================================
+    // Buttons: Play / Reset BIPS
+    // ============================================================
+    const playBipsBtn = document.getElementById("playBipsBtn");
+    const resetBipsBtn = document.getElementById("resetBipsBtn");
 
-      if (scene==="dna"){
-        drawDNA(false);
-        return;
-      }
-      if (scene==="genes"){
-        drawDNA(true);
-        return;
-      }
+    playBipsBtn.addEventListener("click", () => {
+      mode = "bips";
+      world.playing = true;
+      miniTitle.textContent = "BIPS";
+      miniSub.textContent = "Clusters forming… (bridging-induced attraction in cartoon form)";
+    });
 
-      drawPolymer();
-      drawTFs();
-      drawBridges();
+    resetBipsBtn.addEventListener("click", () => {
+      // return to chromatin mode, reset polymer
+      initPolymer();
+      mode = "chromatin";
+      world.playing = false;
+      miniTitle.textContent = "Chromatin";
+      miniSub.textContent = "DNA packaged into a moving polymer chain.";
+    });
 
-      if (scene==="tfs" || scene==="bips") updateStats();
+    // ============================================================
+    // RNG helper
+    // ============================================================
+    function randn(){
+      // Box-Muller
+      let u=0,v=0;
+      while(u===0) u=Math.random();
+      while(v===0) v=Math.random();
+      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
     }
 
     // Start
-    initWorld();
-    applySlide(0);
-    step();
+    resizeCanvas();
+    initPolymer();
+    render();
   </script>
+
 </body>
 </html>
+
 
 
 
