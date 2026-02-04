@@ -5,20 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BIPS Explainer | Nishwal Gora</title>
 
-  <!-- Your site styles (optional if you want shared global styles) -->
-  <!-- <link rel="stylesheet" href="../stylesheets/global.css"> -->
-
-  <!-- New page-specific stylesheet -->
   <link rel="stylesheet" href="../stylesheets/bips_style.css">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body class="dark">
+
+  <!-- Top progress bar -->
   <div id="scroll-progress"></div>
 
-  <!-- ===== Header (matches your existing pages) ===== -->
-  <header class="site-header fade-in">
+  <!-- Header / nav (kept consistent with your site) -->
+  <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../index.html">Nishwal Gora</a>
       <nav class="site-nav">
@@ -34,322 +31,255 @@
     </div>
   </header>
 
-  <!-- ===== Hero ===== -->
-  <section class="hero fade-in">
-    <h1 class="page-title">From DNA to Chromatin to BIPS</h1>
-    <p class="subtitle">
-      Scroll to climb the ladder from DNA to chromatin — then watch how “sticky” transcription factors can
-      create clusters through positive feedback (Bridging-Induced Phase Separation).
-    </p>
-    <div class="hero-hint">Scroll ↓</div>
-  </section>
+  <!-- Fixed “stage” (visual stays in center; slides change it) -->
+  <div class="stage" aria-hidden="true">
+    <canvas id="stageCanvas" width="1400" height="900"></canvas>
 
-  <!-- ===== Main scrollytelling container ===== -->
-  <main class="story">
-    <!-- LEFT: text steps -->
-    <section class="steps" id="steps">
-      <article class="step fade-in" data-scene="dna">
-        <h2>1) DNA</h2>
+    <!-- Optional: tiny HUD -->
+    <div class="hud">
+      <div class="hud-title" id="hudTitle">DNA</div>
+      <div class="hud-sub" id="hudSub">Scroll to build the story</div>
+    </div>
+  </div>
+
+  <!-- Fullscreen slide deck -->
+  <main class="deck" id="deck">
+
+    <section class="slide" data-scene="dna">
+      <div class="slide-inner">
+        <h1>DNA</h1>
         <p>
           DNA is a long molecule made from four “letters”: A, C, G, T.
-          The order of these letters stores biological information.
+          The order stores biological information.
         </p>
-        <p class="mini">
-          Interaction: hover the animation to see base-pairs.
-        </p>
-      </article>
+        <p class="hint">Scroll ↓</p>
+      </div>
+    </section>
 
-      <article class="step fade-in" data-scene="genes">
-        <h2>2) Genes</h2>
+    <section class="slide" data-scene="genes">
+      <div class="slide-inner">
+        <h1>Genes</h1>
         <p>
           A gene is a segment of DNA that can be “read” to make RNA (and often proteins).
           Different cells use different genes.
         </p>
-        <p class="mini">
-          Idea: gene ON/OFF changes what the cell does.
-        </p>
-      </article>
-
-      <article class="step fade-in" data-scene="packing">
-        <h2>3) Packing problem</h2>
-        <p>
-          Human cells contain ~2 metres of DNA packed into a nucleus only a few microns wide.
-          So DNA must fold and organise in 3D.
-        </p>
-      </article>
-
-      <article class="step fade-in" data-scene="chromatin">
-        <h2>4) Chromatin</h2>
-        <p>
-          Chromatin is DNA plus proteins. Physically, it behaves like a flexible polymer — a moving spaghetti-like chain
-          that constantly jiggles due to thermal motion.
-        </p>
-        <p class="mini">Interaction: drag the chain slightly.</p>
-      </article>
-
-      <article class="step fade-in" data-scene="tfs">
-        <h2>5) Transcription factors (TFs)</h2>
-        <p>
-          TFs are proteins that float around and bind certain DNA sites more strongly than others.
-          Think: “sticky particles” that recognise specific beads on the polymer.
-        </p>
-        <p class="mini">Interaction: drag a TF onto the polymer to bind.</p>
-      </article>
-
-      <article class="step fade-in" data-scene="bips">
-        <h2>6) BIPS: bridges → clusters</h2>
-        <p>
-          If a TF can bind <strong>two</strong> DNA sites at once, it makes a <strong>bridge</strong>.
-          Bridges pull distant parts together, increasing local density — which makes more binding likely.
-          That positive feedback can create clusters (hubs / factories).
-        </p>
-        <p class="mini">
-          Watch: once a bridge forms, cluster growth becomes easier.
-        </p>
-      </article>
-
-      <article class="step fade-in" data-scene="takehome">
-        <h2>Take-home message</h2>
-        <p>
-          DNA isn’t just a code — it’s also a physical object. Its 3D folding can help decide which genes get used,
-          and mechanisms like BIPS can create stable “hubs” that may support cellular memory.
-        </p>
-      </article>
+      </div>
     </section>
 
-    <!-- RIGHT: sticky animation panel -->
-    <aside class="viz fade-in">
-      <div class="viz-top">
-        <div class="viz-title" id="vizTitle">Scene: DNA</div>
-        <div class="viz-controls">
-          <button id="resetBtn" type="button">Reset</button>
-        </div>
+    <section class="slide" data-scene="packing">
+      <div class="slide-inner">
+        <h1>The packing problem</h1>
+        <p>
+          Human cells contain ~2 metres of DNA packed into a nucleus only a few microns wide.
+          DNA must fold and organise in 3D.
+        </p>
       </div>
+    </section>
 
-      <div class="viz-body">
-        <canvas id="bipsCanvas" width="1000" height="800"></canvas>
-        <div class="tooltip" id="tooltip" aria-hidden="true"></div>
+    <section class="slide" data-scene="chromatin">
+      <div class="slide-inner">
+        <h1>Chromatin</h1>
+        <p>
+          Chromatin is DNA + proteins. Physically it behaves like a flexible polymer — a moving chain.
+        </p>
+        <p class="mini">Try: click & drag the chain (in the visual).</p>
       </div>
+    </section>
 
-      <div class="viz-caption" id="vizCaption">
-        Scroll to progress. Try dragging objects in later scenes.
+    <section class="slide" data-scene="tfs">
+      <div class="slide-inner">
+        <h1>Transcription factors</h1>
+        <p>
+          TFs are proteins that float around and bind specific DNA sites.
+          Think: sticky particles that recognise certain beads.
+        </p>
+        <p class="mini">Try: drag a TF onto a special site.</p>
       </div>
-    </aside>
+    </section>
+
+    <section class="slide" data-scene="bips">
+      <div class="slide-inner">
+        <h1>BIPS</h1>
+        <p>
+          If a TF can bind two sites at once, it makes a <strong>bridge</strong>.
+          Bridges pull DNA together, increasing local density → more binding → clusters.
+        </p>
+        <p class="mini">This is positive feedback in 3D.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-scene="takehome">
+      <div class="slide-inner">
+        <h1>Take-home</h1>
+        <p>
+          DNA isn’t only a code — it’s also a physical object. Its folding can influence regulation,
+          and mechanisms like BIPS can create hubs that may support cellular memory.
+        </p>
+        <p class="hint">End</p>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===== Footer ===== -->
-  <footer class="fade-in">
+  <footer class="footer">
     <div class="social-links">
       <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
       <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
     </div>
   </footer>
 
-  <!-- ===== Your existing scroll progress bar script ===== -->
   <script>
+    // =========================
+    // Scroll progress bar
+    // =========================
     window.addEventListener("scroll", () => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const progress = (scrollTop / scrollHeight) * 100;
       document.getElementById("scroll-progress").style.width = progress + "%";
     });
-  </script>
 
-  <!-- ===== Fade-in observer (your existing style) ===== -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
+    // =========================
+    // PowerPoint feel: detect current slide + update stage
+    // =========================
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const hudTitle = document.getElementById("hudTitle");
+    const hudSub = document.getElementById("hudSub");
 
-      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-    });
-  </script>
-
-  <!-- ===== Scrollytelling scene switching + canvas interactions ===== -->
-  <script>
-    const steps = Array.from(document.querySelectorAll(".step"));
-    const vizTitle = document.getElementById("vizTitle");
-    const vizCaption = document.getElementById("vizCaption");
-    const canvas = document.getElementById("bipsCanvas");
+    const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
-    const tooltip = document.getElementById("tooltip");
-    const resetBtn = document.getElementById("resetBtn");
 
-    let currentScene = "dna";
+    let scene = "dna";
 
-    // --- simple scene state ---
+    // --- Simple “morph parameters” per scene (we animate between them) ---
+    const targets = {
+      dna:      { zoom: 1.35, chain: 0.0, tfs: 0.0, bridges: 0.0 },
+      genes:    { zoom: 1.20, chain: 0.0, tfs: 0.0, bridges: 0.0 },
+      packing:  { zoom: 0.95, chain: 0.2, tfs: 0.0, bridges: 0.0 },
+      chromatin:{ zoom: 0.75, chain: 1.0, tfs: 0.0, bridges: 0.0 },
+      tfs:      { zoom: 0.70, chain: 1.0, tfs: 1.0, bridges: 0.0 },
+      bips:     { zoom: 0.62, chain: 1.0, tfs: 1.0, bridges: 1.0 },
+      takehome: { zoom: 0.62, chain: 1.0, tfs: 0.8, bridges: 1.0 },
+    };
+
+    // current animated state (eases toward target)
+    let anim = { zoom: 1.35, chain: 0.0, tfs: 0.0, bridges: 0.0 };
+
+    // chain points
     const state = {
-      // chromatin chain points
       chain: [],
       chainGrab: null,
-
-      // TF particle
-      tf: { x: 820, y: 420, r: 22, grabbed: false, boundIndex: null },
-
-      // BIPS: bridges
-      bridges: [], // [{i, j}]
+      tf: { x: 1050, y: 520, r: 26, grabbed: false, boundIndex: null },
+      bridges: []
     };
 
     function initChain() {
       state.chain = [];
-      const n = 26;
+      const n = 28;
       for (let i = 0; i < n; i++) {
         state.chain.push({
-          x: 160 + i * 24,
-          y: 420 + 40 * Math.sin(i * 0.35),
-          special: (i % 6 === 0), // “binding sites”
+          x: 360 + i * 26,
+          y: 520 + 55 * Math.sin(i * 0.32),
+          special: (i % 6 === 0)
         });
       }
       state.chainGrab = null;
-      state.tf.x = 820; state.tf.y = 420; state.tf.grabbed = false; state.tf.boundIndex = null;
+      state.tf.x = 1050; state.tf.y = 520; state.tf.grabbed = false; state.tf.boundIndex = null;
       state.bridges = [];
     }
     initChain();
 
-    function clear() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    function lerp(a,b,t){ return a + (b-a)*t; }
 
-    function drawBackground() {
-      ctx.fillStyle = "#f6f6f6";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    function draw() {
+      // ease anim → target
+      const tgt = targets[scene] || targets.dna;
+      anim.zoom    = lerp(anim.zoom, tgt.zoom, 0.07);
+      anim.chain   = lerp(anim.chain, tgt.chain, 0.07);
+      anim.tfs     = lerp(anim.tfs, tgt.tfs, 0.07);
+      anim.bridges = lerp(anim.bridges, tgt.bridges, 0.07);
 
-    function drawDNA() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("DNA: a code + a molecule", 60, 90);
+      // background
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      ctx.fillStyle = "#050507";
+      ctx.fillRect(0,0,canvas.width, canvas.height);
+
+      // subtle stars/noise (cheap and pretty)
+      ctx.fillStyle = "rgba(255,255,255,0.06)";
+      for (let i=0;i<140;i++){
+        const x = (i*97) % canvas.width;
+        const y = (i*181) % canvas.height;
+        ctx.fillRect(x,y,2,2);
+      }
+
+      // transform “zoom”
+      ctx.save();
+      const cx = canvas.width/2, cy = canvas.height/2;
+      ctx.translate(cx, cy);
+      ctx.scale(anim.zoom, anim.zoom);
+      ctx.translate(-cx, -cy);
+
+      // draw DNA “letters” (fade out as chain fades in)
+      const dnaAlpha = 1.0 - anim.chain;
+      if (dnaAlpha > 0.02) drawDNA(dnaAlpha);
+
+      // draw chain (fade in)
+      if (anim.chain > 0.02) drawChain(anim.chain);
+
+      // TFs appear
+      if (anim.tfs > 0.02) drawTF(anim.tfs);
+
+      // bridges appear
+      if (anim.bridges > 0.02) drawBridges(anim.bridges);
+
+      ctx.restore();
+
+      // Title text on canvas (glowy)
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = "700 36px system-ui";
+      ctx.fillText("Build-up animation", 40, 70);
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
       ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("Hover the ‘letters’ to see base-pairing (A–T, C–G).", 60, 130);
+      ctx.fillText("Scroll → the visual morphs like a slide deck", 40, 105);
 
-      // simple “letters” row
+      requestAnimationFrame(draw);
+    }
+
+    function glowStroke(alpha, w){
+      ctx.shadowColor = "rgba(255,255,255,0.25)";
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      ctx.lineWidth = w;
+    }
+    function glowFill(alpha){
+      ctx.shadowColor = "rgba(255,255,255,0.18)";
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    }
+
+    function drawDNA(alpha){
+      // letters row
       const letters = ["A","C","G","T","A","T","C","G","A","C","T","G"];
-      for (let i=0; i<letters.length; i++){
-        const x = 80 + i*60, y = 220;
-        ctx.fillStyle = "rgba(0,0,0,0.08)";
-        ctx.fillRect(x-18, y-38, 46, 56);
-        ctx.fillStyle = "#111";
-        ctx.font = "30px system-ui";
+      ctx.font = "700 46px system-ui";
+      for (let i=0;i<letters.length;i++){
+        const x = 220 + i*82;
+        const y = 470;
+        glowFill(0.10*alpha);
+        ctx.fillRect(x-26, y-60, 62, 76);
+        glowFill(0.85*alpha);
         ctx.fillText(letters[i], x, y);
       }
-    }
 
-    function drawGenes() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("Genes: useful segments", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("A gene is a stretch of DNA that can be read.", 60, 130);
-
-      // highlight segment
-      ctx.fillStyle = "rgba(0,0,0,0.08)";
-      ctx.fillRect(80, 220, 820, 14);
-      ctx.fillStyle = "rgba(0,0,0,0.25)";
-      ctx.fillRect(280, 210, 280, 34);
-      ctx.fillStyle = "#111";
+      // pairing hint
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = `rgba(255,255,255,${0.55*alpha})`;
       ctx.font = "20px system-ui";
-      ctx.fillText("gene", 395, 270);
+      ctx.fillText("A pairs with T • C pairs with G", 420, 560);
     }
 
-    function drawPacking() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("Packing: fitting DNA into the nucleus", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("Long chain → folded fibre → loops → compact structure.", 60, 130);
-
-      // simple “zoom out” coils
-      ctx.strokeStyle = "rgba(0,0,0,0.35)";
-      ctx.lineWidth = 4;
-      for (let k=0;k<4;k++){
-        ctx.beginPath();
-        for (let i=0;i<200;i++){
-          const x = 100 + i*4;
-          const y = 260 + k*110 + 30*Math.sin(i*0.2);
-          ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-      }
-    }
-
-    function drawChromatin() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("Chromatin: a moving polymer", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("Drag the chain slightly — it’s a flexible 3D object.", 60, 130);
-
-      drawChain();
-    }
-
-    function drawTFs() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("TFs: sticky particles that bind sites", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("Drag the TF onto a highlighted site to ‘bind’.", 60, 130);
-
-      drawChain(true);
-      drawTF();
-    }
-
-    function drawBIPS() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("BIPS: bridges create clusters (positive feedback)", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("Make a bridge: bind two sites → chain densifies → more bridges become likely.", 60, 130);
-
-      // Slightly “pull” chain around existing bridges to hint densification
-      applyBridgePull();
-      drawChain(true);
-      drawBridges();
-      drawTF();
-
-      // Visual feedback: “cluster region”
-      if (state.bridges.length > 0) {
-        ctx.fillStyle = "rgba(0,0,0,0.06)";
-        ctx.fillRect(360, 300, 260, 260);
-        ctx.fillStyle = "rgba(0,0,0,0.75)";
-        ctx.font = "18px system-ui";
-        ctx.fillText("density ↑", 450, 340);
-      }
-    }
-
-    function drawTakehome() {
-      drawBackground();
-      ctx.fillStyle = "#111";
-      ctx.font = "34px system-ui";
-      ctx.fillText("Take-home", 60, 90);
-      ctx.font = "18px system-ui";
-      ctx.fillStyle = "rgba(0,0,0,0.75)";
-      ctx.fillText("DNA is physical. 3D folding can shape regulation and stability.", 60, 130);
-      ctx.fillText("BIPS is one physical route to hubs without TF–TF attraction.", 60, 160);
-    }
-
-    function drawChain(showSpecial=false) {
+    function drawChain(alpha){
       // links
-      ctx.strokeStyle = "rgba(0,0,0,0.25)";
-      ctx.lineWidth = 5;
+      glowStroke(0.35*alpha, 6);
       ctx.beginPath();
       state.chain.forEach((p, idx) => {
         if (idx === 0) ctx.moveTo(p.x, p.y);
@@ -358,29 +288,29 @@
       ctx.stroke();
 
       // beads
-      for (const p of state.chain) {
+      state.chain.forEach(p => {
         ctx.beginPath();
-        ctx.fillStyle = (showSpecial && p.special) ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.18)";
-        ctx.arc(p.x, p.y, p.special ? 10 : 8, 0, Math.PI*2);
+        const a = p.special ? 0.70*alpha : 0.35*alpha;
+        glowFill(a);
+        ctx.arc(p.x, p.y, p.special ? 12 : 9, 0, Math.PI*2);
         ctx.fill();
-      }
+      });
     }
 
-    function drawTF() {
+    function drawTF(alpha){
       const tf = state.tf;
+      glowFill(0.75*alpha);
       ctx.beginPath();
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
       ctx.arc(tf.x, tf.y, tf.r, 0, Math.PI*2);
       ctx.fill();
-
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
-      ctx.font = "16px system-ui";
-      ctx.fillText("TF", tf.x - 12, tf.y + 6);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = `rgba(0,0,0,${0.7*alpha})`;
+      ctx.font = "700 18px system-ui";
+      ctx.fillText("TF", tf.x - 14, tf.y + 7);
     }
 
-    function drawBridges() {
-      ctx.strokeStyle = "rgba(0,0,0,0.55)";
-      ctx.lineWidth = 3;
+    function drawBridges(alpha){
+      glowStroke(0.65*alpha, 3.5);
       for (const b of state.bridges) {
         const p1 = state.chain[b.i];
         const p2 = state.chain[b.j];
@@ -389,184 +319,115 @@
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       }
-    }
 
-    function applyBridgePull() {
-      // gentle pull of bridged points toward midpoints to suggest densification
-      for (const b of state.bridges) {
-        const p1 = state.chain[b.i];
-        const p2 = state.chain[b.j];
-        const mx = (p1.x + p2.x) / 2;
-        const my = (p1.y + p2.y) / 2;
-        p1.x += 0.02 * (mx - p1.x);
-        p1.y += 0.02 * (my - p1.y);
-        p2.x += 0.02 * (mx - p2.x);
-        p2.y += 0.02 * (my - p2.y);
+      // cluster glow region
+      if (state.bridges.length > 0) {
+        ctx.shadowBlur = 40;
+        ctx.fillStyle = `rgba(255,255,255,${0.05*alpha})`;
+        ctx.fillRect(560, 390, 320, 320);
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = `rgba(255,255,255,${0.6*alpha})`;
+        ctx.font = "18px system-ui";
+        ctx.fillText("density ↑ → more binding", 605, 425);
       }
     }
 
-    function setScene(scene) {
-      currentScene = scene;
-      vizTitle.textContent = "Scene: " + scene.toUpperCase();
-
-      if (scene === "dna") vizCaption.textContent = "Hover the letters to learn base pairing.";
-      if (scene === "genes") vizCaption.textContent = "A gene is a segment that can be read.";
-      if (scene === "packing") vizCaption.textContent = "Long chain → folded structure.";
-      if (scene === "chromatin") vizCaption.textContent = "Drag the polymer: chromatin behaves like a flexible chain.";
-      if (scene === "tfs") vizCaption.textContent = "Drag the TF onto a dark bead to bind.";
-      if (scene === "bips") vizCaption.textContent = "In BIPS, bridges make clusters easier (positive feedback).";
-      if (scene === "takehome") vizCaption.textContent = "Physical folding can influence stable cell states.";
-
-      render();
-    }
-
-    function render() {
-      if (currentScene === "dna") return drawDNA();
-      if (currentScene === "genes") return drawGenes();
-      if (currentScene === "packing") return drawPacking();
-      if (currentScene === "chromatin") return drawChromatin();
-      if (currentScene === "tfs") return drawTFs();
-      if (currentScene === "bips") return drawBIPS();
-      if (currentScene === "takehome") return drawTakehome();
-    }
-
-    // --- IntersectionObserver: activate scene based on scroll ---
-    const obs = new IntersectionObserver((entries) => {
+    // Slide observer
+    const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          steps.forEach(s => s.dataset.active = "false");
-          e.target.dataset.active = "true";
-          setScene(e.target.dataset.scene);
+          scene = e.target.dataset.scene;
+          hudTitle.textContent = scene.toUpperCase();
+          hudSub.textContent = "Scroll to build the story";
         }
       });
     }, { threshold: 0.6 });
-    steps.forEach(s => obs.observe(s));
 
-    // --- Mouse interactions (drag chain + TF; show tooltip) ---
+    slides.forEach(s => io.observe(s));
+
+    // Minimal interactions: drag chain + TF when relevant
     function getMousePos(evt) {
       const rect = canvas.getBoundingClientRect();
       const x = (evt.clientX - rect.left) * (canvas.width / rect.width);
       const y = (evt.clientY - rect.top) * (canvas.height / rect.height);
-      return {x, y};
+      return {x,y};
     }
-
-    function dist(a,b) {
-      const dx = a.x-b.x, dy = a.y-b.y;
-      return Math.sqrt(dx*dx + dy*dy);
+    function dist(a,b){
+      const dx=a.x-b.x, dy=a.y-b.y;
+      return Math.sqrt(dx*dx+dy*dy);
     }
-
-    function nearestChainPoint(pos, maxD=22) {
-      let best = { idx: -1, d: Infinity };
-      state.chain.forEach((p, i) => {
-        const d = dist(pos, p);
-        if (d < best.d) best = { idx: i, d };
+    function nearestPoint(pos, maxD=22){
+      let best = {idx:-1, d:Infinity};
+      state.chain.forEach((p,i)=>{
+        const d = dist(pos,p);
+        if (d < best.d) best = {idx:i, d};
       });
       return best.d <= maxD ? best : null;
     }
 
-    canvas.addEventListener("mousedown", (e) => {
-      const pos = getMousePos(e);
+    canvas.addEventListener("mousedown",(e)=>{
+      const pos=getMousePos(e);
 
-      // TF drag only in tfs/bips scenes
-      if ((currentScene === "tfs" || currentScene === "bips") && dist(pos, state.tf) <= state.tf.r + 6) {
-        state.tf.grabbed = true;
+      // drag TF in tfs/bips scenes
+      if ((scene==="tfs"||scene==="bips") && dist(pos, state.tf) <= state.tf.r+8){
+        state.tf.grabbed=true;
         return;
       }
 
-      // Chain drag in chromatin/tfs/bips
-      if (currentScene === "chromatin" || currentScene === "tfs" || currentScene === "bips") {
-        const near = nearestChainPoint(pos, 18);
-        if (near) state.chainGrab = near.idx;
+      // drag chain in chromatin+
+      if (scene==="chromatin"||scene==="tfs"||scene==="bips"){
+        const near=nearestPoint(pos, 18);
+        if (near) state.chainGrab=near.idx;
       }
     });
 
-    canvas.addEventListener("mousemove", (e) => {
-      const pos = getMousePos(e);
-
-      // tooltip logic (DNA letters / special beads)
-      tooltip.style.display = "none";
-
-      if (currentScene === "dna") {
-        // fake hover regions where letters drawn (simple)
-        // (We keep it minimal; you can refine later)
-        // No heavy math: just show tooltip if near the letter row
-        if (pos.y > 170 && pos.y < 260) {
-          tooltip.style.display = "block";
-          tooltip.textContent = "Base pairing: A–T and C–G";
-          tooltip.style.left = (e.clientX + 12) + "px";
-          tooltip.style.top = (e.clientY + 12) + "px";
-        }
+    canvas.addEventListener("mousemove",(e)=>{
+      const pos=getMousePos(e);
+      if (state.tf.grabbed){
+        state.tf.x=pos.x; state.tf.y=pos.y;
       }
-
-      if (state.tf.grabbed) {
-        state.tf.x = pos.x;
-        state.tf.y = pos.y;
-        render();
-        return;
-      }
-
-      if (state.chainGrab !== null) {
-        const p = state.chain[state.chainGrab];
-        p.x = pos.x;
-        p.y = pos.y;
-        render();
-        return;
-      }
-
-      // hover special beads in TF scenes
-      if (currentScene === "tfs" || currentScene === "bips") {
-        const near = nearestChainPoint(pos, 16);
-        if (near && state.chain[near.idx].special) {
-          tooltip.style.display = "block";
-          tooltip.textContent = "High-affinity binding site";
-          tooltip.style.left = (e.clientX + 12) + "px";
-          tooltip.style.top = (e.clientY + 12) + "px";
-        }
+      if (state.chainGrab !== null){
+        const p=state.chain[state.chainGrab];
+        p.x=pos.x; p.y=pos.y;
       }
     });
 
-    window.addEventListener("mouseup", () => {
-      // drop TF: bind if near a special site
-      if (state.tf.grabbed) {
-        state.tf.grabbed = false;
-
-        if (currentScene === "tfs" || currentScene === "bips") {
-          const near = nearestChainPoint(state.tf, 28);
-          if (near && state.chain[near.idx].special) {
-            // bind to this bead
+    window.addEventListener("mouseup",()=>{
+      if (state.tf.grabbed){
+        state.tf.grabbed=false;
+        if (scene==="tfs"||scene==="bips"){
+          const near = nearestPoint(state.tf, 30);
+          if (near && state.chain[near.idx].special){
             state.tf.boundIndex = near.idx;
-            state.tf.x = state.chain[near.idx].x + 0;
-            state.tf.y = state.chain[near.idx].y - 34;
+            state.tf.x = state.chain[near.idx].x;
+            state.tf.y = state.chain[near.idx].y - 45;
 
-            // in BIPS: if already bound once, create a bridge on second bind
-            if (currentScene === "bips") {
-              // If no bridge yet, prompt a second “bind”
-              if (state.bridges.length === 0) {
-                // Create a bridge to another special bead (nearest other special)
-                let j = -1, best = Infinity;
-                for (let k=0;k<state.chain.length;k++){
-                  if (k !== near.idx && state.chain[k].special) {
-                    const d = Math.abs(k - near.idx);
-                    if (d < best) { best = d; j = k; }
-                  }
+            // In BIPS: add a bridge the first time you bind
+            if (scene==="bips" && state.bridges.length===0){
+              let j=-1, best=Infinity;
+              for (let k=0;k<state.chain.length;k++){
+                if (k!==near.idx && state.chain[k].special){
+                  const d=Math.abs(k-near.idx);
+                  if (d<best){best=d; j=k;}
                 }
-                if (j >= 0) state.bridges.push({ i: near.idx, j });
               }
+              if (j>=0) state.bridges.push({i: near.idx, j});
             }
           }
         }
-        render();
       }
-
-      state.chainGrab = null;
+      state.chainGrab=null;
     });
 
-    resetBtn.addEventListener("click", () => {
-      initChain();
-      render();
+    // Reset button via HUD click (optional)
+    document.addEventListener("keydown",(e)=>{
+      if (e.key.toLowerCase()==="r"){
+        initChain();
+      }
     });
 
-    render();
+    draw();
   </script>
 </body>
 </html>
+
