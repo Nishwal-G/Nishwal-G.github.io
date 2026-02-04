@@ -400,29 +400,30 @@
       {
         mode: "epi",
         title: "Act 3 — Epigenetics: locking some regions",
-        sub: "Epigenetic marks can make parts of DNA harder to access.",
+        sub: "Epigenetic marks can make parts of DNA harder to access (no more base-pair/gene labels here).",
         html: `
           <p>
             Cells use ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions closed.
             Locked regions are shown in <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
           </p>
           <p>
-            Next we zoom out and treat DNA as a moving object that folds in 3D.
+            Click ${bigWord("EPIGENETICS", "purple", "epi")} or the “Locked region” label on the DNA to highlight them.
           </p>
         `,
         showLegend: false
       },
       {
         mode: "act4",
-        title: "Act 4 — DNA folds into chromatin (gentle folding, not collapse)",
-        sub: "The polymer folds over itself a couple of times and then just keeps wiggling.",
+        title: "Act 4 — DNA folds into chromatin (more folding, not collapse)",
+        sub: "The polymer forms several visible folds/loops, then just keeps wiggling.",
         html: `
           <p>
             DNA is extremely long, so it folds into <strong>chromatin</strong>.
             Here chromatin is a flexible chain (polymer).
           </p>
           <p>
-            This act shows <em>gentle folding</em> (a few loops forming), not a rapid collapse into a ball.
+            This act shows <em>visible folding</em>: the chain loops over itself several times,
+            but it does not rapidly collapse into a tight ball.
           </p>
         `,
         showLegend: true
@@ -430,7 +431,7 @@
       {
         mode: "act5",
         title: "Act 5 — TFs wander while chromatin just sits there",
-        sub: "TFs float around randomly; the polymer does not collapse or fold further here.",
+        sub: "TFs float randomly; the polymer stays extended and does not collapse.",
         html: `
           <p>
             TFs (red) wander randomly in the nucleus. Chromatin (white) is present in the background.
@@ -458,12 +459,12 @@
       },
       {
         mode: "act7",
-        title: "Act 7 — More big TFs move toward the main hub",
-        sub: "No polymer collapse here: just show other big TFs drifting toward the central TF.",
+        title: "Act 7 — More big TFs move slowly toward the main hub",
+        sub: "No polymer collapse here: other big TFs drift slowly toward the wrapped TF.",
         html: `
           <p>
             Once a hub exists, it can recruit more proteins.
-            Here we show additional big TFs drifting toward the main TF.
+            Here we show additional big TFs drifting <strong>slowly</strong> toward the main TF.
           </p>
           <p>
             The polymer does not collapse — it just sits in the scene as context.
@@ -498,10 +499,9 @@
 
       prevBtn.disabled = (actIndex === 0);
       nextBtn.disabled = (actIndex === ACTS.length - 1);
-      resetBtn.style.display = (actIndex >= 4) ? "inline-flex" : (actIndex >= 4 ? "inline-flex" : (actIndex >= 4)); // harmless; we'll override below
-      resetBtn.style.display = (actIndex >= 4 || mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7") ? "inline-flex" : "none";
-      if (mode === "dna" || mode === "epi") resetBtn.style.display = "none";
-      if (mode === "act8") resetBtn.style.display = "none";
+
+      // Reset only for acts 4–7 (not DNA/epi, not blank)
+      resetBtn.style.display = (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7") ? "inline-flex" : "none";
 
       dragHint.classList.toggle("show", mode === "act6");
 
@@ -688,10 +688,13 @@
       const gn = helixPoint(geneIdx);
       const lk = helixPoint(lockIdx);
 
-      drawLabelWithArrow("Base pairs", W*0.08, H*0.26, bp.x, bp.y, "rgba(255,255,255,0.92)", "basepairs");
-      drawLabelWithArrow("Gene",      W*0.74, H*0.78, gn.x, gn.y, "rgba(0,255,140,0.92)", "gene");
-
-      if (mode === "epi") {
+      // IMPORTANT CHANGE (1):
+      // In epigenetics act (mode === "epi"), DO NOT draw base-pair or gene arrows.
+      // Only draw the locked-region arrow.
+      if (mode === "dna") {
+        drawLabelWithArrow("Base pairs", W*0.08, H*0.26, bp.x, bp.y, "rgba(255,255,255,0.92)", "basepairs");
+        drawLabelWithArrow("Gene",      W*0.74, H*0.78, gn.x, gn.y, "rgba(0,255,140,0.92)", "gene");
+      } else if (mode === "epi") {
         drawLabelWithArrow("Locked region", W*0.08, H*0.74, lk.x, lk.y, "rgba(190,120,255,0.95)", "locked");
       }
     }
@@ -773,22 +776,40 @@
         world.beads.push({x,y});
       }
 
-      // Act 4: bake in a couple folds quickly at init, then stop “collapsing”
+      // Act 4 (CHANGE 2): stronger initial “folding into itself”
+      // We bias THREE broad regions toward two nearby anchors to create
+      // several obvious folds/loops, but we don't keep collapsing afterwards.
       if (mode === "act4"){
-        // Create 2 large loops by shifting segments toward two anchor points
-        const a1 = {x: W*0.40, y: H*0.52};
-        const a2 = {x: W*0.62, y: H*0.60};
+        const a1 = {x: W*0.44, y: H*0.50};
+        const a2 = {x: W*0.60, y: H*0.62};
+
         for (let i=0;i<P.beadCount;i++){
           const p = world.beads[i];
           const t = i/(P.beadCount-1);
-          const w1 = Math.exp(-Math.pow((t-0.35)/0.18,2));
-          const w2 = Math.exp(-Math.pow((t-0.70)/0.18,2));
-          p.x = p.x*(1-0.35*(w1+w2)) + (a1.x*w1 + a2.x*w2)*0.35;
-          p.y = p.y*(1-0.35*(w1+w2)) + (a1.y*w1 + a2.y*w2)*0.35;
+
+          // three broad "lumps" along the chain
+          const w1 = Math.exp(-Math.pow((t-0.25)/0.14,2));
+          const w2 = Math.exp(-Math.pow((t-0.50)/0.14,2));
+          const w3 = Math.exp(-Math.pow((t-0.75)/0.14,2));
+
+          // alternate anchors so the chain folds back-and-forth
+          const ax = a1.x*w1 + a2.x*w2 + a1.x*w3;
+          const ay = a1.y*w1 + a2.y*w2 + a1.y*w3;
+
+          const w = 0.55*(w1+w2+w3); // overall strength of folding
+          p.x = p.x*(1-w) + ax*w;
+          p.y = p.y*(1-w) + ay*w;
+        }
+
+        // add a small sideways "kink" so the folds are visually clear
+        for (let i=0;i<P.beadCount;i++){
+          const p = world.beads[i];
+          const t = i/(P.beadCount-1);
+          p.y += (H*0.05)*Math.sin(10*t);
         }
       }
 
-      // Act 5: polymer static-ish (no folding forces), TFs wander
+      // Act 5: polymer static-ish, TFs wander
       world.tfs = [];
       if (mode === "act5"){
         for (let i=0;i<36;i++){
@@ -911,15 +932,6 @@
         }
       }
 
-      // Act 4: only gentle “wiggle” after initial folds, no ongoing collapse forces
-      if (mode === "act4"){
-        // no extra global pull; just wiggling via Brownian below
-      }
-
-      // Act 5: keep polymer basically static—very low Brownian
-      // (still let it breathe slightly to avoid looking frozen)
-      // We'll handle via per-mode brownian below.
-
       // Act 6: wrap around bigTF
       if (mode === "act6"){
         for (let i=0;i<n;i++){
@@ -930,12 +942,9 @@
         }
       }
 
-      // Act 7: NO collapse forces; polymer sits as context
-      // (we do not apply any hub pull here)
-
       // integrate with per-act Brownian strength
       let brown = 0.16;
-      if (mode === "act4") brown = 0.20;      // lively wiggle
+      if (mode === "act4") brown = 0.22;      // lively wiggle + visible folds
       if (mode === "act5") brown = 0.02;      // nearly static
       if (mode === "act6") brown = 0.14;      // moderate
       if (mode === "act7") brown = 0.01;      // basically static
@@ -970,19 +979,22 @@
         }
       }
 
-      // Act 7 big TFs drift toward main TF (no polymer collapse)
+      // Act 7 (CHANGE 3): slow down drift of big TFs toward hub
       if (mode === "act7"){
         const W=canvas.width, H=canvas.height;
         const target = {x: bigTF.x, y: bigTF.y};
         for (const tf of bigTFs){
-          tf.vx += 0.25*randn();
-          tf.vy += 0.25*randn();
+          // weaker noise
+          tf.vx += 0.12*randn();
+          tf.vy += 0.12*randn();
 
-          tf.vx += 0.004*(target.x - tf.x);
-          tf.vy += 0.004*(target.y - tf.y);
+          // slower attraction
+          tf.vx += 0.0016*(target.x - tf.x);
+          tf.vy += 0.0016*(target.y - tf.y);
 
-          tf.vx *= 0.90;
-          tf.vy *= 0.90;
+          // more damping
+          tf.vx *= 0.88;
+          tf.vy *= 0.88;
           tf.x += tf.vx;
           tf.y += tf.vy;
 
@@ -1032,11 +1044,11 @@
 
       // act7 big TFs drifting in
       if (mode === "act7"){
-        // central hub
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
         glowCircle(bigTF.x, bigTF.y, bigTF.radius*4.6, "rgba(255,120,200,0.020)", 160);
         ctx.restore();
+
         glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 42);
 
         for (const tf of bigTFs){
@@ -1082,6 +1094,7 @@
   </script>
 </body>
 </html>
+
 
 
 
