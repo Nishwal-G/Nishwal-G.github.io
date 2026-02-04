@@ -414,200 +414,173 @@
 
     const ACTS = [
  {
-    mode: "dna",
-    title: "How do cells know who they are?",
-    html: `
-      <p>
-        A skin cell, a neuron, and a blood cell all carry (almost) the <strong>same DNA</strong>.
-        Yet they behave completely differently. Why?
-      </p>
-      <p>
-        Because “cell identity” is mainly about <strong>which parts of the DNA are read</strong>.
-        You can think of the genome as one enormous instruction book:
-        every cell owns the same book, but each cell type reads a different set of chapters.
-      </p>
-      <p>
-        This story asks a simple question with a physics twist:
-        <strong>could the 3D folding of DNA help decide which chapters get read?</strong>
-      </p>
-    `,
-    showLegend: false
-  },
-
-  {
-    mode: "dna",
-    title: "What is DNA?",
-    html: `
-      <p>
-        DNA is information written in a tiny alphabet of just <strong>four letters</strong>:
-        <strong>A, C, G, T</strong>. That’s enough to encode the instructions for building and running living cells.
-      </p>
-      <p>
-        DNA has the famous “twisted ladder” shape (the double helix). The ladder rungs are
-        ${bigWord("BASE PAIRS", "white", "basepair")}: A pairs with T, and C pairs with G.
-        These pairings make the two strands fit together like matching puzzle pieces.
-      </p>
-      <p>
-        Most importantly: the <strong>order</strong> of base pairs along the strand is the message
-        — just like the order of letters in a sentence changes the meaning.
-      </p>
-    `,
-    showLegend: false
-  },
-
-  {
-    mode: "dna",
-    title: "What is a gene?",
-    html: `
-      <p>
-        If ${bigWord("BASE PAIRS", "white", "basepair")} are like letters, then a
-        ${bigWord("GENE", "green", "gene")} is like a meaningful “sentence” or “recipe” in the DNA book.
-      </p>
-      <p>
-        When a cell needs a particular instruction, it “reads” that gene by making a copy (RNA),
-        which can then be used to build proteins — the molecules that do work inside cells.
-      </p>
-      <p>
-        Different cell types turn different genes ON and OFF.
-        That pattern of gene activity is a big part of what makes a cell a skin cell, a neuron, or a blood cell.
-      </p>
-    `,
-    showLegend: false
-  },
-
-  {
-    mode: "epi",
-    title: "Epigenetics: locking some regions",
-    html: `
-      <p>
-        Cells also use chemical and structural “locks” called
-        ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions harder to access.
-        It’s like putting padlocks on certain chapters of the instruction book.
-      </p>
-      <p>
-        This helps a cell <strong>stay consistent</strong> when it divides:
-        a skin cell’s daughter cells usually remain skin cells because the same sets of genes stay available (or locked away).
-        In the animation, locked regions are shown in
-        <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
-      </p>
-      <p>
-        Click ${bigWord("EPIGENETICS", "purple", "epi")} (or the “Locked region” label) to highlight what “locked” means.
-        Next, we add a second idea: DNA is not just information — it’s also a <strong>moving physical object</strong>.
-      </p>
-    `,
-    showLegend: false
-  },
-
-  {
-    mode: "act4",
-    title: "DNA exists in 3D: chromatin folding",
-    html: `
-      <p>
-        DNA isn’t stretched out like a straight string. Inside the nucleus it is folded and packaged into
-        <strong>chromatin</strong> (DNA plus proteins), forming a long, flexible chain in 3D.
-      </p>
-      <p>
-        In this simplified model, chromatin is a chain of beads. Each bead represents a huge chunk of DNA
-        — roughly <strong>millions of base pairs</strong> (about <strong>3 million</strong> in this cartoon).
-        This “zoomed-out” view is how physicists often model chromatin: as a <strong>polymer</strong>.
-      </p>
-      <p>
-        Here’s the key idea we’re building toward:
-        <strong>folding changes which parts of DNA are physically near each other</strong>.
-        If genes end up near the same place in 3D, that can change how often they are visited by the proteins that read them.
-      </p>
-      <p>
-        <strong>Try it:</strong> drag the chain and fold it over itself. This is what “3D genome organisation” means in the simplest possible picture.
-      </p>
-    `,
-    showLegend: true
-  },
-
-  {
-    mode: "act5",
-    title: "The readers: transcription factors",
-    html: `
-      <p>
-        Genes don’t “read themselves”. Cells use proteins called <strong>transcription factors</strong> (TFs)
-        to find gene regions and help start transcription (copying DNA into RNA).
-      </p>
-      <p>
-        TFs move around the nucleus mostly by random motion — like dust motes drifting in air.
-        They spend a lot of time <strong>searching</strong>.
-        To actually read a gene, they must <strong>stick</strong> to the right place on the chromatin.
-      </p>
-      <p>
-        In this act the TFs are simply wandering: no special pulling yet — just the idea that the nucleus is busy,
-        and finding the right place takes time.
-      </p>
-    `,
-    showLegend: true
-  },
-
-  {
-    mode: "act6",
-    title: "Multivalent binding: one TF can pull chromatin in",
-    html: `
-      <p>
-        Some TFs are <strong>multivalent</strong>: they can bind at multiple points.
-        That makes them behave like a “hub” — not because they are huge,
-        but because they can grab more than one part of the chromatin.
-      </p>
-      <p>
-        When one TF binds in several places, it can <strong>pull chromatin together locally</strong>.
-        That increases the chromatin density in that region — a bit like gathering loose string into your hand.
-      </p>
-      <p>
-        <strong>Try it:</strong> drag the big red TF. Watch how chromatin slowly wraps around it.
-        This is the start of a physical feedback: binding creates local compaction.
-      </p>
-    `,
-    showLegend: true
-  },
-
-  {
-    mode: "act7",
-    title: "Recruitment: dense regions attract more readers",
-    html: `
-      <p>
-        Once chromatin becomes denser in one region, TFs are more likely to collide with it and bind there.
-        So density can attract attention: <strong>more chromatin in one place → more TF binding in that place</strong>.
-      </p>
-      <p>
-        Here we begin with chromatin already wrapped around a “hub” TF.
-        Now other TFs drift in <strong>slowly</strong> and accumulate at the high-density region.
-      </p>
-      <p>
-        This is the core message:
-        <strong>3D structure can help concentrate the readers</strong>,
-        which can bias which genes are active — even before you invoke complex biochemical regulation.
-      </p>
-    `,
-    showLegend: true
-  },
-
-  {
-    mode: "act8",
-    title: "Transcription factories: a structural way to regulate identity",
-    html: `
-      <p>
-        When many TFs and gene regions gather in the same place, we can think of it as a
-        <strong>transcription factory</strong>: a hub where a lot of “reading” is happening.
-      </p>
-      <p>
-        If most readers are concentrated in a few hubs, then other regions are visited less often
-        — meaning some genes are effectively <strong>quiet</strong>, even if they aren’t chemically locked.
-      </p>
-      <p>
-        Put together, this gives a powerful idea:
-        epigenetics can lock or unlock chapters, but <strong>3D folding can also steer attention</strong>
-        by bringing certain genes into busy hubs.
-        In that way, genome structure may contribute to how cells maintain their identity over time.
-      </p>
-    `,
-    showLegend: false
-  }
-];
+        mode: "act1_img",
+        title: "How do cells know who they are?",
+        sub: "Most cells carry the same DNA — but they don’t behave the same. Why?",
+        html: `
+          <p>
+            A skin cell, a neuron, and a blood cell usually contain the <strong>same DNA</strong>. Yet they do totally different jobs.
+          </p>
+          <p>
+            The big idea is: <strong>cell identity</strong> is mostly about <em>which parts of DNA get read</em> and which parts stay quiet.
+            If different “chapters” get used, you get different cell types.
+          </p>
+          <p>
+            In this story we’ll build one more layer onto that idea:
+            DNA isn’t just a code — it’s also a <strong>3D object</strong> that folds and moves. That folding can change what gets read.
+          </p>
+        `,
+        showLegend: false,
+        buttons: { basepair:false, gene:false, epi:false },
+      },
+      {
+        mode: "dna",
+        title: "What is DNA?",
+        sub: "DNA is information written in a simple alphabet — and arranged in a famous shape.",
+        html: `
+          <p>
+            DNA is a long molecule that stores biological information using just four “letters”:
+            <strong>A</strong>, <strong>C</strong>, <strong>G</strong>, and <strong>T</strong>.
+            (Books use 26 letters — life gets a lot done with 4.)
+          </p>
+          <p>
+            DNA is shaped like a twisted ladder called the <strong>double helix</strong>.
+            Each rung is a matched pair of letters: A pairs with T, and C pairs with G.
+            Those rungs are called <strong>base pairs</strong>.
+          </p>
+          <p>
+            Click the buttons below to highlight what a <strong>base pair</strong> looks like on the helix.
+          </p>
+        `,
+        showLegend: false,
+        buttons: { basepair:true, gene:false, epi:false },
+      },
+      {
+        mode: "dna",
+        title: "What is a gene?",
+        sub: "If base pairs are letters, genes are meaningful “sentences” the cell can read.",
+        html: `
+          <p>
+            If <strong>base pairs</strong> are the letters, a <strong>gene</strong> is like a sentence (or recipe) inside the DNA book.
+          </p>
+          <p>
+            When a cell “reads” a gene, it makes an RNA copy and often uses that to build proteins — the molecules that do work in the cell.
+          </p>
+          <p>
+            Different cell types read different genes. That’s a huge part of how cells keep their identities.
+            Click the <strong>Gene</strong> button to highlight one gene-sized region on the helix.
+          </p>
+        `,
+        showLegend: false,
+        buttons: { basepair:false, gene:true, epi:false },
+      },
+      {
+        mode: "epi",
+        title: "Epigenetics: locking some regions",
+        sub: "Cells can keep the ‘wrong’ chapters harder to access — to stay the same kind of cell.",
+        html: `
+          <p>
+            Cells use <strong>epigenetics</strong> to help keep some DNA regions “closed” and others more “open”.
+            You can think of it like placing locks and sticky notes in the DNA book: some chapters become hard to open.
+          </p>
+          <p>
+            In the animation, locked regions glow in <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
+            Click the <strong>Epigenetics</strong> button to highlight those locked sections.
+          </p>
+          <p>
+            Epigenetics is one way identity stays stable. But there’s another ingredient:
+            DNA also has <strong>physics</strong> — it folds in 3D.
+          </p>
+        `,
+        showLegend: false,
+        buttons: { basepair:false, gene:false, epi:true },
+      },
+      {
+        mode: "act4",
+        title: "DNA is not a straight line — it folds in 3D",
+        sub: "When you zoom out, DNA becomes chromatin: a flexible chain packed inside the nucleus.",
+        html: `
+          <p>
+            DNA is extremely long (about <strong>2 metres</strong> per cell if stretched out), but the nucleus is tiny.
+            So DNA wraps around proteins and folds into <strong>chromatin</strong>.
+          </p>
+          <p>
+            Physicists often model chromatin as a flexible chain (a <strong>polymer</strong>) made of connected beads.
+            In this cartoon, <strong>each bead stands for ~millions of base pairs</strong>.
+          </p>
+          <p>
+            <strong>Try it:</strong> drag the chain and fold it over itself. Let go and it will keep wiggling.
+          </p>
+        `,
+        showLegend: true,
+        buttons: { basepair:false, gene:false, epi:false },
+      },
+      {
+        mode: "act5",
+        title: "The book readers: transcription factors (TFs)",
+        sub: "TFs drift around randomly. Before “sticking”, they have to find the right place.",
+        html: `
+          <p>
+            The molecules that help “read” genes include proteins called <strong>transcription factors</strong> (TFs).
+            They move around the nucleus, bumping and drifting — a bit like dust in the air.
+          </p>
+          <p>
+            In this act, TFs (red) mostly wander. The chromatin chain is present, but nothing is pulling it together yet.
+          </p>
+        `,
+        showLegend: true,
+        buttons: { basepair:false, gene:false, epi:false },
+      },
+      {
+        mode: "act6",
+        title: "Sticky hubs: multivalent binding increases local density",
+        sub: "A multivalent TF can bind in multiple places — making it act like a hub that pulls chromatin in.",
+        html: `
+          <p>
+            Some TFs are <strong>multivalent</strong>: they can bind at more than one point.
+            That makes them act like a sticky hub that can pull in nearby chromatin.
+          </p>
+          <p>
+            <strong>Drag the big red TF</strong>. The chromatin will slowly wrap around it, making a dense region.
+          </p>
+        `,
+        showLegend: true,
+        buttons: { basepair:false, gene:false, epi:false },
+      },
+      {
+        mode: "act7",
+        title: "Recruitment to a dense region",
+        sub: "Once a dense region exists, more TFs are more likely to arrive there — leaving other regions quieter.",
+        html: `
+          <p>
+            If chromatin is denser in one region, TFs bump into that region more often — so they tend to accumulate there.
+            That can create a “rich get richer” effect: <strong>density attracts readers</strong>.
+          </p>
+          <p>
+            Here the chromatin is <strong>already wrapped</strong> around the main TF (a high-density hub),
+            and additional TFs drift <strong>slowly</strong> toward it.
+          </p>
+        `,
+        showLegend: true,
+        buttons: { basepair:false, gene:false, epi:false },
+      },
+      {
+        mode: "act8_img",
+        title: "Transcription factories",
+        sub: "A summary picture: active hubs (‘factories’) and quieter regions.",
+        html: `
+          <p>
+            Dense hubs where many TFs gather are often called <strong>transcription factories</strong>.
+            If most readers are pulled into a few hubs, other regions can be left relatively quiet.
+          </p>
+          <p>
+            That means 3D structure isn’t just “packing” — it can help bias which genes get read, and help stabilise a cell’s identity.
+          </p>
+        `,
+        showLegend: false,
+        buttons: { basepair:false, gene:false, epi:false },
+      }
+    ];
 
     function applyAct(i){
       actIndex = clamp(i, 0, ACTS.length - 1);
