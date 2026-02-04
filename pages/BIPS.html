@@ -9,23 +9,14 @@
     :root{
       --bg: #050507;
       --panel: rgba(0,0,0,0.55);
-      --panel2: rgba(255,255,255,0.06);
       --border: rgba(255,255,255,0.14);
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.70);
 
       --green: rgba(0,255,140,0.95);
-      --greenDim: rgba(0,255,140,0.45);
-
       --red: rgba(255,60,60,0.92);
-      --redDim: rgba(255,60,60,0.55);
-
       --pink: rgba(255,120,200,0.70);
       --purple: rgba(190,120,255,0.92);
-
-      /* NEW for hotspots (NOT red) */
-      --hot: rgba(80,190,255,0.95);     /* cyan-ish */
-      --hotDim: rgba(80,190,255,0.35);
 
       --maxw: 1100px;
     }
@@ -73,14 +64,6 @@
       margin-bottom: 8px;
     }
 
-    .titleRow{
-      display:flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
     .sceneTitle{
       font-weight: 950;
       letter-spacing: -0.3px;
@@ -102,7 +85,6 @@
       font-size: 15px;
       line-height: 1.72;
     }
-
     .storyText p{ margin: 10px 0 0 0; }
 
     /* Big clickable glossary-like words */
@@ -127,7 +109,7 @@
     .bigClick.purple{ border-color: rgba(190,120,255,0.35); color: var(--purple); }
     .bigClick.white{ border-color: rgba(255,255,255,0.20); color: rgba(255,255,255,0.92); }
 
-    /* Controls right aligned inside text panel */
+    /* Controls */
     .controls{
       display:flex;
       gap: 10px;
@@ -210,9 +192,7 @@
     .dot.red{ background: var(--red); }
     .dot.pink{ background: var(--pink); }
     .dot.purple{ background: var(--purple); }
-    .dot.hot{ background: var(--hot); }
 
-    /* Small helper text for dragging in act 6 */
     .dragHint{
       position:absolute;
       right: 12px;
@@ -240,14 +220,11 @@
 
 <body>
   <div class="page">
-    <!-- TEXT ABOVE CANVAS -->
     <section class="textPanel" aria-label="Story text">
       <div class="textInner">
         <div class="kicker" id="kicker">Interactive story (8 acts)</div>
 
-        <div class="titleRow">
-          <h1 class="sceneTitle" id="sceneTitle">Opening — How do cells remember who they are?</h1>
-        </div>
+        <h1 class="sceneTitle" id="sceneTitle">Opening — How do cells remember who they are?</h1>
 
         <div class="sceneSub" id="sceneSub">
           Read the story, then look at the animation underneath. Use Next / Prev to move through the acts.
@@ -263,18 +240,16 @@
       </div>
     </section>
 
-    <!-- CANVAS -->
     <section class="stage" aria-label="Animation canvas">
       <canvas id="stageCanvas"></canvas>
 
-      <div class="dragHint" id="dragHint">Act 6: drag the big TF (red) to move it</div>
+      <div class="dragHint" id="dragHint">Act 6: drag the big TF (red)</div>
 
       <div class="legend" id="legend">
-        <span class="dot white"></span> chromatin (DNA packed as a chain)
+        <span class="dot white"></span> chromatin
         <span class="dot green"></span> gene / active region
         <span class="dot red"></span> TF (reader)
         <span class="dot pink"></span> hub / factory
-        <span class="dot hot"></span> hotspot (active zone)
         <span class="dot purple"></span> locked DNA
       </div>
     </section>
@@ -298,11 +273,15 @@
       }
       return { w: canvas.width, h: canvas.height, dpr };
     }
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      rebuildClickables = true;
-      initActWorld(true);
-    });
+
+    // RNG helpers
+    function randn() {
+      let u=0, v=0;
+      while(u===0) u=Math.random();
+      while(v===0) v=Math.random();
+      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+    }
+    function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
 
     // ============================================================
     // UI
@@ -319,20 +298,10 @@
     const legend = document.getElementById("legend");
     const dragHint = document.getElementById("dragHint");
 
-    // RNG helpers
-    function randn() {
-      let u=0, v=0;
-      while(u===0) u=Math.random();
-      while(v===0) v=Math.random();
-      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
-    }
-    function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
-
     // ============================================================
-    // Clickable words (in text) + clickable labels (on DNA)
+    // Clickable words (text) + clickable labels (DNA canvas)
     // ============================================================
     let highlight = null; // "basepair" | "gene" | "epi" | null
-
     function bigWord(label, cssClass, onClickId){
       return `<span class="bigClick ${cssClass}" data-click="${onClickId}">${label}</span>`;
     }
@@ -346,206 +315,7 @@
       if (id === "epi") highlight = (highlight === "epi") ? null : "epi";
     });
 
-    // ============================================================
-    // Acts definition
-    // ============================================================
-    let actIndex = 0;
-    let mode = "dna"; // dna | epi | chromatin | act5 | act6 | act7 | act8
-
-    const ACTS = [
-      {
-        mode: "dna",
-        title: "Opening — How do cells remember who they are?",
-        sub: "Almost every cell has the same DNA. Cells differ because they read different parts of it.",
-        html: `
-          <p>
-            Your body is made of many cell types — skin cells, neurons, muscle cells, blood cells.
-            Strangely, most of them contain the <strong>same</strong> DNA.
-          </p>
-          <p>
-            So why do they behave differently? Because different cells “read” different parts of the DNA.
-            A cell’s identity is mainly about which genes are <strong>ON</strong> and which are <strong>OFF</strong>.
-          </p>
-          <p>
-            Click ${bigWord("BASE PAIR", "white", "basepair")} and ${bigWord("GENE", "green", "gene")}
-            to see what those mean on the DNA helix.
-          </p>
-        `,
-        showLegend: false
-      },
-      {
-        mode: "dna",
-        title: "Act 1 — What is DNA?",
-        sub: "DNA is a long message written in a four-letter alphabet: A, C, G, T.",
-        html: `
-          <p>
-            DNA is information. It’s written using four chemical “letters”: <strong>A, C, G, T</strong>.
-            The order of these letters stores instructions.
-          </p>
-          <p>
-            DNA is shaped like a twisted ladder called a <strong>double helix</strong>.
-            The rungs of that ladder are letter-pairs called ${bigWord("BASE PAIRS", "white", "basepair")}
-            (A pairs with T, and C pairs with G).
-          </p>
-          <p>
-            If base pairs are like letters, then long sequences can form words, sentences… and eventually useful instructions.
-          </p>
-        `,
-        showLegend: false
-      },
-      {
-        mode: "dna",
-        title: "Act 2 — What is a gene?",
-        sub: "Genes are meaningful stretches of DNA that can be read and used to make proteins.",
-        html: `
-          <p>
-            A ${bigWord("GENE", "green", "gene")} is a stretch of DNA with a job.
-            It’s like a “sentence” in the instruction book that the cell knows how to copy and use.
-          </p>
-          <p>
-            When a cell reads a gene, it makes an RNA copy. That RNA often helps build a protein —
-            a molecule that does work in the cell.
-          </p>
-          <p>
-            Different cell types read different genes. That’s a big reason a neuron is not a skin cell.
-          </p>
-        `,
-        showLegend: false
-      },
-      {
-        mode: "epi",
-        title: "Act 3 — Epigenetics: keeping some pages locked",
-        sub: "Cells can ‘lock’ DNA regions so they’re harder to read — helping identity stay stable.",
-        html: `
-          <p>
-            Cells don’t read every gene all the time. They use ${bigWord("EPIGENETICS", "purple", "epi")}
-            to keep some DNA regions harder to access.
-          </p>
-          <p>
-            Think of it like padlocks on a book: some chapters are open, others are closed.
-            Locked regions are shown in <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
-          </p>
-          <p>
-            Next we zoom out. DNA is also a <strong>physical object</strong>: it bends, moves, and folds in 3D.
-          </p>
-        `,
-        showLegend: false
-      },
-      {
-        mode: "chromatin",
-        title: "Act 4 — Zoom out: DNA folds into chromatin (a polymer)",
-        sub: "Now we show chromatin as a long chain that folds over itself. This is slow and “wiggly”, not instant collapse.",
-        html: `
-          <p>
-            DNA is extremely long, but it must fit inside a tiny nucleus. So it folds into <strong>chromatin</strong>.
-          </p>
-          <p>
-            Here we model chromatin as a flexible chain (a polymer). Watch it fold and loop around itself.
-            This is slower and more ‘wiggly’ than a fast collapse.
-          </p>
-          <p>
-            In our cartoon, each bead could represent <strong>millions of base pairs</strong> of DNA.
-          </p>
-        `,
-        showLegend: true
-      },
-      {
-        mode: "act5",
-        title: "Act 5 — TFs wander (searching) while chromatin drifts",
-        sub: "TFs move randomly. Chromatin also moves — but in this act, they don’t interact yet.",
-        html: `
-          <p>
-            Transcription factors (TFs) are proteins that float around in the nucleus.
-            They don’t instantly find genes — they wander and search.
-          </p>
-          <p>
-            Here: red TFs wander; the chromatin chain also drifts and wiggles.
-            But there is no sticking yet — this is just the ‘search’ step.
-          </p>
-        `,
-        showLegend: true
-      },
-      {
-        mode: "act6",
-        title: "Act 6 — Multivalent TF: chromatin wraps around it (drag the TF)",
-        sub: "A TF with multiple binding ‘arms’ can pull in nearby chromatin and increase local density.",
-        html: `
-          <p>
-            Some TFs are <strong>multivalent</strong>: they can bind in more than one place.
-            That makes them act like a sticky hub that can pull in different parts of chromatin.
-          </p>
-          <p>
-            Drag the big red TF. The polymer will slowly wrap around it, increasing chromatin density nearby.
-          </p>
-        `,
-        showLegend: true
-      },
-      {
-        mode: "act7",
-        title: "Act 7 — Feedback: the wrapped cluster recruits more chromatin & TFs",
-        sub: "Once a dense hub exists, it becomes a bigger target — more TFs gather and the hub grows.",
-        html: `
-          <p>
-            Once chromatin is dense in one region, TFs bump into that region more often.
-            That can create a feedback loop: density attracts TFs, TFs increase density.
-          </p>
-          <p>
-            Here the polymer is already wrapped around a hub. Watch the rest drift inward over time.
-          </p>
-        `,
-        showLegend: true
-      },
-      {
-        mode: "act8",
-        title: "Act 8 — A nucleus snapshot: hotspots & quiet regions",
-        sub: "Final cartoon: several hotspots (cyan) each crowded with TFs, plus large quiet stretches.",
-        html: `
-          <p>
-            In a whole nucleus, you might have multiple “hotspots” where gene reading happens often,
-            and many quiet regions where little is read.
-          </p>
-          <p>
-            Hotspots are shown in <span style="color: rgba(80,190,255,0.95); font-weight:900;">cyan</span>,
-            with many TFs crowded around each one.
-          </p>
-        `,
-        showLegend: true
-      }
-    ];
-
-    function applyAct(i){
-      actIndex = clamp(i, 0, ACTS.length - 1);
-      const A = ACTS[actIndex];
-
-      mode = A.mode;
-      highlight = null;
-
-      kicker.textContent = `Act ${actIndex + 1} of ${ACTS.length}`;
-      sceneTitle.textContent = A.title;
-      sceneSub.textContent = A.sub;
-      storyText.innerHTML = A.html;
-
-      prevBtn.disabled = (actIndex === 0);
-      nextBtn.disabled = (actIndex === ACTS.length - 1);
-      resetBtn.style.display = (actIndex >= 3) ? "inline-flex" : "none";
-
-      // drag hint only act6
-      dragHint.classList.toggle("show", mode === "act6");
-
-      if (A.showLegend) legend.classList.add("show");
-      else legend.classList.remove("show");
-
-      rebuildClickables = true;
-      initActWorld(true);
-    }
-
-    prevBtn.addEventListener("click", () => applyAct(actIndex - 1));
-    nextBtn.addEventListener("click", () => applyAct(actIndex + 1));
-    resetBtn.addEventListener("click", () => initActWorld(true));
-
-    // ============================================================
-    // Clickable labels drawn on DNA (canvas)
-    // ============================================================
+    // DNA label click regions
     let rebuildClickables = true;
     const clickables = []; // {id, x,y,w,h}
     function clearClickables(){ clickables.length = 0; }
@@ -574,76 +344,177 @@
       }
     });
 
-    // Act 6 dragging (big TF)
-    let draggingTF = false;
-    let dragOffset = {x:0, y:0};
+    // ============================================================
+    // Acts
+    // ============================================================
+    let actIndex = 0;
+    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act8(blank)
 
-    canvas.addEventListener("pointerdown", (e) => {
-      if (mode !== "act6") return;
-      const p = mouseToCanvas(e);
-      const dx = p.x - bigTF.x;
-      const dy = p.y - bigTF.y;
-      const r = Math.sqrt(dx*dx+dy*dy);
-      if (r < bigTF.radius*1.15){
-        draggingTF = true;
-        dragOffset.x = dx;
-        dragOffset.y = dy;
-        canvas.setPointerCapture(e.pointerId);
+    const ACTS = [
+      {
+        mode: "dna",
+        title: "Opening — How do cells remember who they are?",
+        sub: "Most cells share the same DNA. Identity is which genes are ON and OFF.",
+        html: `
+          <p>
+            Skin cells, neurons, and blood cells usually contain the <strong>same DNA</strong>.
+            They behave differently because they use different parts of that DNA.
+          </p>
+          <p>
+            Click ${bigWord("BASE PAIR", "white", "basepair")} and ${bigWord("GENE", "green", "gene")}
+            to see what those mean on the helix.
+          </p>
+        `,
+        showLegend: false
+      },
+      {
+        mode: "dna",
+        title: "Act 1 — What is DNA?",
+        sub: "DNA is a message written in a four-letter alphabet: A, C, G, T.",
+        html: `
+          <p>
+            DNA is information written using four letters: <strong>A, C, G, T</strong>.
+            The ladder rungs are ${bigWord("BASE PAIRS", "white", "basepair")} (A–T and C–G).
+          </p>
+          <p>
+            The order of base pairs is the message — like letters in a sentence.
+          </p>
+        `,
+        showLegend: false
+      },
+      {
+        mode: "dna",
+        title: "Act 2 — What is a gene?",
+        sub: "Genes are meaningful stretches of DNA that can be read and used.",
+        html: `
+          <p>
+            If ${bigWord("BASE PAIRS", "white", "basepair")} are letters, a ${bigWord("GENE", "green", "gene")}
+            is like a sentence or recipe that the cell can copy and use.
+          </p>
+          <p>
+            Different cells read different genes — that’s a big part of cell identity.
+          </p>
+        `,
+        showLegend: false
+      },
+      {
+        mode: "epi",
+        title: "Act 3 — Epigenetics: locking some regions",
+        sub: "Epigenetic marks can make parts of DNA harder to access.",
+        html: `
+          <p>
+            Cells use ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions closed.
+            Locked regions are shown in <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
+          </p>
+          <p>
+            Next we zoom out and treat DNA as a moving object that folds in 3D.
+          </p>
+        `,
+        showLegend: false
+      },
+      {
+        mode: "act4",
+        title: "Act 4 — DNA folds into chromatin (gentle folding, not collapse)",
+        sub: "The polymer folds over itself a couple of times and then just keeps wiggling.",
+        html: `
+          <p>
+            DNA is extremely long, so it folds into <strong>chromatin</strong>.
+            Here chromatin is a flexible chain (polymer).
+          </p>
+          <p>
+            This act shows <em>gentle folding</em> (a few loops forming), not a rapid collapse into a ball.
+          </p>
+        `,
+        showLegend: true
+      },
+      {
+        mode: "act5",
+        title: "Act 5 — TFs wander while chromatin just sits there",
+        sub: "TFs float around randomly; the polymer does not collapse or fold further here.",
+        html: `
+          <p>
+            TFs (red) wander randomly in the nucleus. Chromatin (white) is present in the background.
+          </p>
+          <p>
+            In this act, there is <strong>no attraction</strong> and no further folding — just wandering.
+          </p>
+        `,
+        showLegend: true
+      },
+      {
+        mode: "act6",
+        title: "Act 6 — Multivalent TF: drag it and watch chromatin wrap",
+        sub: "Drag the big TF (red). The polymer slowly wraps around it, increasing local density.",
+        html: `
+          <p>
+            Some TFs are <strong>multivalent</strong> — they can bind at multiple points.
+            That makes them act like a sticky hub that pulls in chromatin.
+          </p>
+          <p>
+            Drag the big red TF. The polymer will slowly wrap around it.
+          </p>
+        `,
+        showLegend: true
+      },
+      {
+        mode: "act7",
+        title: "Act 7 — More big TFs move toward the main hub",
+        sub: "No polymer collapse here: just show other big TFs drifting toward the central TF.",
+        html: `
+          <p>
+            Once a hub exists, it can recruit more proteins.
+            Here we show additional big TFs drifting toward the main TF.
+          </p>
+          <p>
+            The polymer does not collapse — it just sits in the scene as context.
+          </p>
+        `,
+        showLegend: true
+      },
+      {
+        mode: "act8",
+        title: "Act 8 — Summary slide (blank canvas)",
+        sub: "Canvas is intentionally blank here — you’ll place a summary image.",
+        html: `
+          <p>
+            This final act is a summary slide. The canvas is blank so you can add your own image.
+          </p>
+        `,
+        showLegend: false
       }
-    });
+    ];
 
-    canvas.addEventListener("pointermove", (e) => {
-      if (!draggingTF) return;
-      const p = mouseToCanvas(e);
-      bigTF.x = p.x - dragOffset.x;
-      bigTF.y = p.y - dragOffset.y;
-    });
+    function applyAct(i){
+      actIndex = clamp(i, 0, ACTS.length - 1);
+      const A = ACTS[actIndex];
 
-    canvas.addEventListener("pointerup", () => { draggingTF = false; });
-    canvas.addEventListener("pointercancel", () => { draggingTF = false; });
+      mode = A.mode;
+      highlight = null;
 
-    function roundRect(x, y, w, h, r, fill, stroke){
-      const rr = Math.min(r, w/2, h/2);
-      ctx.beginPath();
-      ctx.moveTo(x+rr, y);
-      ctx.arcTo(x+w, y, x+w, y+h, rr);
-      ctx.arcTo(x+w, y+h, x, y+h, rr);
-      ctx.arcTo(x, y+h, x, y, rr);
-      ctx.arcTo(x, y, x+w, y, rr);
-      ctx.closePath();
-      if (fill) ctx.fill();
-      if (stroke) ctx.stroke();
+      kicker.textContent = `Act ${actIndex + 1} of ${ACTS.length}`;
+      sceneTitle.textContent = A.title;
+      sceneSub.textContent = A.sub;
+      storyText.innerHTML = A.html;
+
+      prevBtn.disabled = (actIndex === 0);
+      nextBtn.disabled = (actIndex === ACTS.length - 1);
+      resetBtn.style.display = (actIndex >= 4) ? "inline-flex" : (actIndex >= 4 ? "inline-flex" : (actIndex >= 4)); // harmless; we'll override below
+      resetBtn.style.display = (actIndex >= 4 || mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7") ? "inline-flex" : "none";
+      if (mode === "dna" || mode === "epi") resetBtn.style.display = "none";
+      if (mode === "act8") resetBtn.style.display = "none";
+
+      dragHint.classList.toggle("show", mode === "act6");
+
+      if (A.showLegend) legend.classList.add("show");
+      else legend.classList.remove("show");
+
+      rebuildClickables = true;
+      initActWorld(true);
     }
 
-    function drawLabelWithArrow(label, xText, yText, xTo, yTo, color, id){
-      ctx.save();
-      ctx.font = "900 14px system-ui";
-      const padX = 10;
-      const textW = ctx.measureText(label).width;
-      const w = textW + 2*padX;
-      const h = 28;
-
-      // Arrow
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.70;
-      ctx.beginPath();
-      ctx.moveTo(xText + w*0.5, yText + h);
-      ctx.lineTo(xTo, yTo);
-      ctx.stroke();
-
-      // Pill
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(0,0,0,0.40)";
-      ctx.strokeStyle = "rgba(255,255,255,0.16)";
-      roundRect(xText, yText, w, h, 999, true, true);
-
-      ctx.fillStyle = color;
-      ctx.fillText(label, xText + padX, yText + 19);
-      ctx.restore();
-
-      addClickable(id, xText, yText, w, h);
-    }
+    prevBtn.addEventListener("click", () => applyAct(actIndex - 1));
+    nextBtn.addEventListener("click", () => applyAct(actIndex + 1));
+    resetBtn.addEventListener("click", () => initActWorld(true));
 
     // ============================================================
     // Drawing helpers
@@ -670,8 +541,49 @@
       ctx.restore();
     }
 
+    function roundRect(x, y, w, h, r, fill, stroke){
+      const rr = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+rr, y);
+      ctx.arcTo(x+w, y, x+w, y+h, rr);
+      ctx.arcTo(x+w, y+h, x, y+h, rr);
+      ctx.arcTo(x, y+h, x, y, rr);
+      ctx.arcTo(x, y, x+w, y, rr);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    function drawLabelWithArrow(label, xText, yText, xTo, yTo, color, id){
+      ctx.save();
+      ctx.font = "900 14px system-ui";
+      const padX = 10;
+      const textW = ctx.measureText(label).width;
+      const w = textW + 2*padX;
+      const h = 28;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.70;
+      ctx.beginPath();
+      ctx.moveTo(xText + w*0.5, yText + h);
+      ctx.lineTo(xTo, yTo);
+      ctx.stroke();
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "rgba(0,0,0,0.40)";
+      ctx.strokeStyle = "rgba(255,255,255,0.16)";
+      roundRect(xText, yText, w, h, 999, true, true);
+
+      ctx.fillStyle = color;
+      ctx.fillText(label, xText + padX, yText + 19);
+      ctx.restore();
+
+      addClickable(id, xText, yText, w, h);
+    }
+
     // ============================================================
-    // DNA helix (acts 0–3) — same style you liked
+    // DNA helix (acts 0–3)
     // ============================================================
     function drawDNAHelix(){
       const W = canvas.width, H = canvas.height;
@@ -701,7 +613,6 @@
         return false;
       }
 
-      // Purple “locked curtains” behind locked segments (more visible)
       if (mode === "epi") {
         ctx.save();
         ctx.globalAlpha = epiHi ? 0.28 : 0.20;
@@ -724,7 +635,6 @@
         const inGene = (i>=geneStart && i<=geneEnd);
         const locked = isLocked(i);
 
-        // rung styling
         let rungColor = "rgba(255,255,255,0.20)";
         let rungWidth = 2.0;
 
@@ -745,7 +655,6 @@
         ctx.stroke();
         ctx.restore();
 
-        // backbones
         let backboneColor = "rgba(255,255,255,0.55)";
         if (geneHi && inGene) backboneColor = "rgba(0,255,140,0.65)";
         if (mode === "epi" && locked) backboneColor = epiHi ? "rgba(190, 120, 255, 0.80)" : "rgba(190, 120, 255, 0.50)";
@@ -764,7 +673,6 @@
         }
       }
 
-      // clickable labels
       if (rebuildClickables) { clearClickables(); rebuildClickables = false; }
 
       const baseIdx = 16, geneIdx = 20, lockIdx = 9;
@@ -780,69 +688,68 @@
       const gn = helixPoint(geneIdx);
       const lk = helixPoint(lockIdx);
 
-      const white = "rgba(255,255,255,0.92)";
-      const green = "rgba(0,255,140,0.92)";
-      const purple = "rgba(190,120,255,0.95)";
-
-      drawLabelWithArrow("Base pairs", W*0.08, H*0.26, bp.x, bp.y, white, "basepairs");
-      drawLabelWithArrow("Gene",      W*0.74, H*0.78, gn.x, gn.y, green, "gene");
+      drawLabelWithArrow("Base pairs", W*0.08, H*0.26, bp.x, bp.y, "rgba(255,255,255,0.92)", "basepairs");
+      drawLabelWithArrow("Gene",      W*0.74, H*0.78, gn.x, gn.y, "rgba(0,255,140,0.92)", "gene");
 
       if (mode === "epi") {
-        drawLabelWithArrow("Locked region", W*0.08, H*0.74, lk.x, lk.y, purple, "locked");
+        drawLabelWithArrow("Locked region", W*0.08, H*0.74, lk.x, lk.y, "rgba(190,120,255,0.95)", "locked");
       }
     }
 
     // ============================================================
-    // Polymer / TF worlds (acts 4–7) + static scene (act 8)
+    // Polymer worlds for acts 4–7
     // ============================================================
     const world = {
       initialised: false,
       beads: [],
       bvx: [],
       bvy: [],
-      isGene: [],
-      geneSticky: [],
       tfs: [],
-      hubs: [],
       frame: 0
     };
 
     const P = {
-      // polymer baseline
-      beadCount: 230,
+      beadCount: 210,
       restLen: 9,
       kSpring: 0.18,
       kBend: 0.010,
       damping: 0.92,
       brownian: 0.18,
       beadR: 4.6,
-      repelK: 0.55,
-
-      // TF baseline
-      tfCount: 44,
-      tfR: 6.5,
-      tfBrown: 0.50,
-      tfDamp: 0.93,
-
-      // binding
-      bindR: 18,
-      bindPull: 0.050,
-
-      // act-specific (set in init)
-      geneAttract: 0.0,
-      hubAttract: 0.0,
-      hubPullAll: 0.0,
-      hubPullGene: 0.0,
-
-      // act4 compaction control (slow folding)
-      slowCompact: 0.0
+      repelK: 0.55
     };
 
-    // Big TF for act6
+    // Big TF for act6 + act7 (center hub)
     const bigTF = { x: 0, y: 0, vx: 0, vy: 0, radius: 34 };
+    let draggingTF = false;
+    let dragOffset = {x:0, y:0};
+
+    canvas.addEventListener("pointerdown", (e) => {
+      if (mode !== "act6") return;
+      const p = mouseToCanvas(e);
+      const dx = p.x - bigTF.x;
+      const dy = p.y - bigTF.y;
+      if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
+        draggingTF = true;
+        dragOffset.x = dx;
+        dragOffset.y = dy;
+        canvas.setPointerCapture(e.pointerId);
+      }
+    });
+    canvas.addEventListener("pointermove", (e) => {
+      if (!draggingTF) return;
+      const p = mouseToCanvas(e);
+      bigTF.x = p.x - dragOffset.x;
+      bigTF.y = p.y - dragOffset.y;
+    });
+    canvas.addEventListener("pointerup", () => { draggingTF = false; });
+    canvas.addEventListener("pointercancel", () => { draggingTF = false; });
+
+    // extra big TFs for act7
+    let bigTFs = []; // {x,y,vx,vy,radius}
 
     function initActWorld(force=false){
-      const polymerModes = ["chromatin","act5","act6","act7"];
+      const polymerModes = ["act4","act5","act6","act7"];
       if (!polymerModes.includes(mode)) return;
 
       if (world.initialised && !force) return;
@@ -850,134 +757,71 @@
       world.initialised = true;
       world.frame = 0;
       resizeCanvas();
-
       const W = canvas.width, H = canvas.height;
 
-      // polymer init: long-ish chain across
+      // polymer init
       world.beads = [];
       world.bvx = new Array(P.beadCount).fill(0);
       world.bvy = new Array(P.beadCount).fill(0);
-      world.isGene = new Array(P.beadCount).fill(false);
-      world.geneSticky = new Array(P.beadCount).fill(false);
 
-      const startX = W * 0.06;
-      const midY = H * 0.58;
+      const startX = W * 0.10;
+      const midY = H * 0.56;
 
       for (let i=0;i<P.beadCount;i++){
         const x = startX + i*P.restLen;
-        const y = midY + (H*0.07)*Math.sin(i*0.17) + (H*0.02)*randn();
+        const y = midY + (H*0.06)*Math.sin(i*0.17) + (H*0.02)*randn();
         world.beads.push({x,y});
       }
 
-      // three gene regions (green)
-      const centers = [
-        Math.floor(P.beadCount * 0.26),
-        Math.floor(P.beadCount * 0.52),
-        Math.floor(P.beadCount * 0.78)
-      ];
-      for (const c of centers){
-        for (let j=-6;j<=6;j++){
-          const idx = c + j;
-          if (idx>=0 && idx<P.beadCount) world.isGene[idx] = true;
+      // Act 4: bake in a couple folds quickly at init, then stop “collapsing”
+      if (mode === "act4"){
+        // Create 2 large loops by shifting segments toward two anchor points
+        const a1 = {x: W*0.40, y: H*0.52};
+        const a2 = {x: W*0.62, y: H*0.60};
+        for (let i=0;i<P.beadCount;i++){
+          const p = world.beads[i];
+          const t = i/(P.beadCount-1);
+          const w1 = Math.exp(-Math.pow((t-0.35)/0.18,2));
+          const w2 = Math.exp(-Math.pow((t-0.70)/0.18,2));
+          p.x = p.x*(1-0.35*(w1+w2)) + (a1.x*w1 + a2.x*w2)*0.35;
+          p.y = p.y*(1-0.35*(w1+w2)) + (a1.y*w1 + a2.y*w2)*0.35;
         }
       }
-      for (let i=0;i<P.beadCount;i++){
-        world.geneSticky[i] = world.isGene[i];
-      }
 
-      // hubs default (used in act7)
-      world.hubs = [
-        { x: W*0.34, y: H*0.50 },
-        { x: W*0.56, y: H*0.64 },
-        { x: W*0.74, y: H*0.46 }
-      ];
-
-      // TFs
+      // Act 5: polymer static-ish (no folding forces), TFs wander
       world.tfs = [];
-      if (mode === "act5" || mode === "act7") {
-        for (let i=0;i<P.tfCount;i++){
+      if (mode === "act5"){
+        for (let i=0;i<36;i++){
           world.tfs.push({
             x: W*(0.20 + 0.60*Math.random()),
-            y: H*(0.18 + 0.64*Math.random()),
-            vx: 0,
-            vy: 0,
-            boundTo: null
+            y: H*(0.20 + 0.60*Math.random()),
+            vx: 0, vy: 0
           });
         }
       }
 
-      // Reset bigTF for act6
-      if (mode === "act6") {
+      // Act 6: big TF in scene
+      if (mode === "act6"){
         bigTF.x = W*0.60;
         bigTF.y = H*0.56;
-        bigTF.vx = 0;
-        bigTF.vy = 0;
+        bigTF.vx = 0; bigTF.vy = 0;
       }
 
-      // Configure per act (distinct)
-      if (mode === "chromatin") {
-        // Slower folding: no strong hub pull; add very gentle “self-fold” tendency
-        P.geneAttract = 0.0;
-        P.hubAttract = 0.0;
-        P.hubPullAll = 0.0;
-        P.hubPullGene = 0.0;
-        P.slowCompact = 0.0011; // << small, so it folds but not instantly
-        P.brownian = 0.20;      // wiggly
-        P.kBend = 0.008;        // more flexible
-      }
+      // Act 7: big TF fixed, other big TFs drift toward it, polymer just sits
+      if (mode === "act7"){
+        bigTF.x = W*0.58;
+        bigTF.y = H*0.54;
+        bigTF.vx = 0; bigTF.vy = 0;
 
-      if (mode === "act5") {
-        // Have chromatin drifting too, but TFs do NOT interact with it.
-        P.geneAttract = 0.0;
-        P.hubAttract = 0.0;
-        P.hubPullAll = 0.0;
-        P.hubPullGene = 0.0;
-        P.slowCompact = 0.0004; // tiny drift/looping
-        P.brownian = 0.18;
-        P.kBend = 0.010;
-      }
-
-      if (mode === "act6") {
-        // Polymer wraps around big TF slowly (multivalent hub)
-        P.geneAttract = 0.0;    // we’re not using small TFs here
-        P.hubAttract = 0.0;
-        P.hubPullAll = 0.0;
-        P.hubPullGene = 0.0;
-        P.slowCompact = 0.0;
-        P.brownian = 0.16;
-        P.kBend = 0.012;
-      }
-
-      if (mode === "act7") {
-        // Start already wrapped and then pull the rest in.
-        // Make the polymer “pre-wrapped” by seeding a tight coil near hub0.
-        const hub = world.hubs[0];
-        const coilCenterIdx = Math.floor(P.beadCount*0.45);
-        for (let i=0;i<P.beadCount;i++){
-          const p = world.beads[i];
-          const d = Math.abs(i - coilCenterIdx);
-          if (d < 55){
-            const ang = (i - coilCenterIdx)*0.22;
-            const r = 10 + 0.22*d;
-            p.x = hub.x + r*Math.cos(ang);
-            p.y = hub.y + r*Math.sin(ang);
-          }
-        }
-
-        // TFs attracted to hub0 strongly; other hubs weak
-        P.geneAttract = 0.020;
-        P.hubAttract = 0.018;
-        P.hubPullAll = 0.0022;     // stronger pull: “rest moves in”
-        P.hubPullGene = 0.0052;
-        P.slowCompact = 0.0;
-        P.brownian = 0.14;
-        P.kBend = 0.010;
-
-        // (Optional) keep middle gene band a bit dim / less sticky:
-        const midCenter = Math.floor(P.beadCount * 0.52);
-        for (let i=0;i<P.beadCount;i++){
-          if (!world.isGene[i]) continue;
-          if (Math.abs(i - midCenter) <= 7) world.geneSticky[i] = false;
+        bigTFs = [];
+        const count = 6;
+        for (let i=0;i<count;i++){
+          bigTFs.push({
+            x: W*(0.15 + 0.70*Math.random()),
+            y: H*(0.18 + 0.64*Math.random()),
+            vx: 0, vy: 0,
+            radius: 26 + 6*Math.random()
+          });
         }
       }
     }
@@ -1013,53 +857,46 @@
       return {vx,vy};
     }
 
-    // Act 6: slow multivalent “wrap” around bigTF
     function multivalentWrapForce(p, tf){
       const dx=tf.x - p.x;
       const dy=tf.y - p.y;
       const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
 
-      // Two-zone behaviour:
-      //  - medium range: attract (wrap in)
-      //  - very close: repel (avoid collapsing through TF)
       const attractR = tf.radius * 4.2;
       const repelR   = tf.radius * 1.10;
 
       let fx=0, fy=0;
-
       if (d < repelR){
         const push = (repelR - d) * 0.10;
         fx -= push * dx/d;
         fy -= push * dy/d;
       } else if (d < attractR){
         const s = (1 - d/attractR);
-        const pull = 0.010 * s;   // << slow wrapping
+        const pull = 0.010 * s;  // slow
         fx += pull * dx;
         fy += pull * dy;
       }
       return {fx, fy};
     }
 
-    function stepPolymerAndTFs(){
+    function stepPolymer(){
       world.frame++;
       const n = P.beadCount;
 
-      // springs
+      // standard polymer internal forces
       for (let i=0;i<n-1;i++){
         const a=world.beads[i], b=world.beads[i+1];
         const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
         world.bvx[i] += f.fx; world.bvy[i] += f.fy;
         world.bvx[i+1] -= f.fx; world.bvy[i+1] -= f.fy;
       }
-
-      // bending
       for (let i=1;i<n-1;i++){
         const f=bendForce(world.beads[i-1], world.beads[i], world.beads[i+1], P.kBend);
         world.bvx[i] += f.fx;
         world.bvy[i] += f.fy;
       }
 
-      // excluded volume (local)
+      // excluded volume
       const minBB = 2*P.beadR;
       for (let i=0;i<n;i++){
         const i0=Math.max(0,i-14);
@@ -1074,36 +911,16 @@
         }
       }
 
-      // Act 4 slow folding: gentle pull to a few moving "attractor points" (not instant collapse)
-      if (mode === "chromatin"){
-        const W=canvas.width, H=canvas.height;
-        const t = performance.now()*0.00025;
-        const A = [
-          {x: W*(0.40 + 0.08*Math.sin(t)),     y: H*(0.52 + 0.10*Math.cos(t*0.9))},
-          {x: W*(0.58 + 0.10*Math.cos(t*0.7)), y: H*(0.60 + 0.08*Math.sin(t*1.1))}
-        ];
-        for (let i=0;i<n;i++){
-          const p=world.beads[i];
-          // alternate attractor (encourages folding over itself)
-          const a = A[i%2];
-          world.bvx[i] += P.slowCompact*(a.x - p.x);
-          world.bvy[i] += P.slowCompact*(a.y - p.y);
-        }
+      // Act 4: only gentle “wiggle” after initial folds, no ongoing collapse forces
+      if (mode === "act4"){
+        // no extra global pull; just wiggling via Brownian below
       }
 
-      // Act 5: no interaction; polymer drifts with tiny folding
-      if (mode === "act5"){
-        const W=canvas.width, H=canvas.height;
-        const t = performance.now()*0.00022;
-        const a = {x: W*(0.52 + 0.05*Math.cos(t)), y: H*(0.55 + 0.05*Math.sin(t))};
-        for (let i=0;i<n;i++){
-          const p=world.beads[i];
-          world.bvx[i] += P.slowCompact*(a.x - p.x);
-          world.bvy[i] += P.slowCompact*(a.y - p.y);
-        }
-      }
+      // Act 5: keep polymer basically static—very low Brownian
+      // (still let it breathe slightly to avoid looking frozen)
+      // We'll handle via per-mode brownian below.
 
-      // Act 6: wrap polymer around bigTF (multivalent)
+      // Act 6: wrap around bigTF
       if (mode === "act6"){
         for (let i=0;i<n;i++){
           const p=world.beads[i];
@@ -1113,28 +930,22 @@
         }
       }
 
-      // Act 7: pull rest toward hub0 (already wrapped)
-      if (mode === "act7"){
-        const hub0 = world.hubs[0];
-        for (let i=0;i<n;i++){
-          const p=world.beads[i];
-          const dx=hub0.x - p.x;
-          const dy=hub0.y - p.y;
-          world.bvx[i] += P.hubPullAll*dx;
-          world.bvy[i] += P.hubPullAll*dy;
-          if (world.isGene[i]){
-            world.bvx[i] += P.hubPullGene*dx;
-            world.bvy[i] += P.hubPullGene*dy;
-          }
-        }
-      }
+      // Act 7: NO collapse forces; polymer sits as context
+      // (we do not apply any hub pull here)
 
-      // integrate polymer
+      // integrate with per-act Brownian strength
+      let brown = 0.16;
+      if (mode === "act4") brown = 0.20;      // lively wiggle
+      if (mode === "act5") brown = 0.02;      // nearly static
+      if (mode === "act6") brown = 0.14;      // moderate
+      if (mode === "act7") brown = 0.01;      // basically static
+
       for (let i=0;i<n;i++){
-        world.bvx[i] += P.brownian*randn();
-        world.bvy[i] += P.brownian*randn();
+        world.bvx[i] += brown*randn();
+        world.bvy[i] += brown*randn();
         world.bvx[i] *= P.damping;
         world.bvy[i] *= P.damping;
+
         world.beads[i].x += world.bvx[i];
         world.beads[i].y += world.bvy[i];
 
@@ -1142,14 +953,14 @@
         world.bvx[i]=out.vx; world.bvy[i]=out.vy;
       }
 
-      // Act 5: TFs wander (no attraction)
+      // Act 5 TF wander
       if (mode === "act5"){
         const W=canvas.width, H=canvas.height;
         for (const tf of world.tfs){
-          tf.vx += P.tfBrown*randn();
-          tf.vy += P.tfBrown*randn();
-          tf.vx *= P.tfDamp;
-          tf.vy *= P.tfDamp;
+          tf.vx += 0.55*randn();
+          tf.vy += 0.55*randn();
+          tf.vx *= 0.93;
+          tf.vy *= 0.93;
           tf.x += tf.vx;
           tf.y += tf.vy;
           if (tf.x<0) tf.x += W;
@@ -1159,20 +970,16 @@
         }
       }
 
-      // Act 7: TFs gather to hub0 strongly
+      // Act 7 big TFs drift toward main TF (no polymer collapse)
       if (mode === "act7"){
         const W=canvas.width, H=canvas.height;
-        const hub0 = world.hubs[0];
+        const target = {x: bigTF.x, y: bigTF.y};
+        for (const tf of bigTFs){
+          tf.vx += 0.25*randn();
+          tf.vy += 0.25*randn();
 
-        // gradually increase bias as time passes
-        const recruit = Math.min(0.002 + world.frame*0.0000022, 0.010);
-
-        for (const tf of world.tfs){
-          tf.vx += 0.42*randn();
-          tf.vy += 0.42*randn();
-
-          tf.vx += recruit*(hub0.x - tf.x);
-          tf.vy += recruit*(hub0.y - tf.y);
+          tf.vx += 0.004*(target.x - tf.x);
+          tf.vy += 0.004*(target.y - tf.y);
 
           tf.vx *= 0.90;
           tf.vy *= 0.90;
@@ -1187,26 +994,7 @@
       }
     }
 
-    function drawPolymerScene(){
-      // hub glow act7
-      if (mode === "act7"){
-        const hub0 = world.hubs[0];
-        ctx.save();
-        ctx.globalCompositeOperation = "lighter";
-        glowCircle(hub0.x, hub0.y, 120, "rgba(255,120,200,0.020)", 150);
-        glowCircle(hub0.x, hub0.y, 75, "rgba(255,60,60,0.018)", 120);
-        ctx.restore();
-      }
-
-      // Act 6: glow around bigTF
-      if (mode === "act6"){
-        ctx.save();
-        ctx.globalCompositeOperation = "lighter";
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.0, "rgba(255,120,200,0.020)", 160);
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.6, "rgba(255,60,60,0.020)", 120);
-        ctx.restore();
-      }
-
+    function drawPolymerAndTFs(){
       // polymer line
       ctx.save();
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
@@ -1219,147 +1007,82 @@
       ctx.stroke();
       ctx.restore();
 
-      // beads: show genes in acts 5/7; keep subtle in act4/6
-      for (let i=0;i<world.beads.length;i++){
-        const p=world.beads[i];
-        if (world.isGene[i] && (mode === "act5" || mode === "act7")){
-          const sticky = world.geneSticky[i];
-          const col = sticky ? "rgba(0,255,140,0.95)" : "rgba(0,255,140,0.35)";
-          const blur = sticky ? 28 : 18;
-          glowCircle(p.x,p.y, 6.0, col, blur);
-        } else {
-          glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
-        }
+      // beads
+      for (const p of world.beads){
+        glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
       }
 
-      // TFs: act5 and act7
-      if (mode === "act5" || mode === "act7"){
+      // act5 TFs
+      if (mode === "act5"){
         for (const tf of world.tfs){
-          const col = (mode === "act7") ? "rgba(255,60,60,0.80)" : "rgba(255,60,60,0.65)";
-          const blur = (mode === "act7") ? 28 : 20;
-          glowCircle(tf.x, tf.y, 6.5, col, blur);
+          glowCircle(tf.x, tf.y, 6.2, "rgba(255,60,60,0.65)", 20);
         }
       }
 
-      // Big TF: act6
+      // act6 big TF
       if (mode === "act6"){
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 40);
         ctx.save();
-        ctx.font = "900 14px system-ui";
-        ctx.fillStyle = "rgba(0,0,0,0.65)";
-        ctx.fillText("TF", bigTF.x-12, bigTF.y+5);
+        ctx.globalCompositeOperation = "lighter";
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.0, "rgba(255,120,200,0.020)", 160);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.6, "rgba(255,60,60,0.020)", 120);
         ctx.restore();
+
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 40);
       }
-    }
 
-    // ============================================================
-    // Act 8: static “factory snapshot” with CYAN hotspots + many TFs
-    // ============================================================
-    function drawStaticFactorySnapshot(){
-      const W = canvas.width, H = canvas.height;
+      // act7 big TFs drifting in
+      if (mode === "act7"){
+        // central hub
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*4.6, "rgba(255,120,200,0.020)", 160);
+        ctx.restore();
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 42);
 
-      // soft chromatin “web”
-      ctx.save();
-      ctx.strokeStyle = "rgba(255,255,255,0.20)";
-      ctx.lineWidth = 3.6;
-      ctx.shadowColor = "rgba(255,255,255,0.10)";
-      ctx.shadowBlur = 18;
-
-      ctx.beginPath();
-      const pts = 260;
-      for (let i=0;i<pts;i++){
-        const t = i/(pts-1);
-        const x = W*(0.08 + 0.84*t);
-        const y = H*(0.55 + 0.17*Math.sin(6*t) + 0.07*Math.sin(18*t));
-        if (i===0) ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-      }
-      ctx.stroke();
-      ctx.restore();
-
-      // CYAN hotspots
-      const hot = [
-        {x: W*0.24, y: H*0.52},
-        {x: W*0.46, y: H*0.40},
-        {x: W*0.56, y: H*0.63},
-        {x: W*0.72, y: H*0.46},
-        {x: W*0.84, y: H*0.60}
-      ];
-
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-      for (const h of hot){
-        glowCircle(h.x, h.y, 115, "rgba(80,190,255,0.030)", 160);
-        glowCircle(h.x, h.y, 60,  "rgba(80,190,255,0.060)", 110);
-      }
-      ctx.restore();
-
-      // Draw many TFs crowded around each hotspot
-      function scatterAround(cx, cy, n, spread){
-        for (let i=0;i<n;i++){
-          const x = cx + spread*randn();
-          const y = cy + spread*randn();
-          glowCircle(x,y, 6.2, "rgba(255,60,60,0.88)", 24);
+        for (const tf of bigTFs){
+          glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
         }
       }
-      for (const h of hot){
-        scatterAround(h.x, h.y, 34, 24);  // “many many TFs”
-      }
-
-      // quiet TFs elsewhere (dim)
-      for (let i=0;i<10;i++){
-        const x = W*(0.12 + 0.76*Math.random());
-        const y = H*(0.22 + 0.60*Math.random());
-        glowCircle(x,y, 6.0, "rgba(255,60,60,0.25)", 16);
-      }
-
-      // label
-      ctx.save();
-      ctx.font = "900 16px system-ui";
-      ctx.fillStyle = "rgba(255,255,255,0.86)";
-      ctx.fillText("Hotspots (cyan) + TF crowds (red)", 18, 32);
-      ctx.font = "14px system-ui";
-      ctx.fillStyle = "rgba(255,255,255,0.65)";
-      ctx.fillText("Cartoon snapshot: crowded hubs and large quiet stretches", 18, 54);
-      ctx.restore();
     }
 
     // ============================================================
-    // Main animation loop
+    // Tick
     // ============================================================
     function tick(){
       resizeCanvas();
       drawBackground();
 
-      // DNA / epigenetics
       if (mode === "dna" || mode === "epi"){
         rebuildClickables = true;
         if (rebuildClickables) { clearClickables(); rebuildClickables = false; }
         drawDNAHelix();
-      }
-      // polymer acts
-      else if (mode === "chromatin" || mode === "act5" || mode === "act6" || mode === "act7"){
+      } else if (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7"){
         initActWorld(false);
-        stepPolymerAndTFs();
-        drawPolymerScene();
-      }
-      // static snapshot
-      else if (mode === "act8"){
-        drawStaticFactorySnapshot();
+        stepPolymer();
+        drawPolymerAndTFs();
+      } else if (mode === "act8"){
+        // BLANK CANVAS ON PURPOSE
       }
 
       requestAnimationFrame(tick);
     }
 
     // ============================================================
-    // Start
+    // Init
     // ============================================================
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      rebuildClickables = true;
+      initActWorld(true);
+    });
+
     resizeCanvas();
     applyAct(0);
     tick();
   </script>
 </body>
 </html>
+
 
 
 
