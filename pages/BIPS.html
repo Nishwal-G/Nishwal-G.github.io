@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DNA → Chromatin → BIPS (Simple) | Nishwal Gora</title>
+  <title>DNA → Chromatin → Clusters (BIPS story) | Nishwal Gora</title>
+
   <style>
     :root{
       --bg:#050507;
@@ -13,11 +14,12 @@
       --maxw:1100px;
 
       --green: rgba(0,255,140,0.95);
-      --greenDim: rgba(0,255,140,0.35);
+      --greenDim: rgba(0,255,140,0.28);
       --red: rgba(255,60,60,0.92);
       --redDim: rgba(255,60,60,0.55);
       --pink: rgba(255,120,200,0.70);
-      --purple: rgba(190,120,255,0.92);
+      --amber: rgba(255,180,80,0.95);
+      --purple: rgba(190,120,255,0.95);
     }
 
     *{ box-sizing:border-box; }
@@ -72,7 +74,7 @@
     }
     .story{
       margin-top:12px;
-      color:rgba(255,255,255,0.78);
+      color:rgba(255,255,255,0.80);
       font-size:15px;
       line-height:1.72;
     }
@@ -147,6 +149,7 @@
     .dot.green{ background:var(--green); }
     .dot.red{ background:var(--red); }
     .dot.pink{ background:var(--pink); }
+    .dot.amber{ background:var(--amber); }
 
     @media (max-width:860px){
       .stage{ height:52vh; }
@@ -158,9 +161,9 @@
   <div class="page">
     <section class="textPanel">
       <div class="textInner">
-        <div class="kicker" id="kicker">Act 4 of 8</div>
-        <h1 class="sceneTitle" id="sceneTitle">Act 4 — Chromatin as a wiggly polymer</h1>
-        <div class="sceneSub" id="sceneSub">Press Next / Prev to move through the acts. Press Reset to replay the current act.</div>
+        <div class="kicker" id="kicker">Act 1 of 8</div>
+        <h1 class="sceneTitle" id="sceneTitle">Act 1 — How do cells know who they are?</h1>
+        <div class="sceneSub" id="sceneSub">Click the labels on the DNA. Then press Next.</div>
         <div class="story" id="story"></div>
 
         <div class="controls">
@@ -174,10 +177,11 @@
     <section class="stage">
       <canvas id="stageCanvas"></canvas>
       <div class="legend" id="legend">
-        <span><span class="dot white"></span>chromatin</span>
-        <span><span class="dot green"></span>gene region</span>
-        <span><span class="dot red"></span>TF (reader)</span>
-        <span><span class="dot pink"></span>cluster / hub</span>
+        <span><span class="dot.white dot"></span>DNA / chromatin</span>
+        <span><span class="dot.green dot"></span>gene region</span>
+        <span><span class="dot.red dot"></span>TF (reader)</span>
+        <span><span class="dot.pink dot"></span>cluster</span>
+        <span><span class="dot.amber dot"></span>locked</span>
       </div>
     </section>
   </div>
@@ -188,6 +192,7 @@
     // ============================================================
     const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
+
     function resizeCanvas(){
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       const rect = canvas.getBoundingClientRect();
@@ -198,15 +203,16 @@
       }
       return {w:canvas.width, h:canvas.height};
     }
-    window.addEventListener("resize", () => { resizeCanvas(); initAct(true); });
+    window.addEventListener("resize", () => { resizeCanvas(); rebuildClickables(); initAct(true); });
 
-    // RNG
+    // RNG helpers
     function randn(){
       let u=0,v=0;
       while(u===0) u=Math.random();
       while(v===0) v=Math.random();
       return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
     }
+    function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
 
     // Draw helpers
     function drawBackground(){
@@ -229,12 +235,22 @@
       ctx.fill();
       ctx.restore();
     }
+    function roundRect(x, y, w, h, r, fill, stroke){
+      const rr = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+rr, y);
+      ctx.arcTo(x+w, y, x+w, y+h, rr);
+      ctx.arcTo(x+w, y+h, x, y+h, rr);
+      ctx.arcTo(x, y+h, x, y, rr);
+      ctx.arcTo(x, y, x+w, y, rr);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
 
     // ============================================================
-    // ACTS 4–8 only (as requested: simplified chromatin animations)
+    // UI
     // ============================================================
-    let act = 4;
-
     const UI = {
       kicker: document.getElementById("kicker"),
       title: document.getElementById("sceneTitle"),
@@ -246,626 +262,966 @@
       legend: document.getElementById("legend"),
     };
 
+    // ============================================================
+    // Acts 1–8 (FULL)
+    // ============================================================
+    let act = 1;
+    let highlight = null; // "basepair" | "gene" | "locked" | null
+
     const ACTS = {
-      4: {
-        title: "Act 4 — Chromatin as a wiggly polymer",
-        sub: "We zoom out: DNA is packed into chromatin, which behaves like a moving, bending chain.",
+      1: {
+        title: "Act 1 — How do cells know who they are?",
+        sub: "Your DNA is (almost) the same in every cell. Identity = which genes are being read.",
         story: `
           <p>
-            Now imagine zooming out so far that the DNA helix is too small to see. What you see instead is
-            <strong>chromatin</strong>: DNA plus proteins, packed into a 3D structure.
+            Every cell in your body contains the same DNA “instruction book”.
+            But a <strong>skin cell</strong> behaves differently from a <strong>red blood cell</strong>.
           </p>
           <p>
-            Physicists often model chromatin as a <strong>polymer</strong>: a chain of beads connected by springs.
-            In this cartoon, each bead represents a huge chunk of DNA (millions of base pairs).
+            Why? Because different cells read different parts of the instruction book.
+            A cell’s identity is mostly about which <strong>genes</strong> are ON and which are OFF.
           </p>
           <p>
-            The key point is that chromatin is not frozen. It <strong>wiggles</strong>, bends, and explores shapes over time.
+            Click the labels on the helix to learn what <strong>base pairs</strong> and a <strong>gene</strong> are.
           </p>
         `,
-        mode: "polymer_only"
+        mode: "dna"
+      },
+      2: {
+        title: "Act 2 — DNA is a code (an alphabet)",
+        sub: "DNA uses four letters A, C, G, T. Base pairs are the “rungs” of the ladder.",
+        story: `
+          <p>
+            DNA is written using four chemical “letters”: <strong>A, C, G, T</strong>.
+            The order of these letters stores information — like a long message.
+          </p>
+          <p>
+            DNA comes in two strands twisted together: a <strong>double helix</strong>.
+            The two strands are joined by pairs of letters called <strong>base pairs</strong>:
+            A pairs with T, and C pairs with G.
+          </p>
+          <p>
+            Click <strong>Base pairs</strong> to highlight the rungs, and click <strong>Gene</strong> to highlight a “sentence” in the DNA message.
+          </p>
+        `,
+        mode: "dna"
+      },
+      3: {
+        title: "Act 3 — Epigenetics (locking chapters)",
+        sub: "Cells can chemically ‘lock’ regions, making them harder to read.",
+        story: `
+          <p>
+            Cells can keep their identity using <strong>epigenetics</strong>.
+            This is like putting sticky notes and locks on parts of the instruction book:
+            some regions become easy to access (open), others become hard to access (closed).
+          </p>
+          <p>
+            In this cartoon, locked DNA regions glow <span style="color: var(--amber); font-weight:900;">amber</span>.
+            Click <strong>Locked</strong> to see what “closed” regions look like.
+          </p>
+        `,
+        mode: "epi"
+      },
+      4: {
+        title: "Act 4 — Zoom out: chromatin folds and compacts",
+        sub: "Now we stop drawing the helix. We just show a long polymer that folds and gets smaller.",
+        story: `
+          <p>
+            DNA is incredibly long (about 2 metres in a human cell), but it must fit inside a tiny nucleus.
+            So it wraps around proteins and folds into <strong>chromatin</strong>.
+          </p>
+          <p>
+            Here we show chromatin as a long “string” (a polymer).
+            Watch it fold and compact over time — it gets smaller and denser.
+          </p>
+        `,
+        mode: "act4_compaction"
       },
       5: {
-        title: "Act 5 — TFs float around (no attraction yet)",
-        sub: "Transcription factors (TFs) are proteins that drift randomly in the nucleus like pollen in water.",
+        title: "Act 5 — Transcription factors (TFs) wander and search",
+        sub: "TFs are proteins that drift randomly, like pollen in water.",
         story: `
           <p>
             Genes are “read” by proteins. A famous class is <strong>transcription factors</strong> (TFs).
-            They move around by random jiggling (thermal motion), colliding with everything in the nucleus.
+            They move around randomly and bump into DNA/chromatin.
           </p>
           <p>
-            In this act, TFs are just <span style="color: rgba(255,60,60,0.92); font-weight:900;">red</span> particles
-            drifting around. They are not especially attracted to genes yet — they are searching.
+            Here the red TF particles are just wandering — no special attraction yet.
           </p>
         `,
-        mode: "polymer_plus_free_tfs"
+        mode: "act5_free_tfs"
       },
       6: {
-        title: "Act 6 — A TF pulls two genes together (one stays lonely)",
-        sub: "If a TF interacts with two nearby gene regions, it can help bring them close in 3D.",
+        title: "Act 6 — Zoom in: one big TF pulls two parts of DNA together",
+        sub: "A big ‘sticky reader’ can act like a clip that brings two segments close.",
         story: `
           <p>
-            Here’s the physical idea: if a TF can help connect two gene regions, it can “pull” them closer in 3D space.
-            That creates a small cluster where reading becomes easier.
+            Now we zoom into one local region.
+            Imagine a TF that behaves like a <strong>sticky clip</strong>:
+            it can grab two parts of the DNA/chromatin and bring them closer.
           </p>
           <p>
-            Watch: two green gene regions are encouraged to come together into one cluster.
-            A third green region stays isolated and has almost no red TFs nearby.
+            In this cartoon, a large red TF bead sits on the right.
+            The polymer is pulled toward it from two sides, wrapping around it.
           </p>
         `,
-        mode: "two_genes_cluster_one_lonely"
+        mode: "act6_big_tf_wrap"
       },
       7: {
-        title: "Act 7 — Positive feedback: more TFs gather at the cluster",
-        sub: "Once a cluster forms, TFs bump into it more often, so more TFs accumulate there.",
+        title: "Act 7 — Positive feedback: more TFs join the same cluster",
+        sub: "Once one cluster forms, it becomes a bigger target and recruits more TFs.",
         story: `
           <p>
-            A cluster doesn’t just sit there — it changes the “traffic pattern” in the nucleus.
-            A dense cluster is a bigger target, so wandering TFs are more likely to hit it and stick around.
+            Once a cluster exists, it becomes a “busy” place.
+            Wandering TFs are more likely to hit it and stick around.
           </p>
           <p>
-            This is a simple <strong>positive feedback</strong>: clustering makes reading easier, which can attract more TFs,
-            which can stabilise the cluster. The lonely green region remains relatively quiet.
+            Watch more big TFs slowly drift toward the same cluster region.
           </p>
         `,
-        mode: "cluster_attracts_more_tfs"
+        mode: "act7_recruit_more"
       },
       8: {
-        title: "Act 8 — A ‘map’ of the nucleus: hotspots and quiet regions",
-        sub: "A final picture: chromatin looks like a web, with a few active hubs and many quiet regions.",
+        title: "Act 8 — Many clusters across the polymer",
+        sub: "Final picture: one long polymer with several hubs (like factories) along it.",
         story: `
           <p>
-            In real cells, chromatin can look like a complex 3D web. Some places are busy: many TFs and active genes.
-            Other regions are quiet: fewer TFs, less reading.
+            Zoom out again.
+            Across a long chromosome, you might have several hotspots where reading happens more often
+            and many quiet regions where little happens.
           </p>
           <p>
-            This kind of organisation is sometimes described using the idea of <strong>transcription factories</strong>:
-            hotspots where reading happens more often.
+            Here we show a polymer with ~5–6 clusters along its length.
           </p>
         `,
-        mode: "static_web_snapshot"
+        mode: "act8_many_clusters"
       }
     };
-
-    UI.prev.addEventListener("click", () => { act = Math.max(4, act-1); applyAct(); });
-    UI.next.addEventListener("click", () => { act = Math.min(8, act+1); applyAct(); });
-    UI.reset.addEventListener("click", () => initAct(true));
 
     function applyAct(){
-      UI.kicker.textContent = `Act ${act} of 8`;
-      UI.title.textContent = ACTS[act].title;
-      UI.sub.textContent = ACTS[act].sub;
-      UI.story.innerHTML = ACTS[act].story;
+      act = clamp(act, 1, 8);
+      const A = ACTS[act];
 
-      UI.prev.disabled = (act === 4);
+      UI.kicker.textContent = `Act ${act} of 8`;
+      UI.title.textContent = A.title;
+      UI.sub.textContent = A.sub;
+      UI.story.innerHTML = A.story;
+
+      UI.prev.disabled = (act === 1);
       UI.next.disabled = (act === 8);
 
-      // legend on for polymer acts
-      UI.legend.classList.toggle("show", act >= 4);
+      // Legend visible from act 2 onward (fine everywhere)
+      UI.legend.classList.toggle("show", true);
+
+      // Only Acts 1–3 use highlights
+      highlight = null;
 
       initAct(true);
+      rebuildClickables();
+    }
+
+    UI.prev.addEventListener("click", () => { act--; applyAct(); });
+    UI.next.addEventListener("click", () => { act++; applyAct(); });
+    UI.reset.addEventListener("click", () => { initAct(true); rebuildClickables(); });
+
+    // ============================================================
+    // Clickable labels (Acts 1–3)
+    // ============================================================
+    const clickables = []; // {id,x,y,w,h}
+    function clearClickables(){ clickables.length = 0; }
+
+    function mouseToCanvas(e){
+      const rect = canvas.getBoundingClientRect();
+      const sx = (e.clientX - rect.left);
+      const sy = (e.clientY - rect.top);
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return { x: sx * scaleX, y: sy * scaleY };
+    }
+
+    canvas.addEventListener("click", (e) => {
+      if (act > 3) return;
+      const p = mouseToCanvas(e);
+      for (let i=clickables.length-1;i>=0;i--){
+        const c = clickables[i];
+        if (p.x>=c.x && p.x<=c.x+c.w && p.y>=c.y && p.y<=c.y+c.h){
+          if (c.id === "basepairs") highlight = (highlight==="basepair") ? null : "basepair";
+          if (c.id === "gene") highlight = (highlight==="gene") ? null : "gene";
+          if (c.id === "locked") highlight = (highlight==="locked") ? null : "locked";
+          break;
+        }
+      }
+    });
+
+    function drawLabelWithArrow(label, xText, yText, xTo, yTo, color, id){
+      ctx.save();
+      ctx.font = "950 16px system-ui"; // bigger & bolder labels
+      const padX = 12, padY = 8;
+      const textW = ctx.measureText(label).width;
+      const w = textW + 2*padX;
+      const h = 32;
+
+      const rx = xText;
+      const ry = yText;
+
+      // arrow
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.70;
+      ctx.beginPath();
+      ctx.moveTo(rx + w*0.5, ry + h);
+      ctx.lineTo(xTo, yTo);
+      ctx.stroke();
+
+      // pill
+      ctx.globalAlpha = 1.0;
+      ctx.fillStyle = "rgba(0,0,0,0.40)";
+      ctx.strokeStyle = "rgba(255,255,255,0.14)";
+      roundRect(rx, ry, w, h, 999, true, true);
+
+      // text
+      ctx.fillStyle = color;
+      ctx.fillText(label, rx + padX, ry + 22);
+
+      ctx.restore();
+
+      clickables.push({id, x:rx, y:ry, w, h});
+    }
+
+    function rebuildClickables(){
+      clearClickables();
+      // They get rebuilt inside drawDNAHelix each frame too, but clearing here keeps it tidy.
     }
 
     // ============================================================
-    // World state (simplified)
+    // Act 1–3: DNA helix drawing
     // ============================================================
-    const W = {
-      beads: [],
-      bvx: [],
-      bvy: [],
-      isGene: [],
-      // Act 6/7: which genes are "cluster genes" vs "lonely gene"
-      geneRole: [], // "cluster" | "lonely" | "none"
+    function drawDNAHelix(mode){
+      const W = canvas.width, H = canvas.height;
+      const cx = W * 0.52;
+      const cy = H * 0.56;
+      const amp = H * 0.14;
+      const pitch = W * 0.022;
+      const turns = 44;
+      const tNow = performance.now() * 0.0016;
 
-      tfs: [], // {x,y,vx,vy, mode:"free"|"bias"}
-      frame: 0
-    };
+      const geneStart = 15;
+      const geneEnd   = 24;
 
-    // Tunable physics for "more wiggle" (Act 4 request)
-    const P = {
-      beadCount: 220,
-      restLen: 9,
-
-      // Make it MUCH wigglier than before:
-      kSpring: 0.10,        // softer springs
-      kBend: 0.004,         // less bending stiffness
-      damping: 0.90,        // less damping -> more motion persists
-      brownian: 0.55,       // stronger Brownian kicks
-
-      beadR: 4.6,
-      repelK: 0.42,
-
-      // TFs
-      tfCountAct5: 22,
-      tfCountAct7: 48,
-      tfR: 6.2,
-      tfBrown: 0.55,
-      tfDamp: 0.94,
-
-      // Bias strengths (act6/7)
-      pullGeneTogether: 0.0048, // pulls two gene regions toward one another (via a virtual "bridge")
-      tfBiasToCluster: 0.0018,  // gentle drift toward cluster center in act7
-      tfBiasAwayLonely: 0.0008  // slight push away from lonely region so it stays quiet
-    };
-
-    function initAct(force){
-      resizeCanvas();
-      const mode = ACTS[act].mode;
-      W.frame = 0;
-
-      if (mode === "static_web_snapshot"){
-        // no dynamic world needed
-        return;
-      }
-
-      // Build polymer fresh each act (independent animations)
-      const cw = canvas.width, ch = canvas.height;
-
-      W.beads = [];
-      W.bvx = new Array(P.beadCount).fill(0);
-      W.bvy = new Array(P.beadCount).fill(0);
-      W.isGene = new Array(P.beadCount).fill(false);
-      W.geneRole = new Array(P.beadCount).fill("none");
-
-      // Start as a long chain across the screen with a wavy shape
-      const startX = cw * 0.06;
-      const midY = ch * 0.58;
-      for (let i=0;i<P.beadCount;i++){
-        const x = startX + i*P.restLen;
-        const y = midY + (ch*0.10)*Math.sin(i*0.22) + (ch*0.04)*Math.sin(i*0.07);
-        W.beads.push({x,y});
-      }
-
-      // Define 3 gene regions
-      const centers = [
-        Math.floor(P.beadCount * 0.26),
-        Math.floor(P.beadCount * 0.52),
-        Math.floor(P.beadCount * 0.78),
+      const lockSegments = [
+        { a: 7,  b: 12 },
+        { a: 28, b: 33 }
       ];
-      for (const c of centers){
-        for (let j=-6;j<=6;j++){
-          const idx = c + j;
-          if (idx>=0 && idx<P.beadCount) W.isGene[idx] = true;
+      function isLocked(i){
+        for (const seg of lockSegments){
+          if (i>=seg.a && i<=seg.b) return true;
+        }
+        return false;
+      }
+
+      // helix
+      for (let i=0;i<turns;i++){
+        const t = i*0.55 + tNow;
+        const x = cx - (turns*pitch)/2 + i*pitch;
+        const y1 = cy + amp*Math.sin(t);
+        const y2 = cy + amp*Math.sin(t + Math.PI);
+
+        const inGene = (i>=geneStart && i<=geneEnd);
+        const locked = isLocked(i);
+
+        // rung styling
+        let rungColor = "rgba(255,255,255,0.20)";
+        let rungWidth = 2.0;
+
+        if (highlight === "gene" && inGene){ rungColor = "rgba(0,255,140,0.92)"; rungWidth = 3.2; }
+        else if (highlight === "basepair" && (i%4===0)){ rungColor = "rgba(255,255,255,0.92)"; rungWidth = 3.2; }
+
+        if (mode === "epi" && locked){
+          rungColor = (highlight === "locked") ? "rgba(255,180,80,0.90)" : "rgba(255,180,80,0.45)";
+          rungWidth = (highlight === "locked") ? 3.0 : 2.2;
+        }
+
+        ctx.save();
+        ctx.strokeStyle = rungColor;
+        ctx.lineWidth = rungWidth;
+        ctx.beginPath();
+        ctx.moveTo(x,y1);
+        ctx.lineTo(x,y2);
+        ctx.stroke();
+        ctx.restore();
+
+        // backbones
+        let backboneColor = "rgba(255,255,255,0.55)";
+        if (highlight === "gene" && inGene) backboneColor = "rgba(0,255,140,0.65)";
+        if (mode === "epi" && locked) backboneColor = "rgba(255,180,80,0.55)";
+
+        glowCircle(x, y1, 5.0, backboneColor, 18);
+        glowCircle(x, y2, 5.0, backboneColor, 18);
+
+        // epigenetic "lock plates" more visible: amber translucent blocks
+        if (mode === "epi" && locked){
+          ctx.save();
+          ctx.globalAlpha = (highlight === "locked") ? 0.65 : 0.45;
+          ctx.fillStyle = "rgba(255,180,80,0.20)";
+          ctx.strokeStyle = "rgba(255,180,80,0.35)";
+          ctx.lineWidth = 1.8;
+          const cx2 = x;
+          const cy2 = 0.5*(y1+y2);
+          roundRect(cx2-14, cy2-22, 28, 44, 14, true, true);
+          ctx.restore();
         }
       }
 
-      // Roles for act6/7: two genes cluster, one lonely
-      if (mode === "two_genes_cluster_one_lonely" || mode === "cluster_attracts_more_tfs"){
-        // choose left + middle to cluster, right to be lonely
-        const c1 = centers[0];
-        const c2 = centers[1];
-        const cl = centers[2];
+      // clickable labels + arrows
+      clearClickables();
 
-        for (let i=0;i<P.beadCount;i++){
-          if (!W.isGene[i]) continue;
-          if (Math.abs(i-c1) <= 7 || Math.abs(i-c2) <= 7) W.geneRole[i] = "cluster";
-          if (Math.abs(i-cl) <= 7) W.geneRole[i] = "lonely";
-        }
+      const baseIdx = 16;
+      const geneIdx = 20;
+      const lockIdx = 9;
+
+      function helixPoint(i){
+        const t = i*0.55 + tNow;
+        const x = cx - (turns*pitch)/2 + i*pitch;
+        const y1 = cy + amp*Math.sin(t);
+        const y2 = cy + amp*Math.sin(t + Math.PI);
+        return { x, y: 0.5*(y1+y2) };
       }
 
-      // TFs for act5/6/7
-      W.tfs = [];
-      if (mode === "polymer_plus_free_tfs"){
-        spawnTFs(P.tfCountAct5, "free");
-      }
-      if (mode === "two_genes_cluster_one_lonely"){
-        spawnTFs(P.tfCountAct5, "free"); // just a few, mostly near the cluster later via “bridge”
-      }
-      if (mode === "cluster_attracts_more_tfs"){
-        spawnTFs(P.tfCountAct7, "bias"); // more TFs with gentle bias to cluster
+      const bp = helixPoint(baseIdx);
+      const gn = helixPoint(geneIdx);
+      const lk = helixPoint(lockIdx);
+
+      const white = "rgba(255,255,255,0.92)";
+      const green = "rgba(0,255,140,0.92)";
+      const amber = "rgba(255,180,80,0.92)";
+
+      drawLabelWithArrow("Base pairs", W*0.10, H*0.28, bp.x, bp.y, white, "basepairs");
+      drawLabelWithArrow("Gene",      W*0.74, H*0.76, gn.x, gn.y, green, "gene");
+      if (mode === "epi"){
+        drawLabelWithArrow("Locked",   W*0.09, H*0.74, lk.x, lk.y, amber, "locked");
       }
     }
 
-    function spawnTFs(n, tfMode){
-      const cw = canvas.width, ch = canvas.height;
-      for (let i=0;i<n;i++){
-        W.tfs.push({
-          x: cw*(0.20 + 0.60*Math.random()),
-          y: ch*(0.18 + 0.64*Math.random()),
-          vx: 0,
-          vy: 0,
-          mode: tfMode
-        });
-      }
-    }
+    // ============================================================
+    // Acts 4–8: simplified animations (NO previous polymer code)
+    // ============================================================
 
-    // Physics helpers
-    function springForce(ax, ay, bx, by, rest, k){
-      const dx=bx-ax, dy=by-ay;
-      const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
-      const f=k*(r-rest);
-      return {fx:f*dx/r, fy:f*dy/r};
-    }
-    function bendForce(p0,p1,p2,kB){
-      const mx=0.5*(p0.x+p2.x);
-      const my=0.5*(p0.y+p2.y);
-      return {fx:kB*(mx-p1.x), fy:kB*(my-p1.y)};
-    }
-    function repelPair(ax, ay, bx, by, minDist, k){
-      const dx=bx-ax, dy=by-ay;
-      const r2=dx*dx+dy*dy+1e-6;
-      const r=Math.sqrt(r2);
-      if (r>=minDist) return {fx:0, fy:0};
-      const overlap=minDist-r;
-      const f=k*overlap;
-      return {fx:f*dx/r, fy:f*dy/r};
-    }
-    function softWalls(x,y,vx,vy){
-      const cw=canvas.width, ch=canvas.height;
-      const margin=60;
-      const k=0.0020;
-      if (x<margin) vx += k*(margin-x);
-      if (x>cw-margin) vx -= k*(x-(cw-margin));
-      if (y<margin) vy += k*(margin-y);
-      if (y>ch-margin) vy -= k*(y-(ch-margin));
-      return {vx,vy};
-    }
-
-    function step(){
-      const mode = ACTS[act].mode;
-
-      if (mode === "static_web_snapshot") return;
-
-      const n = P.beadCount;
-
-      // --- polymer dynamics ---
-      // springs
-      for (let i=0;i<n-1;i++){
-        const a=W.beads[i], b=W.beads[i+1];
-        const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
-        W.bvx[i] += f.fx; W.bvy[i] += f.fy;
-        W.bvx[i+1] -= f.fx; W.bvy[i+1] -= f.fy;
-      }
-
-      // bending
-      for (let i=1;i<n-1;i++){
-        const f=bendForce(W.beads[i-1], W.beads[i], W.beads[i+1], P.kBend);
-        W.bvx[i] += f.fx;
-        W.bvy[i] += f.fy;
-      }
-
-      // excluded volume (local)
-      const minBB = 2*P.beadR;
-      for (let i=0;i<n;i++){
-        const i0=Math.max(0,i-14);
-        const i1=Math.min(n-1,i+14);
-        for (let j=i0;j<=i1;j++){
-          if (j===i) continue;
-          if (Math.abs(i-j)<=1) continue;
-          const a=W.beads[i], b=W.beads[j];
-          const f=repelPair(a.x,a.y,b.x,b.y,minBB,P.repelK);
-          W.bvx[i] -= f.fx; W.bvy[i] -= f.fy;
-          W.bvx[j] += f.fx; W.bvy[j] += f.fy;
+    // Act 4: a polymer line that folds and compacts
+    const A4 = {
+      pts: [], v: [],
+      init(){
+        const W=canvas.width, H=canvas.height;
+        const N=260;
+        this.pts = [];
+        this.v = new Array(N).fill(0).map(_=>({vx:0,vy:0}));
+        const x0=W*0.10, y0=H*0.55;
+        const dx=(W*0.80)/(N-1);
+        for (let i=0;i<N;i++){
+          this.pts.push({x:x0+i*dx, y:y0 + H*0.10*Math.sin(i*0.18)});
         }
-      }
+        this.t = 0;
+      },
+      step(){
+        const N=this.pts.length;
+        const rest=7.2;
+        const k=0.10;
+        const damp=0.92;
+        const brown=0.55;
 
-      // Act 6/7: virtual “TF bridge” pulling the two cluster gene regions together
-      if (mode === "two_genes_cluster_one_lonely" || mode === "cluster_attracts_more_tfs"){
-        // compute centers for cluster genes and lonely genes
-        let cx=0, cy=0, cc=0;
-        let lx=0, ly=0, lc=0;
+        // gentle global "compaction" pull to centre increases over time
+        this.t += 1;
+        const W=canvas.width, H=canvas.height;
+        const cx=W*0.55, cy=H*0.55;
+        const compact = Math.min(0.004 + this.t*0.000003, 0.012);
 
-        for (let i=0;i<n;i++){
-          if (!W.isGene[i]) continue;
-          if (W.geneRole[i] === "cluster"){ cx += W.beads[i].x; cy += W.beads[i].y; cc++; }
-          if (W.geneRole[i] === "lonely"){ lx += W.beads[i].x; ly += W.beads[i].y; lc++; }
-        }
-        if (cc>0){ cx/=cc; cy/=cc; }
-        if (lc>0){ lx/=lc; ly/=lc; }
-
-        // Pull all "cluster gene" beads toward the cluster center (tighten)
-        for (let i=0;i<n;i++){
-          if (W.geneRole[i] !== "cluster") continue;
-          const dx = cx - W.beads[i].x;
-          const dy = cy - W.beads[i].y;
-          W.bvx[i] += 0.0022*dx;
-          W.bvy[i] += 0.0022*dy;
+        // springs
+        for (let i=0;i<N-1;i++){
+          const a=this.pts[i], b=this.pts[i+1];
+          const dx=b.x-a.x, dy=b.y-a.y;
+          const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          const f=k*(r-rest);
+          const fx=f*dx/r, fy=f*dy/r;
+          this.v[i].vx += fx; this.v[i].vy += fy;
+          this.v[i+1].vx -= fx; this.v[i+1].vy -= fy;
         }
 
-        // Additionally: bring the two gene regions closer by pulling them to a common target
-        // We do this by gently pulling cluster center toward the middle of the stage.
-        const targetX = canvas.width*0.52;
-        const targetY = canvas.height*0.55;
-        const ddx = targetX - cx;
-        const ddy = targetY - cy;
-
-        // distribute this pull across cluster gene beads
-        for (let i=0;i<n;i++){
-          if (W.geneRole[i] !== "cluster") continue;
-          W.bvx[i] += P.pullGeneTogether*ddx;
-          W.bvy[i] += P.pullGeneTogether*ddy;
+        // mild bending / smoothing
+        for (let i=1;i<N-1;i++){
+          const p0=this.pts[i-1], p1=this.pts[i], p2=this.pts[i+1];
+          const mx=0.5*(p0.x+p2.x), my=0.5*(p0.y+p2.y);
+          this.v[i].vx += 0.004*(mx-p1.x);
+          this.v[i].vy += 0.004*(my-p1.y);
         }
 
-        // Keep the lonely region away (so it stays lonely and quiet)
-        for (let i=0;i<n;i++){
-          if (W.geneRole[i] !== "lonely") continue;
-          const dx = (canvas.width*0.82) - W.beads[i].x;
-          const dy = (canvas.height*0.42) - W.beads[i].y;
-          W.bvx[i] += 0.0018*dx;
-          W.bvy[i] += 0.0018*dy;
+        // compaction pull (acts like "folding over itself" visually)
+        for (let i=0;i<N;i++){
+          const p=this.pts[i];
+          this.v[i].vx += compact*(cx - p.x);
+          this.v[i].vy += compact*(cy - p.y);
+        }
+
+        // integrate
+        for (let i=0;i<N;i++){
+          this.v[i].vx += brown*randn();
+          this.v[i].vy += brown*randn();
+          this.v[i].vx *= damp;
+          this.v[i].vy *= damp;
+
+          this.pts[i].x += this.v[i].vx;
+          this.pts[i].y += this.v[i].vy;
+
+          // soft walls
+          const margin=60, kw=0.002;
+          if (this.pts[i].x < margin) this.v[i].vx += kw*(margin - this.pts[i].x);
+          if (this.pts[i].x > W-margin) this.v[i].vx -= kw*(this.pts[i].x - (W-margin));
+          if (this.pts[i].y < margin) this.v[i].vy += kw*(margin - this.pts[i].y);
+          if (this.pts[i].y > H-margin) this.v[i].vy -= kw*(this.pts[i].y - (H-margin));
+        }
+      },
+      draw(){
+        // glow density near centre
+        const W=canvas.width, H=canvas.height;
+        ctx.save();
+        ctx.globalCompositeOperation="lighter";
+        glowCircle(W*0.55,H*0.55, 120, "rgba(255,120,200,0.018)", 150);
+        ctx.restore();
+
+        // line
+        ctx.save();
+        ctx.strokeStyle="rgba(255,255,255,0.25)";
+        ctx.lineWidth=3.2;
+        ctx.beginPath();
+        for (let i=0;i<this.pts.length;i++){
+          const p=this.pts[i];
+          if (i===0) ctx.moveTo(p.x,p.y);
+          else ctx.lineTo(p.x,p.y);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // beads
+        for (const p of this.pts){
+          glowCircle(p.x,p.y, 3.8, "rgba(255,255,255,0.50)", 14);
         }
       }
+    };
 
-      // integrate beads
-      for (let i=0;i<n;i++){
-        W.bvx[i] += P.brownian*randn();
-        W.bvy[i] += P.brownian*randn();
-        W.bvx[i] *= P.damping;
-        W.bvy[i] *= P.damping;
-
-        W.beads[i].x += W.bvx[i];
-        W.beads[i].y += W.bvy[i];
-
-        const out=softWalls(W.beads[i].x, W.beads[i].y, W.bvx[i], W.bvy[i]);
-        W.bvx[i]=out.vx; W.bvy[i]=out.vy;
-      }
-
-      // --- TF dynamics (acts 5–7) ---
-      if (mode === "polymer_plus_free_tfs" || mode === "two_genes_cluster_one_lonely" || mode === "cluster_attracts_more_tfs"){
-        // compute cluster + lonely centers for biasing
-        let cx=0, cy=0, cc=0;
-        let lx=0, ly=0, lc=0;
-
-        for (let i=0;i<n;i++){
-          if (!W.isGene[i]) continue;
-          if (W.geneRole[i] === "cluster"){ cx += W.beads[i].x; cy += W.beads[i].y; cc++; }
-          if (W.geneRole[i] === "lonely"){ lx += W.beads[i].x; ly += W.beads[i].y; lc++; }
+    // Act 5: free TFs drifting (keep simple)
+    const A5 = {
+      tfs: [],
+      init(){
+        const W=canvas.width, H=canvas.height;
+        this.tfs = [];
+        for (let i=0;i<28;i++){
+          this.tfs.push({
+            x: W*(0.20 + 0.60*Math.random()),
+            y: H*(0.20 + 0.60*Math.random()),
+            vx:0, vy:0
+          });
         }
-        if (cc>0){ cx/=cc; cy/=cc; }
-        if (lc>0){ lx/=lc; ly/=lc; }
+      },
+      step(){
+        const W=canvas.width, H=canvas.height;
+        for (const tf of this.tfs){
+          tf.vx += 0.60*randn();
+          tf.vy += 0.60*randn();
+          tf.vx *= 0.94;
+          tf.vy *= 0.94;
+          tf.x += tf.vx;
+          tf.y += tf.vy;
+          // wrap
+          if (tf.x<0) tf.x += W;
+          if (tf.x>W) tf.x -= W;
+          if (tf.y<0) tf.y += H;
+          if (tf.y>H) tf.y -= H;
+        }
+      },
+      draw(){
+        // subtle “chromatin haze” background only
+        const W=canvas.width, H=canvas.height;
+        ctx.save();
+        ctx.globalCompositeOperation="lighter";
+        glowCircle(W*0.50,H*0.55, 140, "rgba(255,255,255,0.012)", 180);
+        ctx.restore();
 
-        for (const tf of W.tfs){
-          tf.vx += P.tfBrown*randn();
-          tf.vy += P.tfBrown*randn();
-          tf.vx *= P.tfDamp;
-          tf.vy *= P.tfDamp;
+        for (const tf of this.tfs){
+          glowCircle(tf.x, tf.y, 7.0, "rgba(255,60,60,0.80)", 24);
+        }
+      }
+    };
 
-          // Act 7: gentle bias toward the cluster region + away from lonely region
-          if (mode === "cluster_attracts_more_tfs" && tf.mode === "bias"){
-            tf.vx += P.tfBiasToCluster*(cx - tf.x);
-            tf.vy += P.tfBiasToCluster*(cy - tf.y);
+    // Act 6: Zoomed in — big TF bead pulling polymer from two sides, wrapping around it
+    const A6 = {
+      pts: [], v: [],
+      big: {x:0,y:0},
+      init(){
+        const W=canvas.width, H=canvas.height;
+        this.big = { x: W*0.72, y: H*0.55 };
 
-            tf.vx += P.tfBiasAwayLonely*(tf.x - lx);
-            tf.vy += P.tfBiasAwayLonely*(tf.y - ly);
+        const N=160;
+        this.pts = [];
+        this.v = new Array(N).fill(0).map(_=>({vx:0,vy:0}));
+
+        // Make a "U-shaped" chain coming in from left, going past the TF, leaving to left-ish
+        const x0=W*0.12, y0=H*0.55;
+        const span=W*0.60;
+        for (let i=0;i<N;i++){
+          const t=i/(N-1);
+          const x = x0 + span*t;
+          const y = y0 + H*0.18*Math.sin(t*Math.PI); // arch
+          this.pts.push({x,y});
+        }
+        this.t=0;
+      },
+      step(){
+        this.t++;
+        const N=this.pts.length;
+        const rest=6.8;
+        const k=0.13;
+        const damp=0.90;
+        const brown=0.40;
+
+        // springs
+        for (let i=0;i<N-1;i++){
+          const a=this.pts[i], b=this.pts[i+1];
+          const dx=b.x-a.x, dy=b.y-a.y;
+          const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          const f=k*(r-rest);
+          const fx=f*dx/r, fy=f*dy/r;
+          this.v[i].vx += fx; this.v[i].vy += fy;
+          this.v[i+1].vx -= fx; this.v[i+1].vy -= fy;
+        }
+
+        // smooth bending
+        for (let i=1;i<N-1;i++){
+          const p0=this.pts[i-1], p1=this.pts[i], p2=this.pts[i+1];
+          const mx=0.5*(p0.x+p2.x), my=0.5*(p0.y+p2.y);
+          this.v[i].vx += 0.006*(mx-p1.x);
+          this.v[i].vy += 0.006*(my-p1.y);
+        }
+
+        // big TF "attractor": pulls nearby chain segments in
+        const pull=0.010;
+        const R=180;
+        for (let i=0;i<N;i++){
+          const p=this.pts[i];
+          const dx=this.big.x - p.x;
+          const dy=this.big.y - p.y;
+          const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          if (d<R){
+            const s = (1 - d/R);
+            this.v[i].vx += pull*s*dx;
+            this.v[i].vy += pull*s*dy;
           }
+        }
 
-          // Act 6: keep TFs near cluster, but leave lonely region quiet
-          if (mode === "two_genes_cluster_one_lonely"){
-            tf.vx += 0.0010*(cx - tf.x);
-            tf.vy += 0.0010*(cy - tf.y);
-
-            tf.vx += 0.0012*(tf.x - lx);
-            tf.vy += 0.0012*(tf.y - ly);
+        // excluded volume around big TF so chain wraps around not through
+        const hardR = 62;
+        for (let i=0;i<N;i++){
+          const p=this.pts[i];
+          const dx=p.x - this.big.x;
+          const dy=p.y - this.big.y;
+          const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          if (d < hardR){
+            const push = (hardR - d)*0.08;
+            this.v[i].vx += push*dx/d;
+            this.v[i].vy += push*dy/d;
           }
+        }
 
+        // integrate
+        const W=canvas.width, H=canvas.height;
+        for (let i=0;i<N;i++){
+          this.v[i].vx += brown*randn();
+          this.v[i].vy += brown*randn();
+          this.v[i].vx *= damp;
+          this.v[i].vy *= damp;
+          this.pts[i].x += this.v[i].vx;
+          this.pts[i].y += this.v[i].vy;
+
+          // soft walls
+          const margin=50, kw=0.0022;
+          if (this.pts[i].x < margin) this.v[i].vx += kw*(margin - this.pts[i].x);
+          if (this.pts[i].x > W-margin) this.v[i].vx -= kw*(this.pts[i].x - (W-margin));
+          if (this.pts[i].y < margin) this.v[i].vy += kw*(margin - this.pts[i].y);
+          if (this.pts[i].y > H-margin) this.v[i].vy -= kw*(this.pts[i].y - (H-margin));
+        }
+      },
+      draw(){
+        // big TF glow
+        ctx.save();
+        ctx.globalCompositeOperation="lighter";
+        glowCircle(this.big.x,this.big.y, 130, "rgba(255,60,60,0.020)", 180);
+        glowCircle(this.big.x,this.big.y, 78, "rgba(255,120,200,0.030)", 120);
+        ctx.restore();
+
+        // chain
+        ctx.save();
+        ctx.strokeStyle="rgba(255,255,255,0.25)";
+        ctx.lineWidth=3.4;
+        ctx.beginPath();
+        for (let i=0;i<this.pts.length;i++){
+          const p=this.pts[i];
+          if (i===0) ctx.moveTo(p.x,p.y);
+          else ctx.lineTo(p.x,p.y);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // beads
+        for (const p of this.pts){
+          glowCircle(p.x,p.y, 4.0, "rgba(255,255,255,0.55)", 16);
+        }
+
+        // big TF bead (solid)
+        glowCircle(this.big.x,this.big.y, 46, "rgba(255,60,60,0.92)", 40);
+        ctx.save();
+        ctx.fillStyle="rgba(0,0,0,0.65)";
+        ctx.font="900 14px system-ui";
+        ctx.fillText("TF", this.big.x-12, this.big.y+5);
+        ctx.restore();
+      }
+    };
+
+    // Act 7: More big TFs drift toward the main cluster (focus on one cluster)
+    const A7 = {
+      pts: [], v: [],
+      bigs: [],
+      anchor: {x:0,y:0},
+      init(){
+        const W=canvas.width, H=canvas.height;
+        this.anchor = { x: W*0.70, y: H*0.55 };
+
+        // polymer already wrapped-ish around anchor
+        const N=170;
+        this.pts = [];
+        this.v = new Array(N).fill(0).map(_=>({vx:0,vy:0}));
+        const x0=W*0.12, y0=H*0.55;
+        const span=W*0.62;
+        for (let i=0;i<N;i++){
+          const t=i/(N-1);
+          const x = x0 + span*t;
+          const y = y0 + H*0.20*Math.sin(t*Math.PI);
+          this.pts.push({x,y});
+        }
+
+        // big TFs: start scattered, then slowly migrate to anchor
+        this.bigs = [];
+        const count=6;
+        for (let i=0;i<count;i++){
+          this.bigs.push({
+            x: W*(0.20 + 0.60*Math.random()),
+            y: H*(0.20 + 0.60*Math.random()),
+            vx:0, vy:0,
+            arrived: false
+          });
+        }
+        this.t=0;
+      },
+      step(){
+        this.t++;
+        const N=this.pts.length;
+        const rest=6.8;
+        const k=0.13;
+        const damp=0.90;
+        const brown=0.38;
+
+        // polymer springs + bend
+        for (let i=0;i<N-1;i++){
+          const a=this.pts[i], b=this.pts[i+1];
+          const dx=b.x-a.x, dy=b.y-a.y;
+          const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          const f=k*(r-rest);
+          const fx=f*dx/r, fy=f*dy/r;
+          this.v[i].vx += fx; this.v[i].vy += fy;
+          this.v[i+1].vx -= fx; this.v[i+1].vy -= fy;
+        }
+        for (let i=1;i<N-1;i++){
+          const p0=this.pts[i-1], p1=this.pts[i], p2=this.pts[i+1];
+          const mx=0.5*(p0.x+p2.x), my=0.5*(p0.y+p2.y);
+          this.v[i].vx += 0.006*(mx-p1.x);
+          this.v[i].vy += 0.006*(my-p1.y);
+        }
+
+        // anchor attraction & exclusion (cluster region)
+        const pull=0.010;
+        const R=190;
+        const hardR=65;
+        for (let i=0;i<N;i++){
+          const p=this.pts[i];
+          const dx=this.anchor.x - p.x;
+          const dy=this.anchor.y - p.y;
+          const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          if (d<R){
+            const s=(1-d/R);
+            this.v[i].vx += pull*s*dx;
+            this.v[i].vy += pull*s*dy;
+          }
+          if (d<hardR){
+            const push=(hardR-d)*0.08;
+            this.v[i].vx += push*(p.x-this.anchor.x)/d;
+            this.v[i].vy += push*(p.y-this.anchor.y)/d;
+          }
+        }
+
+        // integrate polymer
+        const W=canvas.width, H=canvas.height;
+        for (let i=0;i<N;i++){
+          this.v[i].vx += brown*randn();
+          this.v[i].vy += brown*randn();
+          this.v[i].vx *= damp;
+          this.v[i].vy *= damp;
+          this.pts[i].x += this.v[i].vx;
+          this.pts[i].y += this.v[i].vy;
+
+          const margin=50, kw=0.0022;
+          if (this.pts[i].x < margin) this.v[i].vx += kw*(margin - this.pts[i].x);
+          if (this.pts[i].x > W-margin) this.v[i].vx -= kw*(this.pts[i].x - (W-margin));
+          if (this.pts[i].y < margin) this.v[i].vy += kw*(margin - this.pts[i].y);
+          if (this.pts[i].y > H-margin) this.v[i].vy -= kw*(this.pts[i].y - (H-margin));
+        }
+
+        // big TFs drift to anchor slowly (more & more “join”)
+        const drift = 0.0012;
+        for (const tf of this.bigs){
+          tf.vx += 0.40*randn();
+          tf.vy += 0.40*randn();
+
+          // “recruitment”: after some time, bias increases
+          const recruit = Math.min(0.001 + this.t*0.0000025, 0.0038);
+          tf.vx += recruit*(this.anchor.x - tf.x);
+          tf.vy += recruit*(this.anchor.y - tf.y);
+
+          tf.vx *= 0.92;
+          tf.vy *= 0.92;
           tf.x += tf.vx;
           tf.y += tf.vy;
 
-          const cw=canvas.width, ch=canvas.height;
-          if (tf.x<0) tf.x += cw;
-          if (tf.x>cw) tf.x -= cw;
-          if (tf.y<0) tf.y += ch;
-          if (tf.y>ch) tf.y -= ch;
+          // keep in bounds
+          if (tf.x<0) tf.x += W;
+          if (tf.x>W) tf.x -= W;
+          if (tf.y<0) tf.y += H;
+          if (tf.y>H) tf.y -= H;
         }
-      }
-
-      W.frame++;
-    }
-
-    // ============================================================
-    // Rendering
-    // ============================================================
-    function drawPolymer(){
-      // polymer line
-      ctx.save();
-      ctx.strokeStyle = "rgba(255,255,255,0.22)";
-      ctx.lineWidth = 3.0;
-      ctx.beginPath();
-      W.beads.forEach((p,i)=>{
-        if(i===0) ctx.moveTo(p.x,p.y);
-        else ctx.lineTo(p.x,p.y);
-      });
-      ctx.stroke();
-      ctx.restore();
-
-      // beads: white + green gene regions
-      for (let i=0;i<W.beads.length;i++){
-        const p=W.beads[i];
-        if (W.isGene[i]){
-          glowCircle(p.x,p.y, 6.4, "rgba(0,255,140,0.95)", 28);
-        } else {
-          glowCircle(p.x,p.y, 4.8, "rgba(255,255,255,0.55)", 16);
-        }
-      }
-    }
-
-    function drawTFs(alpha=1){
-      for (const tf of W.tfs){
-        glowCircle(tf.x, tf.y, P.tfR, `rgba(255,60,60,${0.78*alpha})`, 22);
-      }
-    }
-
-    function drawClusterGlow(){
-      // derive cluster center glow for acts 6/7
-      let cx=0, cy=0, cc=0;
-      for (let i=0;i<W.beads.length;i++){
-        if (W.geneRole[i] === "cluster"){
-          cx += W.beads[i].x;
-          cy += W.beads[i].y;
-          cc++;
-        }
-      }
-      if (cc>0){
-        cx/=cc; cy/=cc;
+      },
+      draw(){
+        // cluster glow
         ctx.save();
         ctx.globalCompositeOperation="lighter";
-        glowCircle(cx, cy, 90, "rgba(255,120,200,0.025)", 110);
-        glowCircle(cx, cy, 52, "rgba(255,120,200,0.045)", 80);
+        glowCircle(this.anchor.x,this.anchor.y, 150, "rgba(255,120,200,0.020)", 190);
+        glowCircle(this.anchor.x,this.anchor.y, 90,  "rgba(255,60,60,0.020)", 150);
         ctx.restore();
-      }
-    }
 
-    function drawStaticWeb(){
-      const cw=canvas.width, ch=canvas.height;
-
-      // big webby chromatin network (static)
-      ctx.save();
-      ctx.strokeStyle = "rgba(255,255,255,0.18)";
-      ctx.lineWidth = 2.2;
-      ctx.shadowColor = "rgba(255,255,255,0.10)";
-      ctx.shadowBlur = 16;
-
-      // Draw several sinuous strands crisscrossing
-      const strands = 9;
-      for (let s=0;s<strands;s++){
+        // polymer
+        ctx.save();
+        ctx.strokeStyle="rgba(255,255,255,0.25)";
+        ctx.lineWidth=3.4;
         ctx.beginPath();
-        const y0 = ch*(0.18 + 0.70*(s/(strands-1)));
-        for (let i=0;i<240;i++){
-          const t=i/239;
-          const x = cw*(0.06 + 0.88*t);
-          const y = y0 + ch*0.06*Math.sin(8*t + 0.9*s) + ch*0.03*Math.sin(21*t + 0.4*s);
-          if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        for (let i=0;i<this.pts.length;i++){
+          const p=this.pts[i];
+          if (i===0) ctx.moveTo(p.x,p.y);
+          else ctx.lineTo(p.x,p.y);
         }
         ctx.stroke();
+        ctx.restore();
+        for (const p of this.pts){
+          glowCircle(p.x,p.y, 4.0, "rgba(255,255,255,0.55)", 16);
+        }
+
+        // big TFs
+        for (const tf of this.bigs){
+          glowCircle(tf.x, tf.y, 34, "rgba(255,60,60,0.82)", 36);
+        }
+        // anchor TF (central)
+        glowCircle(this.anchor.x,this.anchor.y, 44, "rgba(255,60,60,0.95)", 42);
       }
-      ctx.restore();
+    };
 
-      // Hotspots (pink) + TF crowds (red)
-      const hubs = [
-        {x: cw*0.28, y: ch*0.36},
-        {x: cw*0.55, y: ch*0.62},
-        {x: cw*0.78, y: ch*0.44}
-      ];
+    // Act 8: one polymer with many clusters (5–6)
+    const A8 = {
+      pts: [], v: [],
+      hubs: [],
+      init(){
+        const W=canvas.width, H=canvas.height;
+        const N=260;
+        this.pts = [];
+        this.v = new Array(N).fill(0).map(_=>({vx:0,vy:0}));
+        const x0=W*0.08, y0=H*0.55;
+        const dx=(W*0.84)/(N-1);
+        for (let i=0;i<N;i++){
+          this.pts.push({x:x0+i*dx, y:y0 + H*0.12*Math.sin(i*0.16)});
+        }
+        // 6 hubs spaced along
+        this.hubs = [
+          {x:W*0.20,y:H*0.40},
+          {x:W*0.35,y:H*0.62},
+          {x:W*0.48,y:H*0.47},
+          {x:W*0.60,y:H*0.68},
+          {x:W*0.73,y:H*0.44},
+          {x:W*0.84,y:H*0.58}
+        ];
+        this.t=0;
+      },
+      step(){
+        this.t++;
+        const N=this.pts.length;
+        const rest=7.0;
+        const k=0.11;
+        const damp=0.92;
+        const brown=0.42;
 
-      ctx.save();
-      ctx.globalCompositeOperation="lighter";
-      for (const h of hubs){
-        glowCircle(h.x,h.y, 120, "rgba(255,120,200,0.020)", 150);
-        glowCircle(h.x,h.y, 65,  "rgba(255,120,200,0.045)", 95);
-      }
-      ctx.restore();
+        // springs
+        for (let i=0;i<N-1;i++){
+          const a=this.pts[i], b=this.pts[i+1];
+          const dx=b.x-a.x, dy=b.y-a.y;
+          const r=Math.sqrt(dx*dx+dy*dy)+1e-6;
+          const f=k*(r-rest);
+          const fx=f*dx/r, fy=f*dy/r;
+          this.v[i].vx += fx; this.v[i].vy += fy;
+          this.v[i+1].vx -= fx; this.v[i+1].vy -= fy;
+        }
+        // bend smoothing
+        for (let i=1;i<N-1;i++){
+          const p0=this.pts[i-1], p1=this.pts[i], p2=this.pts[i+1];
+          const mx=0.5*(p0.x+p2.x), my=0.5*(p0.y+p2.y);
+          this.v[i].vx += 0.004*(mx-p1.x);
+          this.v[i].vy += 0.004*(my-p1.y);
+        }
 
-      // gene hotspots bright green, many quiet greens faint
-      function geneSpot(x,y,active){
-        const col = active ? "rgba(0,255,140,0.95)" : "rgba(0,255,140,0.18)";
-        const blur = active ? 34 : 16;
-        glowCircle(x,y, active?8:6, col, blur);
-      }
+        // pull each bead to nearest hub a bit (creates 5–6 clusters along)
+        const pull = 0.0042;
+        const R = 170;
+        for (let i=0;i<N;i++){
+          const p=this.pts[i];
+          let best={d2:Infinity,h:this.hubs[0]};
+          for (const h of this.hubs){
+            const dx=h.x-p.x, dy=h.y-p.y;
+            const d2=dx*dx+dy*dy;
+            if (d2<best.d2) best={d2,h};
+          }
+          const d=Math.sqrt(best.d2)+1e-6;
+          if (d<R){
+            const s=(1-d/R);
+            this.v[i].vx += pull*s*(best.h.x - p.x);
+            this.v[i].vy += pull*s*(best.h.y - p.y);
+          }
+        }
 
-      // Active near hubs
-      geneSpot(cw*0.26, ch*0.35, true);
-      geneSpot(cw*0.30, ch*0.37, true);
-      geneSpot(cw*0.54, ch*0.61, true);
-      geneSpot(cw*0.57, ch*0.63, true);
-      geneSpot(cw*0.79, ch*0.44, true);
+        // integrate
+        const W=canvas.width, H=canvas.height;
+        for (let i=0;i<N;i++){
+          this.v[i].vx += brown*randn();
+          this.v[i].vy += brown*randn();
+          this.v[i].vx *= damp;
+          this.v[i].vy *= damp;
+          this.pts[i].x += this.v[i].vx;
+          this.pts[i].y += this.v[i].vy;
 
-      // Many quiet genes scattered
-      for (let i=0;i<22;i++){
-        const x = cw*(0.10 + 0.82*Math.random());
-        const y = ch*(0.18 + 0.70*Math.random());
-        geneSpot(x,y,false);
-      }
+          const margin=55, kw=0.002;
+          if (this.pts[i].x < margin) this.v[i].vx += kw*(margin - this.pts[i].x);
+          if (this.pts[i].x > W-margin) this.v[i].vx -= kw*(this.pts[i].x - (W-margin));
+          if (this.pts[i].y < margin) this.v[i].vy += kw*(margin - this.pts[i].y);
+          if (this.pts[i].y > H-margin) this.v[i].vy -= kw*(this.pts[i].y - (H-margin));
+        }
+      },
+      draw(){
+        // hub glows
+        ctx.save();
+        ctx.globalCompositeOperation="lighter";
+        for (const h of this.hubs){
+          glowCircle(h.x,h.y, 95, "rgba(255,120,200,0.018)", 140);
+          glowCircle(h.x,h.y, 58, "rgba(255,60,60,0.016)", 120);
+        }
+        ctx.restore();
 
-      // TF crowds near hubs + sparse elsewhere
-      function tfCloud(cx,cy,n,spread){
-        for (let i=0;i<n;i++){
-          const x = cx + spread*randn();
-          const y = cy + spread*randn();
-          glowCircle(x,y, 6.2, "rgba(255,60,60,0.85)", 22);
+        // polymer
+        ctx.save();
+        ctx.strokeStyle="rgba(255,255,255,0.24)";
+        ctx.lineWidth=3.2;
+        ctx.beginPath();
+        for (let i=0;i<this.pts.length;i++){
+          const p=this.pts[i];
+          if (i===0) ctx.moveTo(p.x,p.y);
+          else ctx.lineTo(p.x,p.y);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // beads
+        for (const p of this.pts){
+          glowCircle(p.x,p.y, 3.8, "rgba(255,255,255,0.50)", 14);
+        }
+
+        // draw “cluster beads” (big TF-like blobs) at hubs
+        for (const h of this.hubs){
+          glowCircle(h.x,h.y, 18, "rgba(255,60,60,0.80)", 30);
         }
       }
-      tfCloud(hubs[0].x,hubs[0].y, 28, 30);
-      tfCloud(hubs[1].x,hubs[1].y, 26, 30);
-      tfCloud(hubs[2].x,hubs[2].y, 20, 28);
+    };
 
-      for (let i=0;i<10;i++){
-        const x = cw*(0.12 + 0.78*Math.random());
-        const y = ch*(0.20 + 0.66*Math.random());
-        glowCircle(x,y, 6.0, "rgba(255,60,60,0.25)", 16);
+    function initAct(force){
+      const mode = ACTS[act].mode;
+      if (mode === "dna" || mode === "epi"){
+        // nothing persistent needed
+        return;
       }
-
-      // labels
-      ctx.save();
-      ctx.font="900 16px system-ui";
-      ctx.fillStyle="rgba(255,255,255,0.88)";
-      ctx.fillText("A web of chromatin with hotspots (factories) and quiet regions", 16, 28);
-      ctx.font="14px system-ui";
-      ctx.fillStyle="rgba(255,255,255,0.62)";
-      ctx.fillText("Hotspots: many TFs + active genes • Quiet regions: fewer TFs + less reading", 16, 50);
-      ctx.restore();
+      if (mode === "act4_compaction") A4.init();
+      if (mode === "act5_free_tfs") A5.init();
+      if (mode === "act6_big_tf_wrap") A6.init();
+      if (mode === "act7_recruit_more") A7.init();
+      if (mode === "act8_many_clusters") A8.init();
     }
 
-    function draw(){
+    function stepAndDraw(){
       drawBackground();
 
       const mode = ACTS[act].mode;
 
-      if (mode === "static_web_snapshot"){
-        drawStaticWeb();
+      if (mode === "dna"){
+        drawDNAHelix("dna");
+        return;
+      }
+      if (mode === "epi"){
+        drawDNAHelix("epi");
         return;
       }
 
-      // Acts 4–7: polymer always
-      drawPolymer();
-
-      if (mode === "two_genes_cluster_one_lonely" || mode === "cluster_attracts_more_tfs"){
-        drawClusterGlow();
+      if (mode === "act4_compaction"){
+        A4.step(); A4.draw();
+        return;
       }
-
-      // Act 5: free TFs
-      if (mode === "polymer_plus_free_tfs"){
-        drawTFs(1.0);
+      if (mode === "act5_free_tfs"){
+        A5.step(); A5.draw();
+        return;
       }
-
-      // Act 6: a few TFs, mostly near cluster and away from lonely region
-      if (mode === "two_genes_cluster_one_lonely"){
-        drawTFs(0.95);
-
-        // annotate lonely region lightly (optional)
-        // (We keep minimal; you can remove these text lines if you want.)
-        ctx.save();
-        ctx.font="900 14px system-ui";
-        ctx.fillStyle="rgba(255,255,255,0.70)";
-        ctx.fillText("cluster gene region (more TFs)", 16, canvas.height - 40);
-        ctx.fillStyle="rgba(255,255,255,0.55)";
-        ctx.fillText("lonely gene region (few TFs)", 16, canvas.height - 18);
-        ctx.restore();
+      if (mode === "act6_big_tf_wrap"){
+        A6.step(); A6.draw();
+        return;
       }
-
-      // Act 7: many TFs bias to cluster
-      if (mode === "cluster_attracts_more_tfs"){
-        drawTFs(1.0);
+      if (mode === "act7_recruit_more"){
+        A7.step(); A7.draw();
+        return;
+      }
+      if (mode === "act8_many_clusters"){
+        A8.step(); A8.draw();
+        return;
       }
     }
 
     function tick(){
       resizeCanvas();
-      step();
-      draw();
+      stepAndDraw();
       requestAnimationFrame(tick);
     }
 
     // Start
     resizeCanvas();
-    initAct(true);
     applyAct();
     tick();
-
-    function applyAct(){
-      UI.kicker.textContent = `Act ${act} of 8`;
-      UI.title.textContent = ACTS[act].title;
-      UI.sub.textContent = ACTS[act].sub;
-      UI.story.innerHTML = ACTS[act].story;
-
-      UI.prev.disabled = (act === 4);
-      UI.next.disabled = (act === 8);
-
-      UI.legend.classList.toggle("show", true);
-      initAct(true);
-    }
   </script>
 </body>
 </html>
+
 
 
 
