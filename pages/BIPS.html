@@ -352,57 +352,59 @@
     const ACTS = [
       {
         mode: "dna",
-        title: "Opening — How do cells remember who they are?",
-        sub: "Most cells share the same DNA. Identity is which genes are ON and OFF.",
+        title: "How do cells know who they are?",
         html: `
           <p>
-            Skin cells, neurons, and blood cells usually contain the <strong>same DNA</strong>.
-            They behave differently because they use different parts of that DNA.
+            Skin cells, neurons, and blood cells usually have access the <strong>same DNA</strong>.
+            However they carry out different roles. They know which different roles to perform because they 
+            read different parts of that DNA.
           </p>
           <p>
-            Click ${bigWord("BASE PAIR", "white", "basepair")} and ${bigWord("GENE", "green", "gene")}
-            to see what those mean on the helix.
+            The genome (written on DNA) is like an all encompassing instruction manual. However, various cells need 
+            to read various parts of the book to know what their specific role is!
           </p>
         `,
         showLegend: false
       },
       {
         mode: "dna",
-        title: "Act 1 — What is DNA?",
-        sub: "DNA is a message written in a four-letter alphabet: A, C, G, T.",
+        title: "What is DNA?",
         html: `
           <p>
-            DNA is information written using four letters: <strong>A, C, G, T</strong>.
+            DNA is information written using four letters: <strong>A, C, G, T</strong>. The books we read have 26 alphabets. life only needs
+            four to specify every function necessary for life. The rungs on the famous doubel helix of the DNA contain these letters. 
+            Every letter is paired with a friend letter on the other half of the rung. 
             The ladder rungs are ${bigWord("BASE PAIRS", "white", "basepair")} (A–T and C–G).
           </p>
           <p>
             The order of base pairs is the message — like letters in a sentence.
           </p>
+  
         `,
         showLegend: false
       },
       {
         mode: "dna",
-        title: "Act 2 — What is a gene?",
-        sub: "Genes are meaningful stretches of DNA that can be read and used.",
+        title: "What is a gene?",
         html: `
           <p>
             If ${bigWord("BASE PAIRS", "white", "basepair")} are letters, a ${bigWord("GENE", "green", "gene")}
             is like a sentence or recipe that the cell can copy and use.
           </p>
           <p>
-            Different cells read different genes — that’s a big part of cell identity.
+            Different cells read different genes — that’s mainly what gives cells the different instructions that give them their 
+            particular identities. 
           </p>
         `,
         showLegend: false
       },
       {
         mode: "epi",
-        title: "Act 3 — Epigenetics: locking some regions",
-        sub: "Epigenetic marks can make parts of DNA harder to access (only the lock label here).",
+        title: "Epigenetics: locking some regions",
         html: `
           <p>
-            Cells use ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions closed.
+            Cells use ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions closed. This ensures that certain cells 
+            only read certain parts of the DNA and are blocked off from others. This helps specify their role!
             Locked regions are shown in <span style="color: rgba(190,120,255,0.95); font-weight:900;">purple</span>.
           </p>
           <p>
@@ -413,12 +415,16 @@
       },
       {
         mode: "act4",
-        title: "Act 4 — DNA folds into chromatin (now interactive)",
-        sub: "Drag the chain to fold it over itself. It also keeps wiggling naturally.",
+        title: "DNA in not a straight line, but exists in 3D",
         html: `
           <p>
-            DNA is extremely long, so it folds into <strong>chromatin</strong>.
-            Here chromatin is a flexible chain (polymer).
+            Instead of dealing with DNA, we can talk about <strong>chromatin</strong>, which for simplicity can be thought of as clumps of DNA folded
+            onto itself. In essence, we are are just zooming out a bit!Each bead here represents close to 3 million 
+            base pairs!
+          </p>
+          <p>
+            This chromatin can be thought of as a flexible chain! If it were not, how could we fit 2 metres of DNA into one cell! Hence, DNA
+            <strong>must fold</strong>. Can this folding help us explain why only certain parts of the DNA are read and other are not?
           </p>
           <p>
             <strong>Try it:</strong> drag on the chain and fold it over itself. Then let go and watch it keep wiggling.
@@ -428,25 +434,23 @@
       },
       {
         mode: "act5",
-        title: "Act 5 — TFs wander while chromatin stays extended",
-        sub: "TFs float randomly; the polymer does not collapse.",
+        title: "The Book Readers: Transcription Factors",
         html: `
           <p>
-            TFs (red) wander randomly in the nucleus. Chromatin (white) is present as context.
-          </p>
-          <p>
-            In this act, there is <strong>no attraction</strong> and no further folding — just wandering.
+            The things which actually read the DNA can be called "transcription factors" (TFs). They move along the genes
+            in DNA and read it out loud in a process called "transcription". These messages which tell the cell what to do!
+            These TFs are plentiful in the cell and are usually just wondering around. But in order to begin reading, they must stick 
+            to the DNA.
           </p>
         `,
         showLegend: true
       },
       {
         mode: "act6",
-        title: "Act 6 — Multivalent TF: drag it and watch chromatin wrap",
-        sub: "Drag the big TF (red). The polymer slowly wraps around it, increasing local density.",
+        title: "Multivalent TF: drag it and watch chromatin wrap",
         html: `
           <p>
-            Some TFs are <strong>multivalent</strong> — they can bind at multiple points.
+            Some TFs, which as we said need to be sticky, are <strong>multivalent</strong> — they can bind at multiple points.
             That makes them act like a sticky hub that pulls in chromatin.
           </p>
           <p>
@@ -457,26 +461,27 @@
       },
       {
         mode: "act7",
-        title: "Act 7 — Recruitment to a dense region (wrapped first)",
-        sub: "We start with chromatin already wrapped (high density), then other big TFs drift in slowly.",
+        title: "Recruitment to a dense region",
         html: `
           <p>
-            Once a dense hub exists, it can recruit more proteins.
+            Since one TF has the ability to pull in a lot of chromatin, it increases the density of chromatin in this one region. 
+            Since there is just more chromatin in this region now, more TFs are likely to come along and bind!
             Here the chromatin is <strong>already wrapped</strong> around the main TF (a high-density region).
           </p>
           <p>
-            Then additional big TFs drift <strong>slowly</strong> toward that hub.
+            Then additional TFs drift <strong>slowly</strong> toward that hub.
           </p>
         `,
         showLegend: true
       },
       {
         mode: "act8",
-        title: "Act 8 — Summary slide (blank canvas)",
-        sub: "Canvas is intentionally blank here — you’ll place a summary image.",
+        title: "Transcription Factories",
         html: `
           <p>
-            This final act is a summary slide. The canvas is blank so you can add your own image.
+            These hubs are what we call "transcription factories", where a lot of readers are doing a lot of reading!
+            Since these hubs pull in most of the readers, other regiosn of the DNA are left unread. Just liek epigenetics, this can 
+            depending on where these factories are, a cell will here only specific instruction and know which role to perform!
           </p>
         `,
         showLegend: false
