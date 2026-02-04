@@ -1,3 +1,9 @@
+<!-- =========================
+     FILE: pages/BIPS.html
+     Copy-paste this ENTIRE file.
+     Includes CSS link + ALL JS inline (no separate JS files).
+     Put the CSS below into: stylesheets/bips_style.css
+========================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +15,7 @@
 
 <body class="dark">
 
-  <!-- Header (keeps your site consistent) -->
+  <!-- Header / nav consistent with your site -->
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../index.html">Nishwal Gora</a>
@@ -26,148 +32,86 @@
     </div>
   </header>
 
-  <!-- Fixed canvas stage -->
-  <div class="stage">
+  <!-- Fullscreen stage -->
+  <main class="stage">
     <canvas id="stageCanvas"></canvas>
 
-    <!-- tiny floating HUD (minimal) -->
-    <div class="miniHUD">
-      <div class="miniTitle" id="miniTitle">DNA</div>
-      <div class="miniSub" id="miniSub">Hover words to highlight parts of the helix.</div>
+    <!-- Minimal overlay (canvas-first) -->
+    <div class="overlay">
+
+      <!-- Top-left -->
+      <div class="overlay-top">
+        <div class="title" id="sceneTitle">DNA</div>
+
+        <div class="actions">
+          <button class="pill" id="termBasePair" type="button">base-pair</button>
+          <button class="pill" id="termGene" type="button">gene</button>
+
+          <span class="sep"></span>
+
+          <button class="pill strong" id="nextBtn" type="button">Next →</button>
+        </div>
+      </div>
+
+      <!-- Tiny tooltip (only when a term is clicked) -->
+      <div class="tooltip" id="tooltip" aria-live="polite">
+        <div class="tooltip-title" id="tipTitle">Base pair</div>
+        <div class="tooltip-text" id="tipText">
+          A “rung” connecting the two DNA strands (A–T or C–G).
+        </div>
+        <button class="tipClose" id="tipClose" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Bottom-left BIPS controls (only in chromatin scene) -->
+      <div class="bipsControls" id="bipsControls">
+        <button class="pill" id="playBtn" type="button">▶ Play BIPS</button>
+        <button class="pill" id="resetBtn" type="button">Reset</button>
+        <button class="pill" id="backBtn" type="button">← Back</button>
+      </div>
+
+      <!-- Optional: tiny legend in chromatin scene -->
+      <div class="legend" id="legend">
+        <span class="dot white"></span> chromatin
+        <span class="dot red"></span> TU (hotspot)
+      </div>
+
     </div>
-  </div>
-
-  <!-- Content (scrollable) -->
-  <main class="content">
-
-    <!-- ===================== SECTION 1: DNA ===================== -->
-    <section class="section" id="dnaSection">
-      <div class="card">
-        <h1>From DNA to Chromatin to BIPS</h1>
-        <p class="lead">
-          This is an interactive scroll-through explainer aimed at students who know basic science.
-          We’ll start with <strong>DNA</strong>, then zoom out to <strong>chromatin</strong>, and finally show
-          how “sticky” proteins can create <strong>clusters</strong> by physics alone (BIPS).
-        </p>
-
-        <h2>1) DNA: the information molecule</h2>
-        <p>
-          DNA is shaped like a <strong>double helix</strong>. It has two “rails” (the sugar-phosphate backbones)
-          and “rungs” connecting them.
-          Each rung is a <span class="term" data-highlight="basepair">base pair</span>.
-        </p>
-
-        <p>
-          DNA stores information because the rungs come in four letters: A, C, G, T.
-          They pair up in specific ways: A-T and C-G. The <em>order</em> of these letters is the code.
-        </p>
-
-        <p>
-          A <span class="term" data-highlight="gene">gene</span> is a stretch of DNA that can be “read” to make RNA
-          (and often proteins). Different cell types switch different genes ON/OFF.
-        </p>
-
-        <details class="expander">
-          <summary>Click to reveal more detail: what does “read a gene” mean?</summary>
-          <div class="expander-body">
-            <p>
-              Cells have molecular machines that move along DNA and copy a gene into RNA.
-              You can think of it like a scanner reading a section of a barcode. The RNA can then help build proteins.
-            </p>
-            <p>
-              Big idea: <strong>the same DNA</strong> exists in (almost) every cell, but cells behave differently because
-              they read different sets of genes.
-            </p>
-          </div>
-        </details>
-
-        <div class="bottomNav">
-          <button class="nextBtn" id="toChromatinBtn">Next → (Zoom out to Chromatin)</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== SECTION 2: CHROMATIN + BIPS ===================== -->
-    <section class="section" id="chromatinSection">
-      <div class="card">
-        <h2>2) Chromatin: DNA as a physical object</h2>
-        <p>
-          DNA is extremely long. In a human cell, if you stretched it out it’s about <strong>2 metres</strong>,
-          but it must fit inside a nucleus only a few micrometres wide.
-          So DNA is packaged with proteins into <strong>chromatin</strong>.
-        </p>
-
-        <p>
-          In our cartoon, chromatin is drawn as a chain of beads.
-          <strong>Each bead represents an enormous chunk of DNA</strong> —
-          you can imagine something like <strong>~3 million base pairs per bead</strong>
-          (a simplification, but it helps connect scales).
-        </p>
-
-        <h3>Genes are read by proteins (TFs)</h3>
-        <p>
-          To read genes, cells use proteins that diffuse around in the nucleus.
-          A famous class are <strong>transcription factors (TFs)</strong>.
-          They are “sticky” in a very specific way: they bind certain DNA regions more strongly than others.
-        </p>
-
-        <h3>Bridging-induced attraction</h3>
-        <p>
-          Here is the key physical idea:
-          if a protein can bind <strong>two places</strong> on chromatin, it can form a <strong>bridge</strong>.
-          Bridges pull distant parts of the chain closer together.
-        </p>
-
-        <p>
-          Once a region becomes slightly denser, it becomes easier for more proteins to bind there —
-          which makes it denser still. That is a <strong>positive feedback loop</strong>.
-          When this feedback produces stable clusters, we call it
-          <strong>Bridging-Induced Phase Separation (BIPS)</strong>.
-        </p>
-
-        <details class="expander">
-          <summary>Click to reveal more physics intuition (optional)</summary>
-          <div class="expander-body">
-            <p>
-              Think “Velcro balls on a string”. If the balls can grab two points on the string,
-              they create loops. Loops increase local density of string, which increases the chance
-              of more grabbing events. The system can self-organise into multiple hubs.
-            </p>
-            <p>
-              Importantly, you don’t need proteins to attract each other directly —
-              the clustering can be an <strong>emergent consequence</strong> of binding + polymer physics.
-            </p>
-          </div>
-        </details>
-
-        <div class="controlsRow">
-          <button class="playBtn" id="playBipsBtn">▶ Play BIPS animation</button>
-          <button class="ghostBtn" id="resetBipsBtn">Reset</button>
-        </div>
-
-        <p class="tinyNote">
-          In the animation, <span class="chip red"></span> red beads are special “hotspots” (TUs).
-          When BIPS starts, the chain forms <strong>2–3 clusters</strong> around these hotspots.
-        </p>
-
-        <div class="bottomNav">
-          <button class="ghostBtn" id="backToDnaBtn">← Back to DNA</button>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <script>
     // ============================================================
-    // Canvas + global rendering state
+    // Minimal interactive explainer (all-in-one, no external JS)
+    // Scenes:
+    //   - dna: double helix (click base-pair / gene to highlight)
+    //   - chromatin: long polymer (calm motion), shows "Play BIPS"
+    //   - bips: same polymer, pulled into 2–3 clusters around hotspots
     // ============================================================
+
+    // ---------- DOM ----------
     const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
 
-    const miniTitle = document.getElementById("miniTitle");
-    const miniSub   = document.getElementById("miniSub");
+    const sceneTitle = document.getElementById("sceneTitle");
+    const termBasePair = document.getElementById("termBasePair");
+    const termGene = document.getElementById("termGene");
+    const nextBtn = document.getElementById("nextBtn");
 
+    const tooltip = document.getElementById("tooltip");
+    const tipTitle = document.getElementById("tipTitle");
+    const tipText = document.getElementById("tipText");
+    const tipClose = document.getElementById("tipClose");
+
+    const bipsControls = document.getElementById("bipsControls");
+    const playBtn = document.getElementById("playBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const backBtn = document.getElementById("backBtn");
+    const legend = document.getElementById("legend");
+
+    // ---------- State ----------
+    let scene = "dna";          // "dna" | "chromatin" | "bips"
+    let highlight = null;       // null | "basepair" | "gene"
+
+    // ---------- Canvas resize ----------
     function resizeCanvas() {
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       const rect = canvas.getBoundingClientRect();
@@ -180,79 +124,179 @@
     }
     window.addEventListener("resize", resizeCanvas);
 
-    // Modes:
-    //  - "dna": helix (with hover highlight)
-    //  - "chromatin": long chain, calm motion
-    //  - "bips": chain pulled into 2–3 clusters (animation)
-    let mode = "dna";
+    // ---------- Tooltip helpers ----------
+    function showTip(title, text) {
+      tipTitle.textContent = title;
+      tipText.textContent = text;
+      tooltip.classList.add("show");
+    }
+    function hideTip() {
+      tooltip.classList.remove("show");
+    }
+    tipClose.addEventListener("click", hideTip);
 
-    // Hover highlight state for DNA
-    let hoverHighlight = null; // "basepair" | "gene" | null
+    // ---------- Scene switching ----------
+    function setScene(s) {
+      scene = s;
+      highlight = null;
+      hideTip();
 
-    // ============================================================
-    // Section navigation (buttons)
-    // ============================================================
-    const toChromatinBtn = document.getElementById("toChromatinBtn");
-    const backToDnaBtn   = document.getElementById("backToDnaBtn");
-
-    toChromatinBtn.addEventListener("click", () => {
-      document.getElementById("chromatinSection").scrollIntoView({ behavior: "smooth" });
-      setMode("chromatin");
-    });
-
-    backToDnaBtn.addEventListener("click", () => {
-      document.getElementById("dnaSection").scrollIntoView({ behavior: "smooth" });
-      setMode("dna");
-    });
-
-    // Switch mode depending on what section is mostly visible
-    const sections = [
-      { el: document.getElementById("dnaSection"), mode: "dna" },
-      { el: document.getElementById("chromatinSection"), mode: "chromatin" }
-    ];
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const m = e.target.id === "dnaSection" ? "dna" : "chromatin";
-          setMode(m);
-        }
-      });
-    }, { threshold: 0.55 });
-
-    sections.forEach(s => observer.observe(s.el));
-
-    function setMode(m) {
-      // If currently playing bips, don’t forcibly interrupt unless leaving chromatin area
-      if (mode === "bips" && m === "chromatin") return;
-      mode = m;
-
-      if (mode === "dna") {
-        miniTitle.textContent = "DNA";
-        miniSub.textContent = "Hover ‘base pair’ or ‘gene’ in the text.";
-      } else if (mode === "chromatin") {
-        miniTitle.textContent = "Chromatin";
-        miniSub.textContent = "DNA packaged into a moving polymer chain.";
-      } else if (mode === "bips") {
-        miniTitle.textContent = "BIPS";
-        miniSub.textContent = "Watch clusters form around hotspots.";
+      if (scene === "dna") {
+        sceneTitle.textContent = "DNA";
+        termBasePair.disabled = false;
+        termGene.disabled = false;
+        nextBtn.textContent = "Next →";
+        bipsControls.classList.remove("show");
+        legend.classList.remove("show");
+      } else if (scene === "chromatin") {
+        sceneTitle.textContent = "Chromatin";
+        termBasePair.disabled = true;
+        termGene.disabled = true;
+        nextBtn.textContent = "↺ DNA";
+        bipsControls.classList.add("show");
+        legend.classList.add("show");
+      } else if (scene === "bips") {
+        sceneTitle.textContent = "BIPS";
+        termBasePair.disabled = true;
+        termGene.disabled = true;
+        nextBtn.textContent = "↺ DNA";
+        bipsControls.classList.add("show");
+        legend.classList.add("show");
       }
     }
 
-    // ============================================================
-    // Hover interactions for terms ("base pair", "gene")
-    // ============================================================
-    document.querySelectorAll(".term").forEach(span => {
-      span.addEventListener("mouseenter", () => {
-        hoverHighlight = span.dataset.highlight;
-      });
-      span.addEventListener("mouseleave", () => {
-        hoverHighlight = null;
-      });
+    // Buttons
+    nextBtn.addEventListener("click", () => {
+      if (scene === "dna") setScene("chromatin");
+      else setScene("dna");
+    });
+    backBtn.addEventListener("click", () => setScene("dna"));
+
+    // DNA term toggles
+    termBasePair.addEventListener("click", () => {
+      highlight = (highlight === "basepair") ? null : "basepair";
+      hideTip();
+      if (highlight === "basepair") {
+        showTip("Base pair", "A “rung” connecting the two DNA strands (A–T or C–G).");
+      }
+    });
+    termGene.addEventListener("click", () => {
+      highlight = (highlight === "gene") ? null : "gene";
+      hideTip();
+      if (highlight === "gene") {
+        showTip("Gene", "A stretch of DNA that can be read to make RNA (and often proteins).");
+      }
     });
 
+    // ---------- RNG ----------
+    function randn() {
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+
     // ============================================================
-    // Chromatin / BIPS animation world
+    // DNA double helix (canvas)
+    // ============================================================
+    function drawBackground() {
+      ctx.fillStyle = "#050507";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // subtle specks
+      ctx.fillStyle = "rgba(255,255,255,0.035)";
+      for (let i = 0; i < 140; i++) {
+        const x = (i * 97) % canvas.width;
+        const y = (i * 181) % canvas.height;
+        ctx.fillRect(x, y, 2, 2);
+      }
+    }
+
+    function glow(x, y, r, color, blur = 18) {
+      ctx.save();
+      ctx.shadowColor = color;
+      ctx.shadowBlur = blur;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawDNA() {
+      const W = canvas.width, H = canvas.height;
+
+      // helix geometry
+      const cx = W * 0.52;
+      const cy = H * 0.56;
+      const amp = H * 0.14;
+      const pitch = W * 0.022;
+      const turns = 44;
+
+      // highlight choices
+      const baseHi = (highlight === "basepair");
+      const geneHi = (highlight === "gene");
+      const geneStart = 15;
+      const geneEnd = 24;
+
+      const tNow = performance.now() * 0.0016;
+
+      // helix ladder
+      for (let i = 0; i < turns; i++) {
+        const t = i * 0.55 + tNow;
+        const x = cx - (turns * pitch) / 2 + i * pitch;
+
+        const y1 = cy + amp * Math.sin(t);
+        const y2 = cy + amp * Math.sin(t + Math.PI);
+
+        const inGene = (i >= geneStart && i <= geneEnd);
+
+        const highlightRung = (baseHi && (i % 4 === 0)) || (geneHi && inGene);
+
+        const rungColor =
+          geneHi && inGene ? "rgba(0,255,140,0.90)" :
+          baseHi && (i % 4 === 0) ? "rgba(255,255,255,0.90)" :
+          "rgba(255,255,255,0.20)";
+
+        ctx.save();
+        ctx.strokeStyle = rungColor;
+        ctx.lineWidth = highlightRung ? 3.0 : 2.0;
+        ctx.beginPath();
+        ctx.moveTo(x, y1);
+        ctx.lineTo(x, y2);
+        ctx.stroke();
+        ctx.restore();
+
+        // backbone nodes
+        const backboneColor = (geneHi && inGene) ? "rgba(0,255,140,0.65)" : "rgba(255,255,255,0.55)";
+        glow(x, y1, 5.0, backboneColor, 18);
+        glow(x, y2, 5.0, backboneColor, 18);
+      }
+
+      // small arrows/labels (subtle, not blocking)
+      // (These are visual-only; interaction is via the top-left buttons)
+      ctx.save();
+      ctx.font = "600 14px system-ui";
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.lineWidth = 2;
+
+      // Base pair label
+      const bx = W * 0.16, by = H * 0.34;
+      ctx.fillText("base pair", bx, by);
+      ctx.beginPath(); ctx.moveTo(bx + 10, by + 6); ctx.lineTo(W * 0.36, H * 0.46); ctx.stroke();
+
+      // Gene label
+      const gx = W * 0.70, gy = H * 0.76;
+      ctx.fillText("gene", gx, gy);
+      ctx.strokeStyle = "rgba(0,255,140,0.18)";
+      ctx.beginPath(); ctx.moveTo(gx + 6, gy + 6); ctx.lineTo(W * 0.60, H * 0.60); ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // ============================================================
+    // Chromatin polymer + BIPS clusters (canvas)
     // ============================================================
     const world = {
       beads: [],
@@ -261,33 +305,30 @@
       isHot: [],
       frame: 0,
       playing: false,
-      // cluster targets (computed at start)
-      clusterCenters: []
+      centers: []
     };
 
     const params = {
-      beadCount: 160,
+      beadCount: 180,
       restLen: 10,
+
       kSpring: 0.18,
       kBend: 0.010,
       damping: 0.92,
-      brownian: 0.16,
+      brownian: 0.15,
 
-      // excluded volume (keeps it from collapsing into a single overlapped ball)
-      beadRadius: 4.6,
+      beadRadius: 4.7,
       kRepel: 0.55,
 
-      // BIPS pull strength (toward cluster centers)
-      kClusterPull: 0.0030,
-      kHotPull: 0.0060,
-
-      // choose 3 cluster centres
-      clusterCount: 3
+      // BIPS: gentle pull to 3 centers + stronger pull for hotspots
+      kClusterPull: 0.0028,
+      kHotPull: 0.0068
     };
 
     function initPolymer() {
       resizeCanvas();
       const W = canvas.width, H = canvas.height;
+
       world.frame = 0;
       world.playing = false;
 
@@ -296,17 +337,17 @@
       world.vy = new Array(params.beadCount).fill(0);
       world.isHot = new Array(params.beadCount).fill(false);
 
-      const startX = W * 0.10;
-      const midY   = H * 0.58;
+      // long polymer across the screen
+      const startX = W * 0.08;
+      const midY = H * 0.58;
 
-      for (let i=0; i<params.beadCount; i++) {
+      for (let i = 0; i < params.beadCount; i++) {
         const x = startX + i * params.restLen;
         const y = midY + (H * 0.05) * Math.sin(i * 0.20);
         world.beads.push({ x, y });
       }
 
-      // mark "hotspots" (TUs) in red — only a few, grouped so we form 2–3 clusters
-      // pick 3 hotspot bands
+      // hotspots (TUs) - RED
       const bands = [
         Math.floor(params.beadCount * 0.25),
         Math.floor(params.beadCount * 0.52),
@@ -319,30 +360,30 @@
         }
       }
 
-      // cluster centers (fixed locations in space) — spread across the canvas
-      world.clusterCenters = [
+      // cluster centers (fixed) - 3
+      world.centers = [
         { x: W * 0.34, y: H * 0.50 },
-        { x: W * 0.55, y: H * 0.60 },
-        { x: W * 0.70, y: H * 0.45 }
+        { x: W * 0.56, y: H * 0.62 },
+        { x: W * 0.72, y: H * 0.46 }
       ];
     }
 
     function springForce(ax, ay, bx, by, rest, k) {
       const dx = bx - ax, dy = by - ay;
-      const r = Math.sqrt(dx*dx + dy*dy) + 1e-6;
+      const r = Math.sqrt(dx * dx + dy * dy) + 1e-6;
       const f = k * (r - rest);
       return { fx: f * dx / r, fy: f * dy / r };
     }
 
     function bendForce(p0, p1, p2, kB) {
-      const mx = 0.5*(p0.x + p2.x);
-      const my = 0.5*(p0.y + p2.y);
-      return { fx: kB*(mx - p1.x), fy: kB*(my - p1.y) };
+      const mx = 0.5 * (p0.x + p2.x);
+      const my = 0.5 * (p0.y + p2.y);
+      return { fx: kB * (mx - p1.x), fy: kB * (my - p1.y) };
     }
 
     function repelPair(ax, ay, bx, by, minDist, k) {
       const dx = bx - ax, dy = by - ay;
-      const r2 = dx*dx + dy*dy + 1e-6;
+      const r2 = dx * dx + dy * dy + 1e-6;
       const r = Math.sqrt(r2);
       if (r >= minDist) return { fx: 0, fy: 0 };
       const overlap = (minDist - r);
@@ -367,58 +408,56 @@
       const n = params.beadCount;
       world.frame++;
 
-      // neighbour springs
-      for (let i=0; i<n-1; i++) {
-        const a = world.beads[i];
-        const b = world.beads[i+1];
-        const f = springForce(a.x,a.y,b.x,b.y, params.restLen, params.kSpring);
-        world.vx[i]   += f.fx; world.vy[i]   += f.fy;
-        world.vx[i+1] -= f.fx; world.vy[i+1] -= f.fy;
+      // springs (neighbors)
+      for (let i = 0; i < n - 1; i++) {
+        const a = world.beads[i], b = world.beads[i + 1];
+        const f = springForce(a.x, a.y, b.x, b.y, params.restLen, params.kSpring);
+        world.vx[i] += f.fx; world.vy[i] += f.fy;
+        world.vx[i + 1] -= f.fx; world.vy[i + 1] -= f.fy;
       }
 
       // bending
-      for (let i=1; i<n-1; i++) {
-        const f = bendForce(world.beads[i-1], world.beads[i], world.beads[i+1], params.kBend);
+      for (let i = 1; i < n - 1; i++) {
+        const f = bendForce(world.beads[i - 1], world.beads[i], world.beads[i + 1], params.kBend);
         world.vx[i] += f.fx;
         world.vy[i] += f.fy;
       }
 
-      // excluded volume (local window)
+      // excluded volume (local)
       const minBB = 2 * params.beadRadius;
-      for (let i=0; i<n; i++) {
+      for (let i = 0; i < n; i++) {
         const i0 = Math.max(0, i - 14);
         const i1 = Math.min(n - 1, i + 14);
-        for (let j=i0; j<=i1; j++) {
+        for (let j = i0; j <= i1; j++) {
           if (j === i) continue;
           if (Math.abs(i - j) <= 1) continue;
-          const a = world.beads[i];
-          const b = world.beads[j];
-          const f = repelPair(a.x,a.y,b.x,b.y, minBB, params.kRepel);
+          const a = world.beads[i], b = world.beads[j];
+          const f = repelPair(a.x, a.y, b.x, b.y, minBB, params.kRepel);
           world.vx[i] -= f.fx; world.vy[i] -= f.fy;
           world.vx[j] += f.fx; world.vy[j] += f.fy;
         }
       }
 
-      // BIPS-like clustering pull ONLY when playing
-      if (mode === "bips" && world.playing) {
-        // pull every bead gently toward nearest cluster center
-        for (let i=0; i<n; i++) {
+      // BIPS pulling (only when playing)
+      if (scene === "bips" && world.playing) {
+        for (let i = 0; i < n; i++) {
           const p = world.beads[i];
 
-          // find nearest center
-          let best = { d2: Infinity, c: null };
-          for (const c of world.clusterCenters) {
+          // nearest center
+          let best = { d2: Infinity, c: world.centers[0] };
+          for (const c of world.centers) {
             const dx = c.x - p.x, dy = c.y - p.y;
-            const d2 = dx*dx + dy*dy;
+            const d2 = dx * dx + dy * dy;
             if (d2 < best.d2) best = { d2, c };
           }
-
           const c = best.c;
           const dx = c.x - p.x, dy = c.y - p.y;
+
+          // gentle pull for all
           world.vx[i] += params.kClusterPull * dx;
           world.vy[i] += params.kClusterPull * dy;
 
-          // hotspots pull harder (these represent strong binding sites)
+          // stronger pull for hotspots
           if (world.isHot[i]) {
             world.vx[i] += params.kHotPull * dx;
             world.vy[i] += params.kHotPull * dy;
@@ -427,225 +466,97 @@
       }
 
       // integrate
-      for (let i=0; i<n; i++) {
-        // brownian
+      for (let i = 0; i < n; i++) {
         world.vx[i] += params.brownian * randn();
         world.vy[i] += params.brownian * randn();
 
-        // damping
         world.vx[i] *= params.damping;
         world.vy[i] *= params.damping;
 
-        // update
         world.beads[i].x += world.vx[i];
         world.beads[i].y += world.vy[i];
 
-        // soft walls
         const out = softWalls(world.beads[i].x, world.beads[i].y, world.vx[i], world.vy[i]);
         world.vx[i] = out.vx;
         world.vy[i] = out.vy;
       }
     }
 
-    // ============================================================
-    // DNA drawing with hover highlights
-    // ============================================================
-    function drawBackground() {
-      ctx.fillStyle = "#050507";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      // subtle noise points
-      ctx.fillStyle = "rgba(255,255,255,0.04)";
-      for (let i=0;i<120;i++){
-        const x=(i*97)%canvas.width;
-        const y=(i*181)%canvas.height;
-        ctx.fillRect(x,y,2,2);
-      }
-    }
-
-    function glow(x,y,r,color,blur=18){
-      ctx.save();
-      ctx.shadowColor = color;
-      ctx.shadowBlur = blur;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(x,y,r,0,Math.PI*2);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    function drawDNA() {
-      const W = canvas.width, H = canvas.height;
-      const cx = W * 0.50, cy = H * 0.55;
-      const amp = H * 0.12;
-      const pitch = W * 0.020;
-      const turns = 40;
-
-      // decide highlight ranges
-      const highlightBasePairs = (hoverHighlight === "basepair");
-      const highlightGene = (hoverHighlight === "gene");
-
-      const geneStart = 14;
-      const geneEnd   = 22;
-
-      for (let i=0; i<turns; i++){
-        const t = i*0.55 + (performance.now()*0.0016);
-        const x = cx - (turns*pitch)/2 + i*pitch;
-
-        const y1 = cy + amp*Math.sin(t);
-        const y2 = cy + amp*Math.sin(t + Math.PI);
-
-        const inGene = (i >= geneStart && i <= geneEnd);
-
-        // base-pair rung highlight
-        const isBasePairHi = highlightBasePairs && (i % 4 === 0);
-        const isGeneHi = highlightGene && inGene;
-
-        const rungCol = isBasePairHi ? "rgba(255,255,255,0.95)"
-                      : isGeneHi ? "rgba(0,255,140,0.95)"
-                      : "rgba(255,255,255,0.22)";
-
-        ctx.save();
-        ctx.strokeStyle = rungCol;
-        ctx.lineWidth = (isBasePairHi || isGeneHi) ? 3.0 : 2.0;
-        ctx.beginPath();
-        ctx.moveTo(x,y1);
-        ctx.lineTo(x,y2);
-        ctx.stroke();
-        ctx.restore();
-
-        // backbone beads
-        const backCol = isGeneHi ? "rgba(0,255,140,0.75)" : "rgba(255,255,255,0.55)";
-        glow(x, y1, 4.8, backCol, 18);
-        glow(x, y2, 4.8, backCol, 18);
-      }
-
-      // labels arrows (simple)
-      ctx.save();
-      ctx.fillStyle = "rgba(255,255,255,0.75)";
-      ctx.font = "600 16px system-ui";
-
-      // base pair label
-      const lx = W*0.22, ly = H*0.32;
-      ctx.fillText("base pair (a rung)", lx, ly);
-
-      // draw arrow to a rung
-      ctx.strokeStyle = "rgba(255,255,255,0.30)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(lx + 10, ly + 8);
-      ctx.lineTo(W*0.38, H*0.42);
-      ctx.stroke();
-
-      // gene label
-      const gx = W*0.68, gy = H*0.72;
-      ctx.fillStyle = "rgba(255,255,255,0.75)";
-      ctx.fillText("gene (a section)", gx, gy);
-      ctx.strokeStyle = "rgba(0,255,140,0.30)";
-      ctx.beginPath();
-      ctx.moveTo(gx + 10, gy + 8);
-      ctx.lineTo(W*0.60, H*0.58);
-      ctx.stroke();
-
-      ctx.restore();
-    }
-
-    // ============================================================
-    // Polymer drawing + BIPS clusters
-    // ============================================================
     function drawPolymer() {
-      // chain line
+      // chain
       ctx.save();
-      ctx.strokeStyle = "rgba(255,255,255,0.28)";
+      ctx.strokeStyle = "rgba(255,255,255,0.26)";
       ctx.lineWidth = 3.0;
       ctx.beginPath();
-      world.beads.forEach((p,i) => {
-        if (i===0) ctx.moveTo(p.x,p.y);
-        else ctx.lineTo(p.x,p.y);
+      world.beads.forEach((p, i) => {
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
       });
       ctx.stroke();
       ctx.restore();
 
-      // beads
-      for (let i=0; i<world.beads.length; i++){
+      // beads (white) and hotspots (red)
+      for (let i = 0; i < world.beads.length; i++) {
         const p = world.beads[i];
         if (world.isHot[i]) {
-          // hotspots (TUs) are red (as you asked)
-          glow(p.x,p.y, 6.6, "rgba(255,60,60,0.95)", 28);
+          glow(p.x, p.y, 6.8, "rgba(255,60,60,0.95)", 30);
         } else {
-          glow(p.x,p.y, 4.8, "rgba(255,255,255,0.55)", 16);
+          glow(p.x, p.y, 4.8, "rgba(255,255,255,0.55)", 16);
         }
       }
 
-      // cluster centers (subtle hint during bips)
-      if (mode === "bips") {
+      // subtle cluster fog
+      if (scene === "bips") {
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
-        for (const c of world.clusterCenters) {
-          glow(c.x, c.y, 42, "rgba(255,255,255,0.015)", 60);
+        for (const c of world.centers) {
+          glow(c.x, c.y, 52, "rgba(255,255,255,0.014)", 70);
         }
         ctx.restore();
       }
     }
 
     // ============================================================
-    // Animation loop
+    // Controls for polymer scene
     // ============================================================
-    function render() {
+    playBtn.addEventListener("click", () => {
+      if (scene !== "chromatin" && scene !== "bips") return;
+      setScene("bips");
+      world.playing = true;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      initPolymer();
+      setScene("chromatin");
+    });
+
+    // ============================================================
+    // Main loop
+    // ============================================================
+    function tick() {
+      resizeCanvas();
       drawBackground();
 
-      if (mode === "dna") {
+      if (scene === "dna") {
         drawDNA();
       } else {
-        // chromatin or bips
         stepPolymer();
         drawPolymer();
       }
 
-      requestAnimationFrame(render);
-    }
-
-    // ============================================================
-    // Buttons: Play / Reset BIPS
-    // ============================================================
-    const playBipsBtn = document.getElementById("playBipsBtn");
-    const resetBipsBtn = document.getElementById("resetBipsBtn");
-
-    playBipsBtn.addEventListener("click", () => {
-      mode = "bips";
-      world.playing = true;
-      miniTitle.textContent = "BIPS";
-      miniSub.textContent = "Clusters forming… (bridging-induced attraction in cartoon form)";
-    });
-
-    resetBipsBtn.addEventListener("click", () => {
-      // return to chromatin mode, reset polymer
-      initPolymer();
-      mode = "chromatin";
-      world.playing = false;
-      miniTitle.textContent = "Chromatin";
-      miniSub.textContent = "DNA packaged into a moving polymer chain.";
-    });
-
-    // ============================================================
-    // RNG helper
-    // ============================================================
-    function randn(){
-      // Box-Muller
-      let u=0,v=0;
-      while(u===0) u=Math.random();
-      while(v===0) v=Math.random();
-      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+      requestAnimationFrame(tick);
     }
 
     // Start
     resizeCanvas();
     initPolymer();
-    render();
+    setScene("dna");
+    tick();
   </script>
 
 </body>
 </html>
+
 
 
 
