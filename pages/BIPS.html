@@ -137,7 +137,7 @@
     .pill.ghost{ background: rgba(255,255,255,0.04); }
     .pill:disabled{ opacity: 0.35; cursor: default; }
 
-    /* ACT 2 extra buttons (Base pair / Gene) */
+    /* ACT 2+3+4 mini buttons (Base pair / Gene / Epigenetics) */
     .miniControls{
       display:flex;
       gap: 10px;
@@ -162,6 +162,7 @@
     .miniPill:hover{ background: rgba(255,255,255,0.10); }
     .miniPill.white{ border-color: rgba(255,255,255,0.20); }
     .miniPill.green{ border-color: rgba(0,255,140,0.30); color: var(--green); }
+    .miniPill.purple{ border-color: rgba(190,120,255,0.35); color: var(--purple); }
 
     /* CANVAS PANEL */
     .stage{
@@ -183,7 +184,7 @@
       touch-action: none; /* important for pointer dragging on mobile */
     }
 
-    /* Act-image overlay (for acts 0 and 7) */
+    /* Act-image overlay (for opening and final acts) */
     .stageImage{
       position:absolute;
       inset: 0;
@@ -270,10 +271,11 @@
 
         <div class="storyText" id="storyText"></div>
 
-        <!-- ONLY shown in Act 2 and Act 3 (DNA acts): no canvas arrows for base pairs / gene -->
+        <!-- Mini buttons: shown for Act 2 (DNA), Act 3 (Gene), Act 4 (Epigenetics) only -->
         <div class="miniControls" id="dnaButtons" style="display:none;">
           <button class="miniPill white" id="btnBasepair" type="button">Base pairs</button>
           <button class="miniPill green" id="btnGene" type="button">Gene</button>
+          <button class="miniPill purple" id="btnEpi" type="button">Epigenetics</button>
         </div>
 
         <div class="controls">
@@ -287,7 +289,7 @@
     <section class="stage" aria-label="Animation canvas">
       <canvas id="stageCanvas"></canvas>
 
-      <!-- New: images for Act 0 and Act 8 -->
+      <!-- images for opening + final -->
       <img id="stageImage" class="stageImage" alt="Act image"/>
 
       <div class="dragHint" id="dragHint">Act 6: drag the big TF (red)</div>
@@ -350,6 +352,7 @@
     const dnaButtons = document.getElementById("dnaButtons");
     const btnBasepair = document.getElementById("btnBasepair");
     const btnGene = document.getElementById("btnGene");
+    const btnEpi = document.getElementById("btnEpi");
 
     // ============================================================
     // Clickable words (text) + click-to-highlight (DNA)
@@ -369,51 +372,25 @@
       if (id === "epi") highlight = (highlight === "epi") ? null : "epi";
     });
 
-    // Buttons for DNA acts (Act 2 and Act 3)
+    // Buttons for DNA/Gene/Epi acts
     btnBasepair.addEventListener("click", () => {
       highlight = (highlight === "basepair") ? null : "basepair";
     });
     btnGene.addEventListener("click", () => {
       highlight = (highlight === "gene") ? null : "gene";
     });
-
-    // ============================================================
-    // DNA label click regions (ONLY for epigenetics lock label)
-    // ============================================================
-    let rebuildClickables = true;
-    const clickables = []; // {id, x,y,w,h}
-    function clearClickables(){ clickables.length = 0; }
-    function addClickable(id, x, y, w, h){ clickables.push({id, x,y,w,h}); }
-
-    function mouseToCanvas(e){
-      const rect = canvas.getBoundingClientRect();
-      const sx = (e.clientX - rect.left);
-      const sy = (e.clientY - rect.top);
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      return { x: sx * scaleX, y: sy * scaleY };
-    }
-
-    canvas.addEventListener("click", (e) => {
-      if (mode !== "epi") return;
-      const p = mouseToCanvas(e);
-      for (let i = clickables.length - 1; i >= 0; i--) {
-        const c = clickables[i];
-        if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h) {
-          if (c.id === "locked") highlight = (highlight === "epi") ? null : "epi";
-          break;
-        }
-      }
+    btnEpi.addEventListener("click", () => {
+      highlight = (highlight === "epi") ? null : "epi";
     });
 
     // ============================================================
-    // Acts (UNCHANGED behaviour, just: Act 0 uses image, DNA starts Act 1+)
+    // Acts
     // ============================================================
     let actIndex = 0;
-    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act8(blank)
+    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act1_img | act8_img
 
     const ACTS = [
- {
+      {
         mode: "act1_img",
         title: "How do cells know who they are?",
         sub: "Most cells carry the same DNA — but they don’t behave the same. Why?",
@@ -430,8 +407,7 @@
             DNA isn’t just a code — it’s also a <strong>3D object</strong> that folds and moves. That folding can change what gets read.
           </p>
         `,
-        showLegend: false,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: false
       },
       {
         mode: "dna",
@@ -449,11 +425,10 @@
             Those rungs are called <strong>base pairs</strong>.
           </p>
           <p>
-            Click the buttons below to highlight what a <strong>base pair</strong> looks like on the helix.
+            Click the button below to highlight what a <strong>base pair</strong> looks like on the helix.
           </p>
         `,
-        showLegend: false,
-        buttons: { basepair:true, gene:false, epi:false },
+        showLegend: false
       },
       {
         mode: "dna",
@@ -471,8 +446,7 @@
             Click the <strong>Gene</strong> button to highlight one gene-sized region on the helix.
           </p>
         `,
-        showLegend: false,
-        buttons: { basepair:false, gene:true, epi:false },
+        showLegend: false
       },
       {
         mode: "epi",
@@ -492,8 +466,7 @@
             DNA also has <strong>physics</strong> — it folds in 3D.
           </p>
         `,
-        showLegend: false,
-        buttons: { basepair:false, gene:false, epi:true },
+        showLegend: false
       },
       {
         mode: "act4",
@@ -512,8 +485,7 @@
             <strong>Try it:</strong> drag the chain and fold it over itself. Let go and it will keep wiggling.
           </p>
         `,
-        showLegend: true,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: true
       },
       {
         mode: "act5",
@@ -528,8 +500,7 @@
             In this act, TFs (red) mostly wander. The chromatin chain is present, but nothing is pulling it together yet.
           </p>
         `,
-        showLegend: true,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: true
       },
       {
         mode: "act6",
@@ -544,8 +515,7 @@
             <strong>Drag the big red TF</strong>. The chromatin will slowly wrap around it, making a dense region.
           </p>
         `,
-        showLegend: true,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: true
       },
       {
         mode: "act7",
@@ -561,8 +531,7 @@
             and additional TFs drift <strong>slowly</strong> toward it.
           </p>
         `,
-        showLegend: true,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: true
       },
       {
         mode: "act8_img",
@@ -577,8 +546,7 @@
             That means 3D structure isn’t just “packing” — it can help bias which genes get read, and help stabilise a cell’s identity.
           </p>
         `,
-        showLegend: false,
-        buttons: { basepair:false, gene:false, epi:false },
+        showLegend: false
       }
     ];
 
@@ -605,16 +573,32 @@
       if (A.showLegend) legend.classList.add("show");
       else legend.classList.remove("show");
 
-      // Show DNA buttons ONLY in the DNA acts (What is DNA / What is a gene)
-      const showDNABtns = (mode === "dna");
-      dnaButtons.style.display = showDNABtns ? "flex" : "none";
+      // Mini buttons visibility logic:
+      // Act 2: Base pairs only
+      // Act 3: Base pairs + Gene
+      // Act 4: Epigenetics only
+      const showMini = (mode === "dna" || mode === "epi");
+      dnaButtons.style.display = showMini ? "flex" : "none";
 
-      // Image overlay logic
-      if (mode === "img_open") {
+      btnBasepair.style.display = "none";
+      btnGene.style.display = "none";
+      btnEpi.style.display = "none";
+
+      if (actIndex === 1) { // "What is DNA?"
+        btnBasepair.style.display = "inline-block";
+      } else if (actIndex === 2) { // "What is a gene?"
+        btnBasepair.style.display = "inline-block";
+        btnGene.style.display = "inline-block";
+      } else if (actIndex === 3) { // "Epigenetics"
+        btnEpi.style.display = "inline-block";
+      }
+
+      // Image overlay logic (FIXED MODES)
+      if (mode === "act1_img") {
         stageImage.src = "assets/who_am_I_cell.png";
         stageImage.classList.add("show");
         canvas.style.display = "none";
-      } else if (mode === "img_final") {
+      } else if (mode === "act8_img") {
         stageImage.src = "assets/bips.png";
         stageImage.classList.add("show");
         canvas.style.display = "none";
@@ -624,7 +608,6 @@
         canvas.style.display = "block";
       }
 
-      rebuildClickables = true;
       initActWorld(true);
     }
 
@@ -670,34 +653,6 @@
       if (stroke) ctx.stroke();
     }
 
-    function drawLabelWithArrow(label, xText, yText, xTo, yTo, color, id){
-      ctx.save();
-      ctx.font = "900 14px system-ui";
-      const padX = 10;
-      const textW = ctx.measureText(label).width;
-      const w = textW + 2*padX;
-      const h = 28;
-
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.70;
-      ctx.beginPath();
-      ctx.moveTo(xText + w*0.5, yText + h);
-      ctx.lineTo(xTo, yTo);
-      ctx.stroke();
-
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(0,0,0,0.40)";
-      ctx.strokeStyle = "rgba(255,255,255,0.16)";
-      roundRect(xText, yText, w, h, 999, true, true);
-
-      ctx.fillStyle = color;
-      ctx.fillText(label, xText + padX, yText + 19);
-      ctx.restore();
-
-      addClickable(id, xText, yText, w, h);
-    }
-
     // ============================================================
     // DNA helix (acts: dna + epi)
     // ============================================================
@@ -729,6 +684,7 @@
         return false;
       }
 
+      // Purple background blocks behind locked segments (kept)
       if (mode === "epi") {
         ctx.save();
         ctx.globalAlpha = epiHi ? 0.28 : 0.20;
@@ -789,26 +745,12 @@
         }
       }
 
-      if (rebuildClickables) { clearClickables(); rebuildClickables = false; }
-
-      // IMPORTANT CHANGE: NO "Base pairs" / "Gene" ARROWS EVER.
-      // Only keep the epigenetics lock label in epi mode.
-      if (mode === "epi") {
-        const lockIdx = 9;
-        function helixPoint(i){
-          const t = i*0.55 + tNow;
-          const x = cx - (turns*pitch)/2 + i*pitch;
-          const y1 = cy + amp*Math.sin(t);
-          const y2 = cy + amp*Math.sin(t + Math.PI);
-          return { x, y: 0.5*(y1+y2) };
-        }
-        const lk = helixPoint(lockIdx);
-        drawLabelWithArrow("Locked region", W*0.08, H*0.74, lk.x, lk.y, "rgba(190,120,255,0.95)", "locked");
-      }
+      // IMPORTANT: we removed the "Locked region" arrow + label entirely.
+      // Also: no basepair/gene arrows here either (as requested).
     }
 
     // ============================================================
-    // Polymer worlds for acts 4–7 (UNCHANGED from your reference)
+    // Polymer worlds for acts 4–7 (UNCHANGED)
     // ============================================================
     const world = {
       initialised: false,
@@ -839,6 +781,14 @@
     let draggingBead = { active:false, idx:-1 };
     let beadDragK = 0.020; // springy "mouse tether" strength
 
+    function mouseToCanvas(e){
+      const rect = canvas.getBoundingClientRect();
+      const sx = (e.clientX - rect.left);
+      const sy = (e.clientY - rect.top);
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return { x: sx * scaleX, y: sy * scaleY };
+    }
     function pointerPos(e){ return mouseToCanvas(e); }
 
     function findNearestBead(px, py, maxDist){
@@ -889,7 +839,6 @@
         bigTF.y = p.y - dragOffset.y;
         return;
       }
-      // for bead drag, we apply force in the integrator (so here we just store pointer)
       lastPointer.x = p.x;
       lastPointer.y = p.y;
     });
@@ -994,7 +943,6 @@
         const R1 = bigTF.radius * 3.8;
         for (let i=0;i<P.beadCount;i++){
           const t = i/(P.beadCount-1);
-          // strongest wrapping for middle section, weaker on ends
           const w = Math.exp(-Math.pow((t-0.52)/0.22,2));
           if (w < 0.12) continue;
 
@@ -1245,7 +1193,7 @@
       resizeCanvas();
 
       // If we're showing an image act, do NOT draw on canvas
-      if (mode === "img_open" || mode === "img_final"){
+      if (mode === "act1_img" || mode === "act8_img"){
         requestAnimationFrame(tick);
         return;
       }
@@ -1253,15 +1201,11 @@
       drawBackground();
 
       if (mode === "dna" || mode === "epi"){
-        rebuildClickables = true;
-        if (rebuildClickables) { clearClickables(); rebuildClickables = false; }
         drawDNAHelix();
       } else if (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7"){
         initActWorld(false);
         stepPolymer();
         drawPolymerAndTFs();
-      } else if (mode === "act8"){
-        // (not used anymore; kept for compatibility)
       }
 
       requestAnimationFrame(tick);
@@ -1272,7 +1216,6 @@
     // ============================================================
     window.addEventListener("resize", () => {
       resizeCanvas();
-      rebuildClickables = true;
       initActWorld(true);
     });
 
@@ -1282,6 +1225,7 @@
   </script>
 </body>
 </html>
+
 
 
 
