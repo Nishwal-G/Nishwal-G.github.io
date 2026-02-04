@@ -51,9 +51,7 @@
       overflow: hidden;
     }
 
-    .textInner{
-      padding: 16px 16px 14px 16px;
-    }
+    .textInner{ padding: 16px 16px 14px 16px; }
 
     .kicker{
       font-weight: 900;
@@ -156,6 +154,7 @@
       width:100%;
       height:100%;
       display:block;
+      touch-action: none; /* important for pointer dragging on mobile */
     }
 
     .legend{
@@ -319,7 +318,7 @@
     let rebuildClickables = true;
     const clickables = []; // {id, x,y,w,h}
     function clearClickables(){ clickables.length = 0; }
-    function addClickable(id, x, y, w, h){ clickables.push({id, x, y, w, h}); }
+    function addClickable(id, x, y, w, h){ clickables.push({id, x,y,w,h}); }
 
     function mouseToCanvas(e){
       const rect = canvas.getBoundingClientRect();
@@ -400,7 +399,7 @@
       {
         mode: "epi",
         title: "Act 3 — Epigenetics: locking some regions",
-        sub: "Epigenetic marks can make parts of DNA harder to access (no more base-pair/gene labels here).",
+        sub: "Epigenetic marks can make parts of DNA harder to access (only the lock label here).",
         html: `
           <p>
             Cells use ${bigWord("EPIGENETICS", "purple", "epi")} to keep some DNA regions closed.
@@ -414,27 +413,26 @@
       },
       {
         mode: "act4",
-        title: "Act 4 — DNA folds into chromatin (more folding, not collapse)",
-        sub: "The polymer forms several visible folds/loops, then just keeps wiggling.",
+        title: "Act 4 — DNA folds into chromatin (now interactive)",
+        sub: "Drag the chain to fold it over itself. It also keeps wiggling naturally.",
         html: `
           <p>
             DNA is extremely long, so it folds into <strong>chromatin</strong>.
             Here chromatin is a flexible chain (polymer).
           </p>
           <p>
-            This act shows <em>visible folding</em>: the chain loops over itself several times,
-            but it does not rapidly collapse into a tight ball.
+            <strong>Try it:</strong> drag on the chain and fold it over itself. Then let go and watch it keep wiggling.
           </p>
         `,
         showLegend: true
       },
       {
         mode: "act5",
-        title: "Act 5 — TFs wander while chromatin just sits there",
-        sub: "TFs float randomly; the polymer stays extended and does not collapse.",
+        title: "Act 5 — TFs wander while chromatin stays extended",
+        sub: "TFs float randomly; the polymer does not collapse.",
         html: `
           <p>
-            TFs (red) wander randomly in the nucleus. Chromatin (white) is present in the background.
+            TFs (red) wander randomly in the nucleus. Chromatin (white) is present as context.
           </p>
           <p>
             In this act, there is <strong>no attraction</strong> and no further folding — just wandering.
@@ -459,15 +457,15 @@
       },
       {
         mode: "act7",
-        title: "Act 7 — More big TFs move slowly toward the main hub",
-        sub: "No polymer collapse here: other big TFs drift slowly toward the wrapped TF.",
+        title: "Act 7 — Recruitment to a dense region (wrapped first)",
+        sub: "We start with chromatin already wrapped (high density), then other big TFs drift in slowly.",
         html: `
           <p>
-            Once a hub exists, it can recruit more proteins.
-            Here we show additional big TFs drifting <strong>slowly</strong> toward the main TF.
+            Once a dense hub exists, it can recruit more proteins.
+            Here the chromatin is <strong>already wrapped</strong> around the main TF (a high-density region).
           </p>
           <p>
-            The polymer does not collapse — it just sits in the scene as context.
+            Then additional big TFs drift <strong>slowly</strong> toward that hub.
           </p>
         `,
         showLegend: true
@@ -500,7 +498,7 @@
       prevBtn.disabled = (actIndex === 0);
       nextBtn.disabled = (actIndex === ACTS.length - 1);
 
-      // Reset only for acts 4–7 (not DNA/epi, not blank)
+      // Reset only for acts 4–7
       resetBtn.style.display = (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7") ? "inline-flex" : "none";
 
       dragHint.classList.toggle("show", mode === "act6");
@@ -688,9 +686,6 @@
       const gn = helixPoint(geneIdx);
       const lk = helixPoint(lockIdx);
 
-      // IMPORTANT CHANGE (1):
-      // In epigenetics act (mode === "epi"), DO NOT draw base-pair or gene arrows.
-      // Only draw the locked-region arrow.
       if (mode === "dna") {
         drawLabelWithArrow("Base pairs", W*0.08, H*0.26, bp.x, bp.y, "rgba(255,255,255,0.92)", "basepairs");
         drawLabelWithArrow("Gene",      W*0.74, H*0.78, gn.x, gn.y, "rgba(0,255,140,0.92)", "gene");
@@ -727,26 +722,77 @@
     let draggingTF = false;
     let dragOffset = {x:0, y:0};
 
+    // Act4: dragging the polymer (grab nearest bead)
+    let draggingBead = { active:false, idx:-1 };
+    let beadDragK = 0.020; // springy "mouse tether" strength
+
+    function pointerPos(e){ return mouseToCanvas(e); }
+
+    function findNearestBead(px, py, maxDist){
+      let best = {idx:-1, d2: maxDist*maxDist};
+      for (let i=0;i<world.beads.length;i++){
+        const b = world.beads[i];
+        const dx = b.x - px, dy = b.y - py;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < best.d2){
+          best = {idx:i, d2};
+        }
+      }
+      return best.idx;
+    }
+
     canvas.addEventListener("pointerdown", (e) => {
-      if (mode !== "act6") return;
-      const p = mouseToCanvas(e);
-      const dx = p.x - bigTF.x;
-      const dy = p.y - bigTF.y;
-      if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
-        draggingTF = true;
-        dragOffset.x = dx;
-        dragOffset.y = dy;
-        canvas.setPointerCapture(e.pointerId);
+      const p = pointerPos(e);
+
+      // Act 6: drag big TF
+      if (mode === "act6"){
+        const dx = p.x - bigTF.x;
+        const dy = p.y - bigTF.y;
+        if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
+          draggingTF = true;
+          dragOffset.x = dx;
+          dragOffset.y = dy;
+          canvas.setPointerCapture(e.pointerId);
+          return;
+        }
+      }
+
+      // Act 4: drag polymer bead
+      if (mode === "act4"){
+        const idx = findNearestBead(p.x, p.y, 26);
+        if (idx !== -1){
+          draggingBead.active = true;
+          draggingBead.idx = idx;
+          canvas.setPointerCapture(e.pointerId);
+        }
       }
     });
+
     canvas.addEventListener("pointermove", (e) => {
-      if (!draggingTF) return;
-      const p = mouseToCanvas(e);
-      bigTF.x = p.x - dragOffset.x;
-      bigTF.y = p.y - dragOffset.y;
+      const p = pointerPos(e);
+
+      if (draggingTF){
+        bigTF.x = p.x - dragOffset.x;
+        bigTF.y = p.y - dragOffset.y;
+        return;
+      }
+      // for bead drag, we apply force in the integrator (so here we just store pointer)
+      lastPointer.x = p.x;
+      lastPointer.y = p.y;
     });
-    canvas.addEventListener("pointerup", () => { draggingTF = false; });
-    canvas.addEventListener("pointercancel", () => { draggingTF = false; });
+
+    canvas.addEventListener("pointerup", () => {
+      draggingTF = false;
+      draggingBead.active = false;
+      draggingBead.idx = -1;
+    });
+    canvas.addEventListener("pointercancel", () => {
+      draggingTF = false;
+      draggingBead.active = false;
+      draggingBead.idx = -1;
+    });
+
+    const lastPointer = {x:0,y:0};
 
     // extra big TFs for act7
     let bigTFs = []; // {x,y,vx,vy,radius}
@@ -776,9 +822,7 @@
         world.beads.push({x,y});
       }
 
-      // Act 4 (CHANGE 2): stronger initial “folding into itself”
-      // We bias THREE broad regions toward two nearby anchors to create
-      // several obvious folds/loops, but we don't keep collapsing afterwards.
+      // Act 4: pre-fold (same as before)
       if (mode === "act4"){
         const a1 = {x: W*0.44, y: H*0.50};
         const a2 = {x: W*0.60, y: H*0.62};
@@ -787,21 +831,17 @@
           const p = world.beads[i];
           const t = i/(P.beadCount-1);
 
-          // three broad "lumps" along the chain
           const w1 = Math.exp(-Math.pow((t-0.25)/0.14,2));
           const w2 = Math.exp(-Math.pow((t-0.50)/0.14,2));
           const w3 = Math.exp(-Math.pow((t-0.75)/0.14,2));
 
-          // alternate anchors so the chain folds back-and-forth
           const ax = a1.x*w1 + a2.x*w2 + a1.x*w3;
           const ay = a1.y*w1 + a2.y*w2 + a1.y*w3;
 
-          const w = 0.55*(w1+w2+w3); // overall strength of folding
+          const w = 0.55*(w1+w2+w3);
           p.x = p.x*(1-w) + ax*w;
           p.y = p.y*(1-w) + ay*w;
         }
-
-        // add a small sideways "kink" so the folds are visually clear
         for (let i=0;i<P.beadCount;i++){
           const p = world.beads[i];
           const t = i/(P.beadCount-1);
@@ -809,7 +849,7 @@
         }
       }
 
-      // Act 5: polymer static-ish, TFs wander
+      // Act 5: TF wander
       world.tfs = [];
       if (mode === "act5"){
         for (let i=0;i<36;i++){
@@ -821,24 +861,44 @@
         }
       }
 
-      // Act 6: big TF in scene
+      // Act 6: big TF
       if (mode === "act6"){
         bigTF.x = W*0.60;
         bigTF.y = H*0.56;
         bigTF.vx = 0; bigTF.vy = 0;
       }
 
-      // Act 7: big TF fixed, other big TFs drift toward it, polymer just sits
+      // Act 7: start with polymer ALREADY WRAPPED around bigTF (high density),
+      // then drift additional big TFs in.
       if (mode === "act7"){
         bigTF.x = W*0.58;
         bigTF.y = H*0.54;
         bigTF.vx = 0; bigTF.vy = 0;
 
+        // pre-wrap: nudge many beads into a loose spiral around bigTF
+        const center = {x: bigTF.x, y: bigTF.y};
+        const R0 = bigTF.radius * 1.10;
+        const R1 = bigTF.radius * 3.8;
+        for (let i=0;i<P.beadCount;i++){
+          const t = i/(P.beadCount-1);
+          // strongest wrapping for middle section, weaker on ends
+          const w = Math.exp(-Math.pow((t-0.52)/0.22,2));
+          if (w < 0.12) continue;
+
+          const angle = (i*0.36);
+          const r = (R0 + (R1-R0)*(0.5+0.5*Math.sin(i*0.07))) * (0.6 + 0.5*w);
+          const targetX = center.x + r*Math.cos(angle);
+          const targetY = center.y + r*Math.sin(angle);
+
+          world.beads[i].x = world.beads[i].x*(1-w) + targetX*w;
+          world.beads[i].y = world.beads[i].y*(1-w) + targetY*w;
+        }
+
         bigTFs = [];
         const count = 6;
         for (let i=0;i<count;i++){
           bigTFs.push({
-            x: W*(0.15 + 0.70*Math.random()),
+            x: W*(0.12 + 0.76*Math.random()),
             y: H*(0.18 + 0.64*Math.random()),
             vx: 0, vy: 0,
             radius: 26 + 6*Math.random()
@@ -904,7 +964,7 @@
       world.frame++;
       const n = P.beadCount;
 
-      // standard polymer internal forces
+      // internal polymer forces
       for (let i=0;i<n-1;i++){
         const a=world.beads[i], b=world.beads[i+1];
         const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
@@ -932,6 +992,16 @@
         }
       }
 
+      // Act 4: mouse tether to pull a bead (interactive folding)
+      if (mode === "act4" && draggingBead.active && draggingBead.idx >= 0){
+        const i = draggingBead.idx;
+        const b = world.beads[i];
+        const dx = (lastPointer.x - b.x);
+        const dy = (lastPointer.y - b.y);
+        world.bvx[i] += beadDragK * dx;
+        world.bvy[i] += beadDragK * dy;
+      }
+
       // Act 6: wrap around bigTF
       if (mode === "act6"){
         for (let i=0;i<n;i++){
@@ -942,12 +1012,13 @@
         }
       }
 
-      // integrate with per-act Brownian strength
+      // Act 7: keep polymer mostly steady (already wrapped), just a tiny wiggle
+      // (no extra wrapping force, to avoid "collapsey" feel)
       let brown = 0.16;
-      if (mode === "act4") brown = 0.22;      // lively wiggle + visible folds
-      if (mode === "act5") brown = 0.02;      // nearly static
-      if (mode === "act6") brown = 0.14;      // moderate
-      if (mode === "act7") brown = 0.01;      // basically static
+      if (mode === "act4") brown = 0.22;
+      if (mode === "act5") brown = 0.02;
+      if (mode === "act6") brown = 0.14;
+      if (mode === "act7") brown = 0.006;
 
       for (let i=0;i<n;i++){
         world.bvx[i] += brown*randn();
@@ -979,20 +1050,17 @@
         }
       }
 
-      // Act 7 (CHANGE 3): slow down drift of big TFs toward hub
+      // Act 7: big TFs drift slowly toward hub
       if (mode === "act7"){
         const W=canvas.width, H=canvas.height;
         const target = {x: bigTF.x, y: bigTF.y};
         for (const tf of bigTFs){
-          // weaker noise
           tf.vx += 0.12*randn();
           tf.vy += 0.12*randn();
 
-          // slower attraction
           tf.vx += 0.0016*(target.x - tf.x);
           tf.vy += 0.0016*(target.y - tf.y);
 
-          // more damping
           tf.vx *= 0.88;
           tf.vy *= 0.88;
           tf.x += tf.vx;
@@ -1042,14 +1110,15 @@
         glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 40);
       }
 
-      // act7 big TFs drifting in
+      // act7: show wrapped polymer + recruitment
       if (mode === "act7"){
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*4.6, "rgba(255,120,200,0.020)", 160);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.2, "rgba(255,120,200,0.018)", 170);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.8, "rgba(255,60,60,0.018)", 130);
         ctx.restore();
 
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 42);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 44);
 
         for (const tf of bigTFs){
           glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
@@ -1058,7 +1127,7 @@
     }
 
     // ============================================================
-    // Tick
+    // Main tick
     // ============================================================
     function tick(){
       resizeCanvas();
@@ -1080,7 +1149,7 @@
     }
 
     // ============================================================
-    // Init
+    // Init / resize
     // ============================================================
     window.addEventListener("resize", () => {
       resizeCanvas();
@@ -1094,6 +1163,7 @@
   </script>
 </body>
 </html>
+
 
 
 
