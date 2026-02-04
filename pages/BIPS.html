@@ -14,7 +14,7 @@
   <!-- Top progress bar -->
   <div id="scroll-progress"></div>
 
-  <!-- Header / nav (kept consistent with your site) -->
+  <!-- Header / nav -->
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="../index.html">Nishwal Gora</a>
@@ -31,14 +31,36 @@
     </div>
   </header>
 
-  <!-- Fixed “stage” (visual stays in center; slides change it) -->
+  <!-- Fixed stage (full screen canvas) -->
   <div class="stage" aria-hidden="true">
-    <canvas id="stageCanvas" width="1400" height="900"></canvas>
+    <canvas id="stageCanvas"></canvas>
 
-    <!-- Optional: tiny HUD -->
+    <!-- HUD + controls -->
     <div class="hud">
       <div class="hud-title" id="hudTitle">DNA</div>
       <div class="hud-sub" id="hudSub">Scroll to build the story</div>
+
+      <div class="hud-controls">
+        <div class="row">
+          <button id="resetBtn" type="button">Reset</button>
+          <button id="spawnBtn" type="button">Spawn TF</button>
+        </div>
+
+        <label class="slider">
+          <span>Stickiness</span>
+          <input id="stickiness" type="range" min="0" max="100" value="45">
+          <span class="val" id="stickVal">0.45</span>
+        </label>
+
+        <label class="slider">
+          <span>TF count</span>
+          <input id="tfCount" type="range" min="5" max="60" value="28">
+          <span class="val" id="tfVal">28</span>
+        </label>
+
+        <div class="tiny" id="statsLine">bridges: 0 • bound TFs: 0</div>
+        <div class="tiny">Tip: in Chromatin/TFs/BIPS you can drag beads or TFs.</div>
+      </div>
     </div>
   </div>
 
@@ -93,7 +115,7 @@
           TFs are proteins that float around and bind specific DNA sites.
           Think: sticky particles that recognise certain beads.
         </p>
-        <p class="mini">Try: drag a TF onto a special site.</p>
+        <p class="mini">Try: drag TFs around and watch them bind/unbind.</p>
       </div>
     </section>
 
@@ -104,7 +126,7 @@
           If a TF can bind two sites at once, it makes a <strong>bridge</strong>.
           Bridges pull DNA together, increasing local density → more binding → clusters.
         </p>
-        <p class="mini">This is positive feedback in 3D.</p>
+        <p class="mini">Turn up stickiness or TF count to see clusters emerge.</p>
       </div>
     </section>
 
@@ -129,9 +151,9 @@
   </footer>
 
   <script>
-    // =========================
+    // ============================================================
     // Scroll progress bar
-    // =========================
+    // ============================================================
     window.addEventListener("scroll", () => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -139,200 +161,14 @@
       document.getElementById("scroll-progress").style.width = progress + "%";
     });
 
-    // =========================
-    // PowerPoint feel: detect current slide + update stage
-    // =========================
+    // ============================================================
+    // Slide detection (PowerPoint scroll)
+    // ============================================================
     const slides = Array.from(document.querySelectorAll(".slide"));
     const hudTitle = document.getElementById("hudTitle");
     const hudSub = document.getElementById("hudSub");
 
-    const canvas = document.getElementById("stageCanvas");
-    const ctx = canvas.getContext("2d");
-
     let scene = "dna";
-
-    // --- Simple “morph parameters” per scene (we animate between them) ---
-    const targets = {
-      dna:      { zoom: 1.35, chain: 0.0, tfs: 0.0, bridges: 0.0 },
-      genes:    { zoom: 1.20, chain: 0.0, tfs: 0.0, bridges: 0.0 },
-      packing:  { zoom: 0.95, chain: 0.2, tfs: 0.0, bridges: 0.0 },
-      chromatin:{ zoom: 0.75, chain: 1.0, tfs: 0.0, bridges: 0.0 },
-      tfs:      { zoom: 0.70, chain: 1.0, tfs: 1.0, bridges: 0.0 },
-      bips:     { zoom: 0.62, chain: 1.0, tfs: 1.0, bridges: 1.0 },
-      takehome: { zoom: 0.62, chain: 1.0, tfs: 0.8, bridges: 1.0 },
-    };
-
-    // current animated state (eases toward target)
-    let anim = { zoom: 1.35, chain: 0.0, tfs: 0.0, bridges: 0.0 };
-
-    // chain points
-    const state = {
-      chain: [],
-      chainGrab: null,
-      tf: { x: 1050, y: 520, r: 26, grabbed: false, boundIndex: null },
-      bridges: []
-    };
-
-    function initChain() {
-      state.chain = [];
-      const n = 28;
-      for (let i = 0; i < n; i++) {
-        state.chain.push({
-          x: 360 + i * 26,
-          y: 520 + 55 * Math.sin(i * 0.32),
-          special: (i % 6 === 0)
-        });
-      }
-      state.chainGrab = null;
-      state.tf.x = 1050; state.tf.y = 520; state.tf.grabbed = false; state.tf.boundIndex = null;
-      state.bridges = [];
-    }
-    initChain();
-
-    function lerp(a,b,t){ return a + (b-a)*t; }
-
-    function draw() {
-      // ease anim → target
-      const tgt = targets[scene] || targets.dna;
-      anim.zoom    = lerp(anim.zoom, tgt.zoom, 0.07);
-      anim.chain   = lerp(anim.chain, tgt.chain, 0.07);
-      anim.tfs     = lerp(anim.tfs, tgt.tfs, 0.07);
-      anim.bridges = lerp(anim.bridges, tgt.bridges, 0.07);
-
-      // background
-      ctx.clearRect(0,0,canvas.width, canvas.height);
-      ctx.fillStyle = "#050507";
-      ctx.fillRect(0,0,canvas.width, canvas.height);
-
-      // subtle stars/noise (cheap and pretty)
-      ctx.fillStyle = "rgba(255,255,255,0.06)";
-      for (let i=0;i<140;i++){
-        const x = (i*97) % canvas.width;
-        const y = (i*181) % canvas.height;
-        ctx.fillRect(x,y,2,2);
-      }
-
-      // transform “zoom”
-      ctx.save();
-      const cx = canvas.width/2, cy = canvas.height/2;
-      ctx.translate(cx, cy);
-      ctx.scale(anim.zoom, anim.zoom);
-      ctx.translate(-cx, -cy);
-
-      // draw DNA “letters” (fade out as chain fades in)
-      const dnaAlpha = 1.0 - anim.chain;
-      if (dnaAlpha > 0.02) drawDNA(dnaAlpha);
-
-      // draw chain (fade in)
-      if (anim.chain > 0.02) drawChain(anim.chain);
-
-      // TFs appear
-      if (anim.tfs > 0.02) drawTF(anim.tfs);
-
-      // bridges appear
-      if (anim.bridges > 0.02) drawBridges(anim.bridges);
-
-      ctx.restore();
-
-      // Title text on canvas (glowy)
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "700 36px system-ui";
-      ctx.fillText("Build-up animation", 40, 70);
-      ctx.fillStyle = "rgba(255,255,255,0.55)";
-      ctx.font = "18px system-ui";
-      ctx.fillText("Scroll → the visual morphs like a slide deck", 40, 105);
-
-      requestAnimationFrame(draw);
-    }
-
-    function glowStroke(alpha, w){
-      ctx.shadowColor = "rgba(255,255,255,0.25)";
-      ctx.shadowBlur = 18;
-      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-      ctx.lineWidth = w;
-    }
-    function glowFill(alpha){
-      ctx.shadowColor = "rgba(255,255,255,0.18)";
-      ctx.shadowBlur = 18;
-      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-    }
-
-    function drawDNA(alpha){
-      // letters row
-      const letters = ["A","C","G","T","A","T","C","G","A","C","T","G"];
-      ctx.font = "700 46px system-ui";
-      for (let i=0;i<letters.length;i++){
-        const x = 220 + i*82;
-        const y = 470;
-        glowFill(0.10*alpha);
-        ctx.fillRect(x-26, y-60, 62, 76);
-        glowFill(0.85*alpha);
-        ctx.fillText(letters[i], x, y);
-      }
-
-      // pairing hint
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = `rgba(255,255,255,${0.55*alpha})`;
-      ctx.font = "20px system-ui";
-      ctx.fillText("A pairs with T • C pairs with G", 420, 560);
-    }
-
-    function drawChain(alpha){
-      // links
-      glowStroke(0.35*alpha, 6);
-      ctx.beginPath();
-      state.chain.forEach((p, idx) => {
-        if (idx === 0) ctx.moveTo(p.x, p.y);
-        else ctx.lineTo(p.x, p.y);
-      });
-      ctx.stroke();
-
-      // beads
-      state.chain.forEach(p => {
-        ctx.beginPath();
-        const a = p.special ? 0.70*alpha : 0.35*alpha;
-        glowFill(a);
-        ctx.arc(p.x, p.y, p.special ? 12 : 9, 0, Math.PI*2);
-        ctx.fill();
-      });
-    }
-
-    function drawTF(alpha){
-      const tf = state.tf;
-      glowFill(0.75*alpha);
-      ctx.beginPath();
-      ctx.arc(tf.x, tf.y, tf.r, 0, Math.PI*2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = `rgba(0,0,0,${0.7*alpha})`;
-      ctx.font = "700 18px system-ui";
-      ctx.fillText("TF", tf.x - 14, tf.y + 7);
-    }
-
-    function drawBridges(alpha){
-      glowStroke(0.65*alpha, 3.5);
-      for (const b of state.bridges) {
-        const p1 = state.chain[b.i];
-        const p2 = state.chain[b.j];
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-
-      // cluster glow region
-      if (state.bridges.length > 0) {
-        ctx.shadowBlur = 40;
-        ctx.fillStyle = `rgba(255,255,255,${0.05*alpha})`;
-        ctx.fillRect(560, 390, 320, 320);
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = `rgba(255,255,255,${0.6*alpha})`;
-        ctx.font = "18px system-ui";
-        ctx.fillText("density ↑ → more binding", 605, 425);
-      }
-    }
-
-    // Slide observer
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -342,92 +178,620 @@
         }
       });
     }, { threshold: 0.6 });
-
     slides.forEach(s => io.observe(s));
 
-    // Minimal interactions: drag chain + TF when relevant
-    function getMousePos(evt) {
+    // ============================================================
+    // Canvas setup (high-DPI)
+    // ============================================================
+    const canvas = document.getElementById("stageCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvasToDisplaySize() {
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       const rect = canvas.getBoundingClientRect();
-      const x = (evt.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (evt.clientY - rect.top) * (canvas.height / rect.height);
-      return {x,y};
+      const w = Math.floor(rect.width * dpr);
+      const h = Math.floor(rect.height * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      return { w, h, dpr };
     }
-    function dist(a,b){
-      const dx=a.x-b.x, dy=a.y-b.y;
-      return Math.sqrt(dx*dx+dy*dy);
+
+    // ============================================================
+    // UI controls
+    // ============================================================
+    const resetBtn = document.getElementById("resetBtn");
+    const spawnBtn = document.getElementById("spawnBtn");
+    const stickSlider = document.getElementById("stickiness");
+    const stickVal = document.getElementById("stickVal");
+    const tfCountSlider = document.getElementById("tfCount");
+    const tfVal = document.getElementById("tfVal");
+    const statsLine = document.getElementById("statsLine");
+
+    // ============================================================
+    // Parameters
+    // ============================================================
+    const params = {
+      stickiness: 0.45,      // 0..1
+      tfTargetCount: 28,     // number of TFs
+
+      // polymer
+      beadCount: 34,
+      restLen: 22,
+      kSpring: 0.22,
+      kBend: 0.014,
+      damping: 0.92,
+      brownianChain: 0.35,
+
+      // TFs
+      tfRadius: 10,
+      brownianTF: 1.05,
+      tfDamping: 0.93,
+
+      // binding
+      bindRadius: 18,
+      baseBindRate: 0.025,
+      baseUnbindRate: 0.004,
+
+      // feedback
+      feedbackRadius: 90,
+      feedbackBoostMax: 2.8
+    };
+
+    function updateUI() {
+      params.stickiness = Number(stickSlider.value) / 100;
+      params.tfTargetCount = Number(tfCountSlider.value);
+      stickVal.textContent = params.stickiness.toFixed(2);
+      tfVal.textContent = params.tfTargetCount.toString();
     }
-    function nearestPoint(pos, maxD=22){
-      let best = {idx:-1, d:Infinity};
-      state.chain.forEach((p,i)=>{
-        const d = dist(pos,p);
-        if (d < best.d) best = {idx:i, d};
+    stickSlider.addEventListener("input", updateUI);
+    tfCountSlider.addEventListener("input", updateUI);
+    updateUI();
+
+    // ============================================================
+    // RNG helpers
+    // ============================================================
+    function rand() { return Math.random(); }
+    function randn() {
+      let u = 0, v = 0;
+      while (u === 0) u = rand();
+      while (v === 0) v = rand();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    // ============================================================
+    // World state
+    // ============================================================
+    const world = {
+      beads: [],   // {x,y,vx,vy,special}
+      tfs: [],     // {x,y,vx,vy,bindA,bindB}
+      bridges: []  // {a,b,tfIndex}
+    };
+
+    function initWorld() {
+      resizeCanvasToDisplaySize();
+      const W = canvas.width;
+      const H = canvas.height;
+
+      world.beads = [];
+      world.tfs = [];
+      world.bridges = [];
+
+      // Polymer initial shape (sine curve)
+      const cx = W * 0.52;
+      const cy = H * 0.58;
+      const span = params.restLen * (params.beadCount - 1);
+
+      for (let i=0; i<params.beadCount; i++){
+        const x = cx - span/2 + i*params.restLen;
+        const y = cy + (H*0.06) * Math.sin(i * 0.35);
+        world.beads.push({
+          x, y, vx: 0, vy: 0,
+          special: (i % 6 === 0)
+        });
+      }
+
+      // TFs
+      for (let i=0; i<params.tfTargetCount; i++) spawnTF();
+    }
+
+    function spawnTF() {
+      const W = canvas.width, H = canvas.height;
+      world.tfs.push({
+        x: W*(0.25 + 0.5*rand()),
+        y: H*(0.25 + 0.5*rand()),
+        vx: 0, vy: 0,
+        bindA: null,
+        bindB: null
       });
-      return best.d <= maxD ? best : null;
     }
 
-    canvas.addEventListener("mousedown",(e)=>{
-      const pos=getMousePos(e);
+    function maintainTFCount() {
+      const target = params.tfTargetCount;
+      while (world.tfs.length < target) spawnTF();
+      while (world.tfs.length > target) world.tfs.pop();
+    }
 
-      // drag TF in tfs/bips scenes
-      if ((scene==="tfs"||scene==="bips") && dist(pos, state.tf) <= state.tf.r+8){
-        state.tf.grabbed=true;
-        return;
-      }
+    function resetAll() {
+      initWorld();
+    }
 
-      // drag chain in chromatin+
-      if (scene==="chromatin"||scene==="tfs"||scene==="bips"){
-        const near=nearestPoint(pos, 18);
-        if (near) state.chainGrab=near.idx;
-      }
-    });
+    resetBtn.addEventListener("click", resetAll);
+    spawnBtn.addEventListener("click", () => spawnTF());
 
-    canvas.addEventListener("mousemove",(e)=>{
-      const pos=getMousePos(e);
-      if (state.tf.grabbed){
-        state.tf.x=pos.x; state.tf.y=pos.y;
-      }
-      if (state.chainGrab !== null){
-        const p=state.chain[state.chainGrab];
-        p.x=pos.x; p.y=pos.y;
-      }
-    });
+    // ============================================================
+    // Mouse interactions (cartoon drag)
+    // ============================================================
+    let mouse = { x: 0, y: 0, down: false };
+    let grab = { type: null, index: -1, offx: 0, offy: 0 };
 
-    window.addEventListener("mouseup",()=>{
-      if (state.tf.grabbed){
-        state.tf.grabbed=false;
-        if (scene==="tfs"||scene==="bips"){
-          const near = nearestPoint(state.tf, 30);
-          if (near && state.chain[near.idx].special){
-            state.tf.boundIndex = near.idx;
-            state.tf.x = state.chain[near.idx].x;
-            state.tf.y = state.chain[near.idx].y - 45;
+    function getMousePos(evt){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = canvas.width / rect.width;
+      return {
+        x: (evt.clientX - rect.left) * dpr,
+        y: (evt.clientY - rect.top) * dpr
+      };
+    }
 
-            // In BIPS: add a bridge the first time you bind
-            if (scene==="bips" && state.bridges.length===0){
-              let j=-1, best=Infinity;
-              for (let k=0;k<state.chain.length;k++){
-                if (k!==near.idx && state.chain[k].special){
-                  const d=Math.abs(k-near.idx);
-                  if (d<best){best=d; j=k;}
-                }
-              }
-              if (j>=0) state.bridges.push({i: near.idx, j});
-            }
+    canvas.addEventListener("mousedown", (e) => {
+      mouse.down = true;
+      const p = getMousePos(e);
+      mouse.x = p.x; mouse.y = p.y;
+
+      if (!(scene === "chromatin" || scene === "tfs" || scene === "bips")) return;
+
+      // grab TF first
+      if (scene === "tfs" || scene === "bips") {
+        for (let i=world.tfs.length-1; i>=0; i--){
+          const tf = world.tfs[i];
+          const dx = p.x - tf.x, dy = p.y - tf.y;
+          if (dx*dx + dy*dy <= (params.tfRadius*2.2)**2) {
+            grab.type = "tf"; grab.index = i;
+            grab.offx = tf.x - p.x; grab.offy = tf.y - p.y;
+            return;
           }
         }
       }
-      state.chainGrab=null;
-    });
 
-    // Reset button via HUD click (optional)
-    document.addEventListener("keydown",(e)=>{
-      if (e.key.toLowerCase()==="r"){
-        initChain();
+      // grab bead
+      for (let i=world.beads.length-1; i>=0; i--){
+        const b = world.beads[i];
+        const dx = p.x - b.x, dy = p.y - b.y;
+        if (dx*dx + dy*dy <= (18)**2) {
+          grab.type = "bead"; grab.index = i;
+          grab.offx = b.x - p.x; grab.offy = b.y - p.y;
+          return;
+        }
       }
     });
 
-    draw();
+    canvas.addEventListener("mousemove", (e) => {
+      const p = getMousePos(e);
+      mouse.x = p.x; mouse.y = p.y;
+
+      if (!mouse.down || grab.type === null) return;
+
+      if (grab.type === "bead") {
+        const b = world.beads[grab.index];
+        const tx = mouse.x + grab.offx;
+        const ty = mouse.y + grab.offy;
+        b.vx += 0.25 * (tx - b.x);
+        b.vy += 0.25 * (ty - b.y);
+      }
+
+      if (grab.type === "tf") {
+        const tf = world.tfs[grab.index];
+        const tx = mouse.x + grab.offx;
+        const ty = mouse.y + grab.offy;
+        tf.vx += 0.22 * (tx - tf.x);
+        tf.vy += 0.22 * (ty - tf.y);
+      }
+    });
+
+    window.addEventListener("mouseup", () => {
+      mouse.down = false;
+      grab.type = null;
+      grab.index = -1;
+    });
+
+    // ============================================================
+    // Physics helpers
+    // ============================================================
+    function addBrownian(scale){ return scale * randn(); }
+
+    function springForce(ax, ay, bx, by, restLen, k){
+      const dx = bx - ax;
+      const dy = by - ay;
+      const r = Math.sqrt(dx*dx + dy*dy) + 1e-6;
+      const f = k * (r - restLen);
+      return { fx: f * dx/r, fy: f * dy/r };
+    }
+
+    function bendForce(p0, p1, p2, kB){
+      const mx = 0.5*(p0.x + p2.x);
+      const my = 0.5*(p0.y + p2.y);
+      return { fx: kB*(mx - p1.x), fy: kB*(my - p1.y) };
+    }
+
+    // ============================================================
+    // BIPS binding logic + feedback
+    // ============================================================
+    function feedbackBoostAt(x,y){
+      if (world.bridges.length === 0) return 1.0;
+      let boost = 1.0;
+
+      for (const br of world.bridges){
+        const a = world.beads[br.a];
+        const b = world.beads[br.b];
+        const cx = 0.5*(a.x+b.x);
+        const cy = 0.5*(a.y+b.y);
+        const dx = x - cx, dy = y - cy;
+        const d2 = dx*dx + dy*dy;
+        const R = params.feedbackRadius;
+        if (d2 < R*R){
+          const t = 1.0 - Math.sqrt(d2)/(R);
+          boost = Math.max(boost, 1.0 + t*(params.feedbackBoostMax - 1.0));
+        }
+      }
+      return boost;
+    }
+
+    function tryBind(tfIndex){
+      const tf = world.tfs[tfIndex];
+      if (!(scene === "tfs" || scene === "bips")) return;
+
+      const hasA = (tf.bindA !== null);
+      const hasB = (tf.bindB !== null);
+      if (hasA && hasB) return;
+
+      // nearest special bead
+      let best = { idx: null, d2: Infinity };
+      for (let i=0; i<world.beads.length; i++){
+        const bead = world.beads[i];
+        if (!bead.special) continue;
+        if (tf.bindA === i || tf.bindB === i) continue;
+
+        const dx = bead.x - tf.x;
+        const dy = bead.y - tf.y;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < best.d2) best = { idx: i, d2 };
+      }
+      if (best.idx === null) return;
+
+      const R = params.bindRadius;
+      if (best.d2 > R*R) return;
+
+      const localBoost = (scene === "bips") ? feedbackBoostAt(tf.x, tf.y) : 1.0;
+      const pBind = params.baseBindRate * params.stickiness * localBoost;
+
+      if (Math.random() < pBind) {
+        if (!hasA) tf.bindA = best.idx;
+        else tf.bindB = best.idx;
+
+        // if now 2-site bound, register bridge
+        if (scene === "bips" && tf.bindA !== null && tf.bindB !== null) {
+          const a = Math.min(tf.bindA, tf.bindB);
+          const b = Math.max(tf.bindA, tf.bindB);
+          const exists = world.bridges.some(br => br.a === a && br.b === b);
+          if (!exists) world.bridges.push({ a, b, tfIndex });
+        }
+      }
+    }
+
+    function tryUnbind(tfIndex){
+      const tf = world.tfs[tfIndex];
+      if (!(scene === "tfs" || scene === "bips")) return;
+
+      const localBoost = (scene === "bips") ? feedbackBoostAt(tf.x, tf.y) : 1.0;
+      const unbindRate = params.baseUnbindRate / Math.sqrt(localBoost);
+
+      if (tf.bindA !== null && Math.random() < unbindRate) tf.bindA = null;
+      if (tf.bindB !== null && Math.random() < unbindRate) tf.bindB = null;
+
+      // clean bridges
+      if (scene === "bips") {
+        world.bridges = world.bridges.filter(br => {
+          const t = world.tfs[br.tfIndex];
+          return t && (t.bindA !== null && t.bindB !== null);
+        });
+      }
+    }
+
+    function applyBindingConstraints(){
+      const tetherK = 0.18;
+      for (const tf of world.tfs){
+        if (tf.bindA !== null) {
+          const b = world.beads[tf.bindA];
+          tf.vx += tetherK * (b.x - tf.x);
+          tf.vy += tetherK * (b.y - tf.y);
+        }
+        if (tf.bindB !== null) {
+          const b = world.beads[tf.bindB];
+          tf.vx += tetherK * (b.x - tf.x);
+          tf.vy += tetherK * (b.y - tf.y);
+        }
+      }
+    }
+
+    function applyBridgeForces(){
+      if (scene !== "bips") return;
+
+      const kBridge = 0.08 + 0.18*params.stickiness;
+      const rest = params.restLen * 2.6;
+
+      for (const br of world.bridges){
+        const a = world.beads[br.a];
+        const b = world.beads[br.b];
+        const f = springForce(a.x,a.y,b.x,b.y, rest, kBridge);
+        a.vx += f.fx; a.vy += f.fy;
+        b.vx -= f.fx; b.vy -= f.fy;
+      }
+    }
+
+    // ============================================================
+    // Step physics
+    // ============================================================
+    function stepPhysics() {
+      maintainTFCount();
+
+      const polymerActive = (scene === "chromatin" || scene === "tfs" || scene === "bips" || scene === "takehome");
+      if (polymerActive) {
+        for (let i=0; i<world.beads.length-1; i++){
+          const a = world.beads[i];
+          const b = world.beads[i+1];
+          const f = springForce(a.x,a.y,b.x,b.y, params.restLen, params.kSpring);
+          a.vx += f.fx; a.vy += f.fy;
+          b.vx -= f.fx; b.vy -= f.fy;
+        }
+
+        for (let i=1; i<world.beads.length-1; i++){
+          const f = bendForce(world.beads[i-1], world.beads[i], world.beads[i+1], params.kBend);
+          world.beads[i].vx += f.fx;
+          world.beads[i].vy += f.fy;
+        }
+
+        for (const b of world.beads){
+          b.vx += addBrownian(params.brownianChain);
+          b.vy += addBrownian(params.brownianChain);
+          b.vx *= params.damping;
+          b.vy *= params.damping;
+          b.x += b.vx;
+          b.y += b.vy;
+        }
+
+        // gentle centering
+        const W = canvas.width, H = canvas.height;
+        const pull = 0.0009;
+        for (const b of world.beads){
+          b.vx += pull * (W*0.52 - b.x);
+          b.vy += pull * (H*0.58 - b.y);
+        }
+      }
+
+      const tfActive = (scene === "tfs" || scene === "bips" || scene === "takehome");
+      if (tfActive) {
+        for (const tf of world.tfs){
+          tf.vx += addBrownian(params.brownianTF);
+          tf.vy += addBrownian(params.brownianTF);
+          tf.vx *= params.tfDamping;
+          tf.vy *= params.tfDamping;
+          tf.x += tf.vx;
+          tf.y += tf.vy;
+        }
+
+        // wrap bounds
+        const W = canvas.width, H = canvas.height;
+        for (const tf of world.tfs){
+          if (tf.x < 0) tf.x += W;
+          if (tf.x > W) tf.x -= W;
+          if (tf.y < 0) tf.y += H;
+          if (tf.y > H) tf.y -= H;
+        }
+
+        for (let i=0; i<world.tfs.length; i++){
+          tryUnbind(i);
+          tryBind(i);
+        }
+
+        applyBindingConstraints();
+        applyBridgeForces();
+      }
+    }
+
+    // ============================================================
+    // Rendering
+    // ============================================================
+    function drawBackground() {
+      ctx.fillStyle = "#050507";
+      ctx.fillRect(0,0,canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255,255,255,0.05)";
+      for (let i=0;i<120;i++){
+        const x = (i*97) % canvas.width;
+        const y = (i*181) % canvas.height;
+        ctx.fillRect(x,y,2,2);
+      }
+    }
+
+    function drawGlowCircle(x,y,r,a){
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.shadowColor = "rgba(255,255,255,0.25)";
+      ctx.shadowBlur = 28;
+      ctx.fillStyle = "rgba(255,255,255,1)";
+      ctx.beginPath();
+      ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawDensityGlow() {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+
+      for (const b of world.beads){
+        const a = b.special ? 0.020 : 0.012;
+        drawGlowCircle(b.x, b.y, b.special ? 24 : 18, a);
+      }
+
+      for (const tf of world.tfs){
+        drawGlowCircle(tf.x, tf.y, 18, 0.010);
+      }
+
+      if (scene === "bips" && world.bridges.length > 0) {
+        for (const br of world.bridges){
+          const a = world.beads[br.a];
+          const b = world.beads[br.b];
+          const cx = 0.5*(a.x+b.x);
+          const cy = 0.5*(a.y+b.y);
+          drawGlowCircle(cx, cy, 70, 0.035);
+        }
+      }
+
+      ctx.restore();
+    }
+
+    function drawDNALetters() {
+      if (!(scene === "dna" || scene === "genes")) return;
+
+      const letters = ["A","C","G","T","A","T","C","G","A","C","T","G"];
+      ctx.save();
+      ctx.font = "800 52px system-ui";
+      for (let i=0;i<letters.length;i++){
+        const x = canvas.width*0.16 + i*(canvas.width*0.055);
+        const y = canvas.height*0.55;
+        ctx.shadowColor = "rgba(255,255,255,0.18)";
+        ctx.shadowBlur = 22;
+        ctx.fillStyle = "rgba(255,255,255,0.78)";
+        ctx.fillText(letters[i], x, y);
+      }
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.font = "18px system-ui";
+      ctx.fillText("A–T • C–G", canvas.width*0.45, canvas.height*0.62);
+      ctx.restore();
+    }
+
+    function drawPolymer() {
+      ctx.save();
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "rgba(255,255,255,0.25)";
+      ctx.shadowColor = "rgba(255,255,255,0.15)";
+      ctx.shadowBlur = 18;
+
+      ctx.beginPath();
+      world.beads.forEach((p, i) => {
+        if (i===0) ctx.moveTo(p.x,p.y);
+        else ctx.lineTo(p.x,p.y);
+      });
+      ctx.stroke();
+      ctx.restore();
+
+      for (const b of world.beads){
+        ctx.save();
+        ctx.shadowColor = "rgba(255,255,255,0.20)";
+        ctx.shadowBlur = b.special ? 22 : 14;
+        ctx.fillStyle = b.special ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0.28)";
+        ctx.beginPath();
+        ctx.arc(b.x,b.y, b.special ? 10.5 : 8, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawTFs() {
+      if (!(scene === "tfs" || scene === "bips" || scene === "takehome")) return;
+
+      for (const tf of world.tfs){
+        const bound = (tf.bindA !== null || tf.bindB !== null);
+        ctx.save();
+        ctx.shadowColor = bound ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.20)";
+        ctx.shadowBlur = bound ? 26 : 18;
+
+        ctx.fillStyle = bound ? "rgba(255,255,255,0.78)" : "rgba(255,255,255,0.50)";
+        ctx.beginPath();
+        ctx.arc(tf.x, tf.y, params.tfRadius, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawBridges() {
+      if (scene !== "bips") return;
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.65)";
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = "rgba(255,255,255,0.25)";
+      ctx.shadowBlur = 18;
+
+      for (const br of world.bridges){
+        const a = world.beads[br.a];
+        const b = world.beads[br.b];
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function updateStats() {
+      let boundTFs = 0;
+      for (const tf of world.tfs) {
+        if (tf.bindA !== null || tf.bindB !== null) boundTFs++;
+      }
+      statsLine.textContent = `bridges: ${world.bridges.length} • bound TFs: ${boundTFs}`;
+    }
+
+    function drawTextOverlay() {
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,0.88)";
+      ctx.font = "700 34px system-ui";
+      ctx.fillText("Interactive BIPS (cartoon physics)", 40, 70);
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.font = "18px system-ui";
+
+      if (scene === "dna") ctx.fillText("DNA letters → scroll to zoom out", 40, 105);
+      if (scene === "genes") ctx.fillText("Genes are segments of DNA that can be read", 40, 105);
+      if (scene === "packing") ctx.fillText("Packing drives folding and organisation", 40, 105);
+      if (scene === "chromatin") ctx.fillText("Drag beads: polymer jiggles like spaghetti", 40, 105);
+      if (scene === "tfs") ctx.fillText("TFs diffuse and bind special sites", 40, 105);
+      if (scene === "bips") ctx.fillText("Two-site binding creates bridges → positive feedback", 40, 105);
+      if (scene === "takehome") ctx.fillText("3D folding can influence stable regulation", 40, 105);
+
+      ctx.restore();
+    }
+
+    // ============================================================
+    // Main loop
+    // ============================================================
+    function tick() {
+      resizeCanvasToDisplaySize();
+      stepPhysics();
+      updateStats();
+
+      drawBackground();
+      drawDNALetters();
+
+      if (scene === "packing" || scene === "chromatin" || scene === "tfs" || scene === "bips" || scene === "takehome") {
+        drawDensityGlow();
+        drawPolymer();
+      }
+
+      drawTFs();
+      drawBridges();
+      drawTextOverlay();
+
+      requestAnimationFrame(tick);
+    }
+
+    // Start
+    initWorld();
+    tick();
   </script>
 </body>
 </html>
+
 
