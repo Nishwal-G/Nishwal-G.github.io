@@ -1,9 +1,3 @@
-/* ============================================================
-   FILE: stylesheets/bips_story_style.css
-   Copy-paste this ENTIRE file.
-   Canvas-first layout, minimal overlay, story acts with Next/Prev
-============================================================ */
-
 :root{
   --bg: #050507;
   --border: rgba(255,255,255,0.14);
