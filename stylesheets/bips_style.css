@@ -1,3 +1,11 @@
+/* ============================================================
+   FILE: stylesheets/bips_style.css
+   Changes:
+     1) Canvas fills stage area (no hard-coded inset in canvas)
+     2) Story panel moved to RIGHT (class .story-right)
+     3) Added purple dot for "locked DNA"
+============================================================ */
+
 :root{
   --bg: #050507;
   --border: rgba(255,255,255,0.14);
@@ -63,30 +71,32 @@ body.dark{
 }
 .nav-pill a:hover{ opacity: 1; background: rgba(255,255,255,0.08); }
 
-/* Fullscreen stage */
+/* Fullscreen stage: padding-top matches header height */
 .stage{
   position: fixed;
   inset: 0;
   z-index: 0;
+  padding-top: 64px; /* if your header grows, bump this number */
 }
 
+/* Canvas now fills stage area */
 #stageCanvas{
   position: absolute;
-  inset: 64px 0 0 0; /* below header */
+  inset: 0;
   width: 100%;
-  height: calc(100vh - 64px);
+  height: 100%;
   display: block;
 }
 
-/* Overlay: click-through except UI */
+/* Overlay sits on top */
 .overlay{
   position: absolute;
-  inset: 64px 0 0 0;
+  inset: 0;
   z-index: 10;
   pointer-events: none;
 }
 
-/* Top left: title lines */
+/* Top left text */
 .topLeft{
   position: absolute;
   top: 16px;
@@ -109,7 +119,7 @@ body.dark{
   text-shadow: 0 12px 60px rgba(0,0,0,0.65);
 }
 
-/* Top right: next/prev buttons */
+/* Top right buttons */
 .topRight{
   position: absolute;
   top: 14px;
@@ -119,7 +129,6 @@ body.dark{
   pointer-events: auto;
 }
 
-/* Pills */
 .pill{
   border: 1px solid var(--border);
   background: rgba(0,0,0,0.38);
@@ -130,16 +139,18 @@ body.dark{
   font-weight: 900;
   font-size: 13px;
   backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .pill:hover{ background: rgba(255,255,255,0.10); }
 .pill.strong{ background: rgba(255,255,255,0.12); }
 .pill.ghost{ background: rgba(255,255,255,0.04); }
 .pill:disabled{ opacity: 0.35; cursor: default; }
 
-/* Story panel (small, not covering majority of canvas) */
+/* Story panel: now RIGHT side */
 .story{
   position: absolute;
-  left: 18px;
   bottom: 18px;
   width: min(520px, calc(100% - 36px));
   max-height: 42vh;
@@ -150,6 +161,15 @@ body.dark{
   box-shadow: 0 22px 90px rgba(0,0,0,0.58);
   pointer-events: auto;
   overflow: hidden;
+}
+
+/* default is left (unused now) */
+.story{ left: 18px; }
+
+/* right variant */
+.story.story-right{
+  left: auto;
+  right: 18px;
 }
 
 .storyInner{
@@ -171,7 +191,6 @@ body.dark{
   line-height: 1.55;
 }
 
-/* Optional details */
 .more{
   margin-top: 10px;
   border: 1px solid rgba(255,255,255,0.12);
@@ -208,10 +227,10 @@ body.dark{
   font-size: 12px;
 }
 
-/* Legend (appears later) */
+/* Legend */
 .legend{
   position: absolute;
-  right: 18px;
+  left: 18px;
   bottom: 18px;
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -245,13 +264,21 @@ body.dark{
 .dot.green{ background: rgba(0,255,140,0.95); }
 .dot.red{ background: rgba(255,60,60,0.92); }
 .dot.pink{ background: rgba(255,120,200,0.65); }
+.dot.purple{ background: rgba(190,120,255,0.85); }
 
-/* Mobile */
+/* Mobile tweaks */
 @media (max-width: 820px){
   .nav-pill{ display:none; }
-  .story{ max-height: 46vh; }
+
+  /* On mobile, put story back to bottom-left to avoid covering centre */
+  .story.story-right{
+    left: 18px;
+    right: auto;
+    max-height: 46vh;
+  }
   .storyInner{ max-height: 46vh; }
 }
+
 
 
 
