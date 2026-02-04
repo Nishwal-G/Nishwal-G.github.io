@@ -1,9 +1,14 @@
+/* =========================
+   FILE: stylesheets/bips_style.css
+   Copy-paste this ENTIRE file.
+========================= */
+
 :root{
   --bg: #050507;
   --border: rgba(255,255,255,0.14);
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.65);
-  --maxw: 1100px;
+  --maxw: 1200px;
 }
 
 *{ box-sizing: border-box; }
@@ -14,15 +19,14 @@ body.dark{
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  line-height: 1.6;
 }
 
 /* Header */
 .site-header{
   position: fixed;
   top:0; left:0; right:0;
-  z-index: 1000;
-  background: rgba(5,5,7,0.65);
+  z-index: 50;
+  background: rgba(5,5,7,0.55);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -62,9 +66,12 @@ body.dark{
   opacity: 0.9;
   background: rgba(255,255,255,0.04);
 }
-.nav-pill a:hover{ opacity: 1; background: rgba(255,255,255,0.08); }
+.nav-pill a:hover{
+  opacity: 1;
+  background: rgba(255,255,255,0.08);
+}
 
-/* Fixed full-screen canvas behind everything */
+/* Fullscreen stage */
 .stage{
   position: fixed;
   inset: 0;
@@ -79,179 +86,176 @@ body.dark{
   display: block;
 }
 
-/* Minimal HUD */
-.miniHUD{
+/* Overlay layer: click-through except controls */
+.overlay{
   position: absolute;
-  left: 24px;
-  bottom: 24px;
-  z-index: 2;
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(0,0,0,0.40);
-  backdrop-filter: blur(10px);
-  max-width: 320px;
-  pointer-events: none; /* do not block scrolling/clicks */
+  inset: 64px 0 0 0;
+  z-index: 10;
+  pointer-events: none;
 }
 
-.miniTitle{
+/* Top-left */
+.overlay-top{
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.title{
   font-weight: 900;
-  letter-spacing: 0.6px;
-}
-
-.miniSub{
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-/* Scrollable content on top */
-.content{
-  position: relative;
-  z-index: 5;
-  padding-top: 88px;
-}
-
-.section{
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 46px 18px 80px 18px;
-}
-
-.card{
-  width: min(var(--maxw), 92vw);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 22px 22px;
-  background: rgba(0,0,0,0.42);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 30px 100px rgba(0,0,0,0.55);
-}
-
-.card h1{
-  margin: 0 0 12px 0;
-  font-size: clamp(30px, 4.2vw, 54px);
-  letter-spacing: -0.7px;
-}
-
-.card h2{
-  margin: 18px 0 8px 0;
-  font-size: clamp(22px, 2.8vw, 30px);
-}
-
-.card h3{
-  margin: 16px 0 6px 0;
-  font-size: 18px;
-}
-
-.lead{
-  color: rgba(255,255,255,0.72);
-  font-size: 16px;
-}
-
-.card p{
-  margin: 10px 0 0 0;
-  color: rgba(255,255,255,0.72);
-  font-size: 16px;
-}
-
-/* Interactive terms */
-.term{
+  letter-spacing: 0.4px;
+  font-size: 22px;
   color: rgba(255,255,255,0.92);
-  font-weight: 800;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-  cursor: default;
-  padding: 0 2px;
-}
-.term:hover{
-  color: rgba(0,255,140,0.95);
+  text-shadow: 0 12px 50px rgba(0,0,0,0.70);
 }
 
-/* Expanders for “more writing but hidden until clicked” */
-.expander{
-  margin-top: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 14px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.04);
+.actions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  pointer-events: auto; /* buttons clickable */
 }
 
-.expander summary{
-  cursor: pointer;
-  padding: 12px 14px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.85);
-}
-
-.expander-body{
-  padding: 0 14px 14px 14px;
-  color: rgba(255,255,255,0.70);
-}
-
-/* Buttons / navigation */
-.bottomNav{
-  margin-top: 18px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.nextBtn, .playBtn, .ghostBtn{
+.pill{
   border: 1px solid var(--border);
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.90);
+  padding: 8px 12px;
   border-radius: 999px;
-  padding: 10px 16px;
-  font-weight: 900;
   cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+  backdrop-filter: blur(10px);
 }
+.pill:hover{ background: rgba(255,255,255,0.10); }
+.pill.strong{ background: rgba(255,255,255,0.12); }
+.pill:disabled{ opacity: 0.35; cursor: default; }
 
-.nextBtn, .playBtn{
-  background: rgba(255,255,255,0.10);
-  color: rgba(255,255,255,0.92);
-}
-.nextBtn:hover, .playBtn:hover{
+.sep{
+  width: 1px;
+  height: 18px;
   background: rgba(255,255,255,0.16);
+  display:inline-block;
 }
 
-.ghostBtn{
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.80);
-}
-.ghostBtn:hover{
-  background: rgba(255,255,255,0.09);
+/* Tooltip */
+.tooltip{
+  position: absolute;
+  left: 18px;
+  top: 92px;
+  width: min(380px, calc(100% - 36px));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 12px;
+  background: rgba(0,0,0,0.48);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 70px rgba(0,0,0,0.55);
+
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+
+  pointer-events: none;
 }
 
-.controlsRow{
-  margin-top: 14px;
+.tooltip.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tooltip-title{
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.tooltip-text{
+  margin-top: 6px;
+  color: rgba(255,255,255,0.70);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.tipClose{
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.85);
+  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+/* Bottom-left BIPS controls */
+.bipsControls{
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
 }
 
-.tinyNote{
-  margin-top: 12px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.60);
+.bipsControls.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.chip{
+/* Tiny legend (only in chromatin scene) */
+.legend{
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(0,0,0,0.32);
+  backdrop-filter: blur(10px);
+  color: rgba(255,255,255,0.70);
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+
+  pointer-events: none;
+}
+.legend.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dot{
   display:inline-block;
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   margin-right: 6px;
-  vertical-align: middle;
 }
-.chip.red{ background: rgba(255,60,60,1); }
+.dot.white{ background: rgba(255,255,255,0.85); }
+.dot.red{ background: rgba(255,60,60,0.95); }
 
 /* Mobile */
-@media (max-width: 740px){
-  .nav-pill{ display:none; } /* optional: hide nav pills on mobile */
-  .miniHUD{ max-width: 260px; }
-  .card{ padding: 18px 16px; }
+@media (max-width: 760px){
+  .nav-pill{ display:none; }
+  .tooltip{ top: 86px; }
 }
+
 
 
 
