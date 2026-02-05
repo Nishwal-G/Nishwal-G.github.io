@@ -85,6 +85,18 @@
     }
     .storyText p{ margin: 10px 0 0 0; }
 
+    /* NEW: opening outline bullets */
+    .outline{
+      margin: 10px 0 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,0.82);
+    }
+    .outline li{
+      margin: 8px 0;
+      line-height: 1.65;
+    }
+    .outline strong{ color: rgba(255,255,255,0.92); }
+
     /* Big clickable glossary-like words */
     .bigClick{
       display:inline-block;
@@ -256,7 +268,7 @@
     }
 
     /* ============================================================
-       NEW: Letter / base-pair panel shown under canvas in Acts 2–3
+       Letter / base-pair panel shown under canvas in Acts 2–3
        ============================================================ */
     .pairPanel{
       width: min(var(--maxw), 100%);
@@ -461,7 +473,7 @@
     </section>
 
     <!-- ============================================================
-         NEW: ATCG + pairing panel under the canvas (Acts 2–3 only)
+         ATCG + pairing panel under the canvas (Acts 2–3 only)
          ============================================================ -->
     <section class="pairPanel" id="pairPanel" aria-label="DNA letters and base-pairing">
       <div class="pairInner">
@@ -533,13 +545,12 @@
     const btnEpi = document.getElementById("btnEpi");
 
     // ============================================================
-    // NEW: Letter / base-pair strip under the canvas (Acts 2–3)
+    // Letter / base-pair strip under the canvas (Acts 2–3)
     // ============================================================
     const pairPanel = document.getElementById("pairPanel");
     const pairStrip = document.getElementById("pairStrip");
 
     // A fixed “DNA snippet” so it feels like a real string of letters.
-    // (You can change this to any sequence you like.)
     const DNA_SEQ = "ATGCCATGTTACCGTACGATTCGAGCTAATCG";
     function complement(base){
       if (base === "A") return "T";
@@ -549,13 +560,11 @@
       return "?";
     }
 
-    // In the strip, we’ll define a “gene region” as a chunk of indices.
-    // This is purely a visual teaching aid (independent of the helix drawing).
+    // Visual “gene region” indices in the strip
     const STRIP_GENE_START = 10;
     const STRIP_GENE_END   = 19;
 
-    // When “Base pairs” is clicked, highlight *one* base pair in the strip.
-    // Keep it stable so users recognise it.
+    // Highlight *one* base pair in the strip for “Base pairs”
     const STRIP_BASEPAIR_INDEX = 6;
 
     function buildPairStrip(){
@@ -583,7 +592,7 @@
     }
 
     function updatePairStrip(){
-      // Show only in Act 2 (index 1) and Act 3 (index 2)
+      // Show only in Page 2 (index 1) and Page 3 (index 2)
       const show = (actIndex === 1 || actIndex === 2);
       pairPanel.style.display = show ? "block" : "none";
       if (!show) return;
@@ -642,14 +651,14 @@
     });
 
     // ============================================================
-    // Acts
+    // Pages (Acts)
     // ============================================================
     let actIndex = 0;
-    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act1_img | act8_img
+    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act1_outline | act8_img
 
     const ACTS = [
       {
-        mode: "act1_img",
+        mode: "act1_outline",
         title: "How do cells know who they are?",
         sub: "Most cells carry the same DNA — but they don’t behave the same. Why?",
         html: `
@@ -657,12 +666,20 @@
             A skin cell, a neuron, and a blood cell usually contain the <strong>same DNA</strong>. Yet they do totally different jobs.
           </p>
           <p>
-            The big idea is: <strong>cell identity</strong> is mostly about <em>which parts of DNA get read</em> and which parts stay quiet.
-            If different “chapters” get used, you get different cell types.
+            Here’s the story we’re going to build, step by step:
           </p>
+          <ul class="outline">
+            <li><strong>DNA as information:</strong> four letters (A, C, G, T) arranged into a double helix.</li>
+            <li><strong>Genes:</strong> short regions that can be “read” to make RNA/proteins (different cell types read different genes).</li>
+            <li><strong>Epigenetics:</strong> chemical marks that make some DNA regions easier/harder to access (keeping identity stable).</li>
+            <li><strong>Chromatin:</strong> DNA is packaged and behaves like a <em>flexible polymer</em> in 3D, not a straight line.</li>
+            <li><strong>Transcription factors (TFs):</strong> the “readers” that wander and bind specific regions.</li>
+            <li><strong>Multivalency → hubs:</strong> TFs that can bind multiple places can pull chromatin together into dense hubs.</li>
+            <li><strong>Recruitment / ‘rich get richer’:</strong> once a hub exists, more TFs accumulate there, biasing activity.</li>
+            <li><strong>Transcription factories:</strong> stable, dense hubs can help maintain long-lived patterns of gene activity → memory.</li>
+          </ul>
           <p>
-            In this story we’ll build one more layer onto that idea:
-            DNA isn’t just a code — it’s also a <strong>3D object</strong> that folds and moves. That folding can change what gets read.
+            Use <strong>Next</strong> to start from DNA and work up to 3D organisation and hubs.
           </p>
         `,
         showLegend: false
@@ -815,7 +832,8 @@
       mode = A.mode;
       highlight = null;
 
-      kicker.textContent = `Act ${actIndex + 1} of ${ACTS.length}`;
+      // CHANGE: "Act" -> "Page"
+      kicker.textContent = `Page ${actIndex + 1} of ${ACTS.length}`;
       sceneTitle.textContent = A.title;
       sceneSub.textContent = A.sub;
       storyText.innerHTML = A.html;
@@ -832,9 +850,9 @@
       else legend.classList.remove("show");
 
       // Mini buttons visibility logic:
-      // Act 2: Base pairs only
-      // Act 3: Base pairs + Gene
-      // Act 4: Epigenetics only
+      // Page 2: Base pairs only
+      // Page 3: Base pairs + Gene
+      // Page 4: Epigenetics only
       const showMini = (mode === "dna" || mode === "epi");
       dnaButtons.style.display = showMini ? "flex" : "none";
 
@@ -851,12 +869,10 @@
         btnEpi.style.display = "inline-block";
       }
 
-      // Image overlay logic (FIXED MODES)
-      if (mode === "act1_img") {
-        stageImage.src = "assets/who_am_I_cell.png";
-        stageImage.classList.add("show");
-        canvas.style.display = "none";
-      } else if (mode === "act8_img") {
+      // Image overlay logic:
+      // - Opening is now outline, so NO image
+      // - Final keeps image
+      if (mode === "act8_img") {
         stageImage.src = "assets/bips.png";
         stageImage.classList.add("show");
         canvas.style.display = "none";
@@ -866,9 +882,7 @@
         canvas.style.display = "block";
       }
 
-      // NEW: update the letter strip visibility (Acts 2–3 only)
       updatePairStrip();
-
       initActWorld(true);
     }
 
@@ -915,7 +929,7 @@
     }
 
     // ============================================================
-    // DNA helix (acts: dna + epi)
+    // DNA helix (pages: dna + epi)
     // ============================================================
     function drawDNAHelix(){
       const W = canvas.width, H = canvas.height;
@@ -1005,13 +1019,10 @@
           ctx.restore();
         }
       }
-
-      // IMPORTANT: we removed the "Locked region" arrow + label entirely.
-      // Also: no basepair/gene arrows here either (as requested).
     }
 
     // ============================================================
-    // Polymer worlds for acts 4–7 (UNCHANGED)
+    // Polymer worlds for pages 5–8 (acts 4–7) (UNCHANGED)
     // ============================================================
     const world = {
       initialised: false,
@@ -1453,8 +1464,8 @@
     function tick(){
       resizeCanvas();
 
-      // If we're showing an image act, do NOT draw on canvas
-      if (mode === "act1_img" || mode === "act8_img"){
+      // If we're showing the final image page, do NOT draw on canvas
+      if (mode === "act8_img"){
         requestAnimationFrame(tick);
         return;
       }
@@ -1467,6 +1478,8 @@
         initActWorld(false);
         stepPolymer();
         drawPolymerAndTFs();
+      } else if (mode === "act1_outline"){
+        // Opening page: background-only (no extra drawing needed)
       }
 
       requestAnimationFrame(tick);
@@ -1486,6 +1499,7 @@
   </script>
 </body>
 </html>
+
 
 
 
