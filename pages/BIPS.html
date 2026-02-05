@@ -254,6 +254,163 @@
     @media (max-width: 860px){
       .stage{ height: 52vh; }
     }
+
+    /* ============================================================
+       NEW: Letter / base-pair panel shown under canvas in Acts 2–3
+       ============================================================ */
+    .pairPanel{
+      width: min(var(--maxw), 100%);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.35);
+      overflow: hidden;
+      display: none; /* toggled by JS */
+    }
+    .pairInner{
+      padding: 12px 14px 14px 14px;
+    }
+    .pairTitleRow{
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .pairTitle{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.86);
+    }
+    .pairHint{
+      font-size: 12px;
+      color: rgba(255,255,255,0.66);
+    }
+
+    .pairStripWrap{
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
+    }
+
+    .pairStrip{
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 6px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.22);
+      min-height: 86px;
+    }
+
+    .bp{
+      width: 34px;
+      height: 70px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      position: relative;
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      user-select:none;
+      flex: 0 0 auto;
+    }
+
+    .bp .top, .bp .bot{
+      width: 100%;
+      text-align: center;
+      font-weight: 950;
+      font-size: 18px;
+      line-height: 1.0;
+      letter-spacing: 0.4px;
+      color: rgba(255,255,255,0.86);
+      text-shadow: 0 0 18px rgba(255,255,255,0.12);
+    }
+    .bp .bot{
+      margin-top: 14px;
+      color: rgba(255,255,255,0.76);
+    }
+
+    /* connector “rung” */
+    .bp::after{
+      content:"";
+      position:absolute;
+      left: 50%;
+      top: 29px;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 12px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.20);
+      box-shadow: 0 0 16px rgba(255,255,255,0.10);
+    }
+
+    /* Active single base-pair highlight (Base pairs button / bigClick) */
+    .bp.active{
+      border-color: rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.10);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.06) inset, 0 16px 60px rgba(255,255,255,0.05);
+    }
+    .bp.active .top, .bp.active .bot{
+      color: rgba(255,255,255,0.95);
+      text-shadow: 0 0 22px rgba(255,255,255,0.22);
+    }
+    .bp.active::after{
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 22px rgba(255,255,255,0.35);
+    }
+
+    /* Gene region highlight (Gene button / bigClick) */
+    .bp.gene{
+      border-color: rgba(0,255,140,0.30);
+      background: rgba(0,255,140,0.07);
+    }
+    .bp.gene .top, .bp.gene .bot{
+      color: rgba(0,255,140,0.92);
+      text-shadow: 0 0 24px rgba(0,255,140,0.22);
+    }
+    .bp.gene::after{
+      background: rgba(0,255,140,0.72);
+      box-shadow: 0 0 22px rgba(0,255,140,0.25);
+    }
+
+    /* tiny legend chips */
+    .pairChips{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.72);
+      font-weight: 850;
+      font-size: 12px;
+      user-select:none;
+    }
+    .chip .swatch{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.60);
+      box-shadow: 0 0 14px rgba(255,255,255,0.12);
+    }
+    .chip.green .swatch{
+      background: rgba(0,255,140,0.85);
+      box-shadow: 0 0 18px rgba(0,255,140,0.18);
+    }
   </style>
 </head>
 
@@ -300,6 +457,27 @@
         <span class="dot red"></span> TF (reader)
         <span class="dot pink"></span> hub / factory
         <span class="dot purple"></span> locked DNA
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NEW: ATCG + pairing panel under the canvas (Acts 2–3 only)
+         ============================================================ -->
+    <section class="pairPanel" id="pairPanel" aria-label="DNA letters and base-pairing">
+      <div class="pairInner">
+        <div class="pairTitleRow">
+          <div class="pairTitle">DNA as letters (A, C, G, T) with base-pairing</div>
+          <div class="pairHint">A↔T and C↔G</div>
+        </div>
+
+        <div class="pairStripWrap">
+          <div class="pairStrip" id="pairStrip"></div>
+        </div>
+
+        <div class="pairChips" aria-hidden="true">
+          <span class="chip"><span class="swatch"></span> base pair (click “Base pairs”)</span>
+          <span class="chip green"><span class="swatch"></span> gene region (click “Gene”)</span>
+        </div>
       </div>
     </section>
   </div>
@@ -355,6 +533,82 @@
     const btnEpi = document.getElementById("btnEpi");
 
     // ============================================================
+    // NEW: Letter / base-pair strip under the canvas (Acts 2–3)
+    // ============================================================
+    const pairPanel = document.getElementById("pairPanel");
+    const pairStrip = document.getElementById("pairStrip");
+
+    // A fixed “DNA snippet” so it feels like a real string of letters.
+    // (You can change this to any sequence you like.)
+    const DNA_SEQ = "ATGCCATGTTACCGTACGATTCGAGCTAATCG";
+    function complement(base){
+      if (base === "A") return "T";
+      if (base === "T") return "A";
+      if (base === "C") return "G";
+      if (base === "G") return "C";
+      return "?";
+    }
+
+    // In the strip, we’ll define a “gene region” as a chunk of indices.
+    // This is purely a visual teaching aid (independent of the helix drawing).
+    const STRIP_GENE_START = 10;
+    const STRIP_GENE_END   = 19;
+
+    // When “Base pairs” is clicked, highlight *one* base pair in the strip.
+    // Keep it stable so users recognise it.
+    const STRIP_BASEPAIR_INDEX = 6;
+
+    function buildPairStrip(){
+      pairStrip.innerHTML = "";
+      for (let i=0; i<DNA_SEQ.length; i++){
+        const top = DNA_SEQ[i];
+        const bot = complement(top);
+
+        const bp = document.createElement("div");
+        bp.className = "bp";
+        bp.dataset.idx = String(i);
+
+        const t = document.createElement("div");
+        t.className = "top";
+        t.textContent = top;
+
+        const b = document.createElement("div");
+        b.className = "bot";
+        b.textContent = bot;
+
+        bp.appendChild(t);
+        bp.appendChild(b);
+        pairStrip.appendChild(bp);
+      }
+    }
+
+    function updatePairStrip(){
+      // Show only in Act 2 (index 1) and Act 3 (index 2)
+      const show = (actIndex === 1 || actIndex === 2);
+      pairPanel.style.display = show ? "block" : "none";
+      if (!show) return;
+
+      // clear classes
+      const nodes = pairStrip.querySelectorAll(".bp");
+      nodes.forEach(n => { n.classList.remove("active"); n.classList.remove("gene"); });
+
+      // apply based on current highlight mode
+      if (highlight === "basepair"){
+        const el = pairStrip.querySelector(`.bp[data-idx="${STRIP_BASEPAIR_INDEX}"]`);
+        if (el) el.classList.add("active");
+      }
+      if (highlight === "gene"){
+        for (let i=STRIP_GENE_START; i<=STRIP_GENE_END; i++){
+          const el = pairStrip.querySelector(`.bp[data-idx="${i}"]`);
+          if (el) el.classList.add("gene");
+        }
+      }
+    }
+
+    // Build once
+    buildPairStrip();
+
+    // ============================================================
     // Clickable words (text) + click-to-highlight (DNA)
     // ============================================================
     let highlight = null; // "basepair" | "gene" | "epi" | null
@@ -370,17 +624,21 @@
       if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
       if (id === "gene") highlight = (highlight === "gene") ? null : "gene";
       if (id === "epi") highlight = (highlight === "epi") ? null : "epi";
+      updatePairStrip();
     });
 
     // Buttons for DNA/Gene/Epi acts
     btnBasepair.addEventListener("click", () => {
       highlight = (highlight === "basepair") ? null : "basepair";
+      updatePairStrip();
     });
     btnGene.addEventListener("click", () => {
       highlight = (highlight === "gene") ? null : "gene";
+      updatePairStrip();
     });
     btnEpi.addEventListener("click", () => {
       highlight = (highlight === "epi") ? null : "epi";
+      updatePairStrip();
     });
 
     // ============================================================
@@ -607,6 +865,9 @@
         stageImage.removeAttribute("src");
         canvas.style.display = "block";
       }
+
+      // NEW: update the letter strip visibility (Acts 2–3 only)
+      updatePairStrip();
 
       initActWorld(true);
     }
