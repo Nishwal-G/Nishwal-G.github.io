@@ -197,6 +197,54 @@
     }
     .stageImage.show{ display:block; }
 
+    /* NEW: Inline overlay panel for SVG diagrams (Act 1 + Act 4) */
+    .stageOverlay{
+      position:absolute;
+      inset: 0;
+      display: none;
+      padding: 14px;
+      background: rgba(0,0,0,0.15);
+    }
+    .stageOverlay.show{ display:block; }
+    .overlayCard{
+      height: 100%;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      display:flex;
+      flex-direction: column;
+    }
+    .overlayHead{
+      padding: 12px 14px 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .overlayTitle{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.88);
+    }
+    .overlayHint{
+      font-size: 12px;
+      color: rgba(255,255,255,0.66);
+    }
+    .overlayBody{
+      flex: 1;
+      padding: 12px 14px 14px 14px;
+    }
+    .overlayBody svg{
+      width: 100%;
+      height: 100%;
+      display:block;
+    }
+
     .legend{
       position:absolute;
       left: 12px;
@@ -449,6 +497,19 @@
       <!-- images for opening + final -->
       <img id="stageImage" class="stageImage" alt="Act image"/>
 
+      <!-- NEW: SVG overlays (Act 1 flowchart + Act 4 DNA->chromatin) -->
+      <div class="stageOverlay" id="stageOverlay">
+        <div class="overlayCard">
+          <div class="overlayHead">
+            <div class="overlayTitle" id="overlayTitle">Story map</div>
+            <div class="overlayHint" id="overlayHint">A quick overview</div>
+          </div>
+          <div class="overlayBody" id="overlayBody">
+            <!-- SVG injected by JS -->
+          </div>
+        </div>
+      </div>
+
       <div class="dragHint" id="dragHint">Act 6: drag the big TF (red)</div>
 
       <div class="legend" id="legend">
@@ -490,6 +551,10 @@
     const ctx = canvas.getContext("2d");
 
     const stageImage = document.getElementById("stageImage");
+    const stageOverlay = document.getElementById("stageOverlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayHint  = document.getElementById("overlayHint");
+    const overlayBody  = document.getElementById("overlayBody");
 
     function resizeCanvas() {
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -538,8 +603,6 @@
     const pairPanel = document.getElementById("pairPanel");
     const pairStrip = document.getElementById("pairStrip");
 
-    // A fixed “DNA snippet” so it feels like a real string of letters.
-    // (You can change this to any sequence you like.)
     const DNA_SEQ = "ATGCCATGTTACCGTACGATTCGAGCTAATCG";
     function complement(base){
       if (base === "A") return "T";
@@ -549,13 +612,8 @@
       return "?";
     }
 
-    // In the strip, we’ll define a “gene region” as a chunk of indices.
-    // This is purely a visual teaching aid (independent of the helix drawing).
     const STRIP_GENE_START = 10;
     const STRIP_GENE_END   = 19;
-
-    // When “Base pairs” is clicked, highlight *one* base pair in the strip.
-    // Keep it stable so users recognise it.
     const STRIP_BASEPAIR_INDEX = 6;
 
     function buildPairStrip(){
@@ -583,16 +641,13 @@
     }
 
     function updatePairStrip(){
-      // Show only in Act 2 (index 1) and Act 3 (index 2)
       const show = (actIndex === 1 || actIndex === 2);
       pairPanel.style.display = show ? "block" : "none";
       if (!show) return;
 
-      // clear classes
       const nodes = pairStrip.querySelectorAll(".bp");
       nodes.forEach(n => { n.classList.remove("active"); n.classList.remove("gene"); });
 
-      // apply based on current highlight mode
       if (highlight === "basepair"){
         const el = pairStrip.querySelector(`.bp[data-idx="${STRIP_BASEPAIR_INDEX}"]`);
         if (el) el.classList.add("active");
@@ -605,8 +660,298 @@
       }
     }
 
-    // Build once
     buildPairStrip();
+
+    // ============================================================
+    // NEW: SVG diagrams for Act 1 and Act 4
+    // ============================================================
+    function flowchartSVG(){
+      // Crisp, self-contained story map (no external images).
+      return `
+<svg viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Story flowchart">
+  <defs>
+    <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(255,255,255,0.04)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.01)"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.45 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M0,0 L14,7 L0,14 Z" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+
+    <style>
+      .card{ fill: rgba(0,0,0,0.26); stroke: rgba(255,255,255,0.14); stroke-width: 2; }
+      .title{ font: 900 22px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: rgba(255,255,255,0.92); }
+      .sub{ font: 650 14px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: rgba(255,255,255,0.72); }
+      .tag{ font: 900 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; letter-spacing: .22em; text-transform: uppercase; fill: rgba(255,255,255,0.62); }
+      .arrow{ stroke: rgba(255,255,255,0.42); stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dotW{ fill: rgba(255,255,255,0.85); }
+      .dotG{ fill: rgba(0,255,140,0.90); }
+      .dotP{ fill: rgba(190,120,255,0.90); }
+      .dotR{ fill: rgba(255,60,60,0.86); }
+      .dotK{ fill: rgba(255,120,200,0.70); }
+      .mini{ font: 800 13px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New"; fill: rgba(255,255,255,0.80); }
+    </style>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1100" height="620" rx="22" fill="url(#gBg)"/>
+
+  <!-- Top banner -->
+  <text x="46" y="68" class="tag">The story in one picture</text>
+  <text x="46" y="104" class="title">Same DNA → different cell types</text>
+  <text x="46" y="132" class="sub">Identity is “which genes are read”, and 3D folding helps stabilise that choice.</text>
+
+  <!-- Cards -->
+  <g filter="url(#softGlow)">
+    <!-- Card 1 -->
+    <rect x="46" y="170" width="300" height="150" rx="18" class="card"/>
+    <circle cx="82" cy="214" r="8" class="dotW"/>
+    <text x="102" y="220" class="mini">DNA letters (A C G T)</text>
+    <text x="82" y="255" class="sub">Information is stored as base pairs</text>
+    <text x="82" y="280" class="sub">Genes are stretches you can read</text>
+
+    <!-- Card 2 -->
+    <rect x="400" y="170" width="300" height="150" rx="18" class="card"/>
+    <circle cx="436" cy="214" r="8" class="dotP"/>
+    <text x="456" y="220" class="mini">Epigenetic “locks”</text>
+    <text x="436" y="255" class="sub">Some regions become harder to access</text>
+    <text x="436" y="280" class="sub">Helps keep the “wrong chapters” quiet</text>
+
+    <!-- Card 3 -->
+    <rect x="754" y="170" width="300" height="150" rx="18" class="card"/>
+    <circle cx="790" cy="214" r="8" class="dotW"/>
+    <text x="810" y="220" class="mini">DNA → chromatin (polymer)</text>
+    <text x="790" y="255" class="sub">DNA is a 3D object that folds & moves</text>
+    <text x="790" y="280" class="sub">Folding changes who meets whom</text>
+  </g>
+
+  <!-- arrows between top cards -->
+  <path d="M346 245 C372 245, 374 245, 398 245" class="arrow"/>
+  <path d="M700 245 C726 245, 728 245, 752 245" class="arrow"/>
+
+  <!-- Bottom row -->
+  <g filter="url(#softGlow)">
+    <!-- TFs -->
+    <rect x="150" y="370" width="360" height="190" rx="18" class="card"/>
+    <circle cx="186" cy="414" r="8" class="dotR"/>
+    <text x="206" y="420" class="mini">Transcription factors (TFs)</text>
+    <text x="186" y="455" class="sub">TFs wander, then bind to specific sites</text>
+    <text x="186" y="480" class="sub">Multivalent TFs can act like sticky hubs</text>
+
+    <!-- BIPS / factories -->
+    <rect x="590" y="370" width="360" height="190" rx="18" class="card"/>
+    <circle cx="626" cy="414" r="8" class="dotK"/>
+    <text x="646" y="420" class="mini">BIPS / transcription factories</text>
+    <text x="626" y="455" class="sub">A dense hub attracts more TFs (rich-get-richer)</text>
+    <text x="626" y="480" class="sub">3D structure biases which genes stay active</text>
+    <text x="626" y="505" class="sub">→ a physical route to stable identity (memory)</text>
+
+    <!-- little “hub” doodle -->
+    <circle cx="902" cy="487" r="52" fill="rgba(255,120,200,0.10)" stroke="rgba(255,120,200,0.22)" stroke-width="2"/>
+    <circle cx="902" cy="487" r="18" class="dotR"/>
+    <circle cx="866" cy="458" r="10" class="dotR" opacity="0.55"/>
+    <circle cx="940" cy="458" r="10" class="dotR" opacity="0.55"/>
+    <circle cx="866" cy="516" r="10" class="dotR" opacity="0.55"/>
+    <circle cx="940" cy="516" r="10" class="dotR" opacity="0.55"/>
+  </g>
+
+  <!-- arrows down -->
+  <path d="M550 320 C550 338, 550 342, 330 370" class="arrow" opacity="0.8"/>
+  <path d="M550 320 C550 340, 550 345, 770 370" class="arrow" opacity="0.8"/>
+
+  <!-- Footer -->
+  <text x="46" y="602" class="sub">Use Next → to step through each piece, then watch the physics happen in the animations.</text>
+</svg>
+      `;
+    }
+
+    function dnaToChromatinSVG(){
+      // A cartoon: DNA helix wraps around histones -> nucleosomes -> fiber -> polymer chain
+      return `
+<svg viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DNA to chromatin diagram">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(255,255,255,0.04)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.01)"/>
+    </linearGradient>
+    <filter id="glow2" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arr2" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M0,0 L14,7 L0,14 Z" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <style>
+      .panel{ fill: rgba(0,0,0,0.22); stroke: rgba(255,255,255,0.12); stroke-width: 2; }
+      .title{ font: 950 22px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: rgba(255,255,255,0.92); }
+      .sub{ font: 650 14px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: rgba(255,255,255,0.72); }
+      .tag{ font: 900 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; letter-spacing: .22em; text-transform: uppercase; fill: rgba(255,255,255,0.62); }
+      .arrow{ stroke: rgba(255,255,255,0.42); stroke-width: 3; fill: none; marker-end: url(#arr2); }
+      .dna{ stroke: rgba(255,255,255,0.75); stroke-width: 3; fill: none; }
+      .dnaDim{ stroke: rgba(255,255,255,0.22); stroke-width: 3; fill: none; }
+      .hist{ fill: rgba(255,60,60,0.20); stroke: rgba(255,60,60,0.55); stroke-width: 2; }
+      .nuc{ fill: rgba(255,120,200,0.10); stroke: rgba(255,120,200,0.28); stroke-width: 2; }
+      .fiber{ stroke: rgba(255,255,255,0.26); stroke-width: 10; fill: none; stroke-linecap: round; }
+      .fiber2{ stroke: rgba(255,255,255,0.60); stroke-width: 3; fill: none; stroke-linecap: round; }
+      .bead{ fill: rgba(255,255,255,0.55); }
+      .bead2{ fill: rgba(255,255,255,0.85); }
+      .beadG{ fill: rgba(0,255,140,0.78); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="620" rx="22" fill="url(#bg2)"/>
+
+  <text x="46" y="68" class="tag">DNA → chromatin (the physical link)</text>
+  <text x="46" y="104" class="title">DNA wraps around histones, then folds into chromatin</text>
+  <text x="46" y="132" class="sub">This is why we can model chromatin as a moving polymer chain in later acts.</text>
+
+  <!-- Panels -->
+  <g filter="url(#glow2)">
+    <rect x="46" y="170" width="320" height="390" rx="18" class="panel"/>
+    <rect x="390" y="170" width="320" height="390" rx="18" class="panel"/>
+    <rect x="734" y="170" width="320" height="390" rx="18" class="panel"/>
+  </g>
+
+  <!-- Labels -->
+  <text x="72" y="206" class="title" style="font-size:18px;">1) DNA double helix</text>
+  <text x="416" y="206" class="title" style="font-size:18px;">2) Nucleosomes</text>
+  <text x="760" y="206" class="title" style="font-size:18px;">3) Chromatin fiber</text>
+
+  <text x="72" y="236" class="sub">Letters live on a helix.</text>
+  <text x="416" y="236" class="sub">DNA wraps around histone proteins.</text>
+  <text x="760" y="236" class="sub">Packed & folded → a polymer-like chain.</text>
+
+  <!-- Panel 1: stylised helix -->
+  <g transform="translate(70,260)">
+    <!-- back strand -->
+    <path class="dnaDim" d="M40,0 C120,40 120,120 40,160 C-40,200 -40,280 40,320 C120,360 120,440 40,480" />
+    <!-- front strand -->
+    <path class="dna" d="M120,0 C40,40 40,120 120,160 C200,200 200,280 120,320 C40,360 40,440 120,480" />
+    <!-- rungs -->
+    <g opacity="0.55">
+      <line x1="55" y1="20" x2="105" y2="20" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="60" x2="110" y2="60" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="55" y1="100" x2="105" y2="100" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="140" x2="110" y2="140" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="55" y1="180" x2="105" y2="180" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="220" x2="110" y2="220" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="55" y1="260" x2="105" y2="260" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="300" x2="110" y2="300" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="55" y1="340" x2="105" y2="340" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="380" x2="110" y2="380" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="55" y1="420" x2="105" y2="420" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <line x1="50" y1="460" x2="110" y2="460" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+    </g>
+
+    <text x="10" y="520" class="sub" style="font-size:13px;">(base pairs are the “rungs”)</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <path d="M366 365 C382 365, 378 365, 388 365" class="arrow"/>
+
+  <!-- Panel 2: nucleosomes (beads on a string) -->
+  <g transform="translate(410,270)">
+    <!-- DNA string -->
+    <path d="M10,240 C90,190 150,290 230,240 C290,205 320,250 340,260" stroke="rgba(255,255,255,0.35)" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+    <!-- nucleosome cores -->
+    <g>
+      <circle cx="70" cy="220" r="44" class="nuc"/>
+      <circle cx="170" cy="250" r="44" class="nuc"/>
+      <circle cx="270" cy="230" r="44" class="nuc"/>
+    </g>
+
+    <!-- histone cores -->
+    <g>
+      <circle cx="70" cy="220" r="18" class="hist"/>
+      <circle cx="170" cy="250" r="18" class="hist"/>
+      <circle cx="270" cy="230" r="18" class="hist"/>
+    </g>
+
+    <!-- DNA wraps (spirals) -->
+    <g fill="none" stroke-linecap="round">
+      <path d="M35,220 C45,195 95,195 105,220 C115,245 65,255 55,235 C45,215 85,210 95,232" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+      <path d="M135,250 C145,225 195,225 205,250 C215,275 165,285 155,265 C145,245 185,240 195,262" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+      <path d="M235,230 C245,205 295,205 305,230 C315,255 265,265 255,245 C245,225 285,220 295,242" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+    </g>
+
+    <text x="0" y="40" class="sub" style="font-size:13px;">Histone proteins (red cores) act like spools.</text>
+    <text x="0" y="62" class="sub" style="font-size:13px;">DNA wraps around them → “beads on a string”.</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <path d="M710 365 C726 365, 722 365, 732 365" class="arrow"/>
+
+  <!-- Panel 3: chromatin fiber + polymer beads -->
+  <g transform="translate(752,270)">
+    <!-- thick fiber -->
+    <path class="fiber" d="M20,250 C70,190 120,310 170,250 C220,190 270,310 320,250"/>
+    <!-- thin fiber highlight -->
+    <path class="fiber2" d="M20,250 C70,190 120,310 170,250 C220,190 270,310 320,250" opacity="0.55"/>
+
+    <!-- polymer beads along fiber -->
+    <circle cx="35" cy="238" r="6" class="bead2"/>
+    <circle cx="70" cy="210" r="6" class="bead"/>
+    <circle cx="105" cy="248" r="6" class="bead2"/>
+    <circle cx="140" cy="290" r="6" class="bead"/>
+    <circle cx="170" cy="250" r="6" class="bead2"/>
+    <circle cx="205" cy="210" r="6" class="bead"/>
+    <circle cx="240" cy="250" r="6" class="bead2"/>
+    <circle cx="275" cy="292" r="6" class="bead"/>
+    <circle cx="320" cy="250" r="6" class="bead2"/>
+
+    <!-- “active region” bead -->
+    <circle cx="205" cy="210" r="8" class="beadG"/>
+
+    <text x="0" y="40" class="sub" style="font-size:13px;">Now it’s a packed, flexible chain.</text>
+    <text x="0" y="62" class="sub" style="font-size:13px;">That’s why polymer models make sense.</text>
+    <text x="0" y="84" class="sub" style="font-size:13px;">(green bead = “gene region”)</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="46" y="602" class="sub">In Act 4 you’ll interact with a polymer cartoon of chromatin (a coarse-grained version of this).</text>
+</svg>
+      `;
+    }
+
+    function updateStageOverlay(){
+      // Show overlay only for Act 1 (flowchart) and Act 4 (DNA->chromatin)
+      // Act 1 is index 0, Act 4 is index 4.
+      const show = (actIndex === 0 || actIndex === 4);
+
+      stageOverlay.classList.toggle("show", show);
+      if (!show) {
+        overlayBody.innerHTML = "";
+        return;
+      }
+
+      if (actIndex === 0){
+        overlayTitle.textContent = "Story map";
+        overlayHint.textContent  = "What you’re about to see";
+        overlayBody.innerHTML = flowchartSVG();
+      } else if (actIndex === 4){
+        overlayTitle.textContent = "DNA → chromatin";
+        overlayHint.textContent  = "How the helix becomes a polymer";
+        overlayBody.innerHTML = dnaToChromatinSVG();
+      }
+    }
 
     // ============================================================
     // Clickable words (text) + click-to-highlight (DNA)
@@ -645,13 +990,13 @@
     // Acts
     // ============================================================
     let actIndex = 0;
-    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act1_img | act8_img
+    let mode = "dna"; // dna | epi | act4 | act5 | act6 | act7 | act8_img
 
     const ACTS = [
       {
-        mode: "act1_img",
+        mode: "act1_overlay",
         title: "How do cells know who they are?",
-        sub: "Most cells carry the same DNA — but they don’t behave the same. Why?",
+        sub: "A story about information, locks, and 3D physics.",
         html: `
           <p>
             A skin cell, a neuron, and a blood cell usually contain the <strong>same DNA</strong>. Yet they do totally different jobs.
@@ -661,8 +1006,8 @@
             If different “chapters” get used, you get different cell types.
           </p>
           <p>
-            In this story we’ll build one more layer onto that idea:
-            DNA isn’t just a code — it’s also a <strong>3D object</strong> that folds and moves. That folding can change what gets read.
+            In this story we add one more layer:
+            DNA isn’t just a code — it’s also a <strong>3D object</strong> that folds and moves. That folding can help stabilise identity.
           </p>
         `,
         showLegend: false
@@ -729,15 +1074,15 @@
       {
         mode: "act4",
         title: "DNA is not a straight line — it folds in 3D",
-        sub: "When you zoom out, DNA becomes chromatin: a flexible chain packed inside the nucleus.",
+        sub: "Zoom out: DNA wraps around proteins and becomes chromatin, a flexible polymer in the nucleus.",
         html: `
           <p>
             DNA is extremely long (about <strong>2 metres</strong> per cell if stretched out), but the nucleus is tiny.
             So DNA wraps around proteins and folds into <strong>chromatin</strong>.
           </p>
           <p>
-            Physicists often model chromatin as a flexible chain (a <strong>polymer</strong>) made of connected beads.
-            In this cartoon, <strong>each bead stands for ~millions of base pairs</strong>.
+            The diagram below shows the physical link: <strong>DNA → nucleosomes (histones) → chromatin fiber</strong>.
+            Physicists then coarse-grain this into a flexible chain (a <strong>polymer</strong>) of beads.
           </p>
           <p>
             <strong>Try it:</strong> drag the chain and fold it over itself. Let go and it will keep wiggling.
@@ -832,9 +1177,6 @@
       else legend.classList.remove("show");
 
       // Mini buttons visibility logic:
-      // Act 2: Base pairs only
-      // Act 3: Base pairs + Gene
-      // Act 4: Epigenetics only
       const showMini = (mode === "dna" || mode === "epi");
       dnaButtons.style.display = showMini ? "flex" : "none";
 
@@ -851,12 +1193,8 @@
         btnEpi.style.display = "inline-block";
       }
 
-      // Image overlay logic (FIXED MODES)
-      if (mode === "act1_img") {
-        stageImage.src = "assets/who_am_I_cell.png";
-        stageImage.classList.add("show");
-        canvas.style.display = "none";
-      } else if (mode === "act8_img") {
+      // Image overlay logic (final act only now)
+      if (mode === "act8_img") {
         stageImage.src = "assets/bips.png";
         stageImage.classList.add("show");
         canvas.style.display = "none";
@@ -865,6 +1203,9 @@
         stageImage.removeAttribute("src");
         canvas.style.display = "block";
       }
+
+      // NEW: stage overlay (Act 1 and Act 4)
+      updateStageOverlay();
 
       // NEW: update the letter strip visibility (Acts 2–3 only)
       updatePairStrip();
@@ -1005,9 +1346,6 @@
           ctx.restore();
         }
       }
-
-      // IMPORTANT: we removed the "Locked region" arrow + label entirely.
-      // Also: no basepair/gene arrows here either (as requested).
     }
 
     // ============================================================
@@ -1033,14 +1371,12 @@
       repelK: 0.55
     };
 
-    // Big TF for act6 + act7 (center hub)
     const bigTF = { x: 0, y: 0, vx: 0, vy: 0, radius: 34 };
     let draggingTF = false;
     let dragOffset = {x:0, y:0};
 
-    // Act4: dragging the polymer (grab nearest bead)
     let draggingBead = { active:false, idx:-1 };
-    let beadDragK = 0.020; // springy "mouse tether" strength
+    let beadDragK = 0.020;
 
     function mouseToCanvas(e){
       const rect = canvas.getBoundingClientRect();
@@ -1068,7 +1404,6 @@
     canvas.addEventListener("pointerdown", (e) => {
       const p = pointerPos(e);
 
-      // Act 6: drag big TF
       if (mode === "act6"){
         const dx = p.x - bigTF.x;
         const dy = p.y - bigTF.y;
@@ -1081,7 +1416,6 @@
         }
       }
 
-      // Act 4: drag polymer bead
       if (mode === "act4"){
         const idx = findNearestBead(p.x, p.y, 26);
         if (idx !== -1){
@@ -1117,8 +1451,7 @@
 
     const lastPointer = {x:0,y:0};
 
-    // extra big TFs for act7
-    let bigTFs = []; // {x,y,vx,vy,radius}
+    let bigTFs = [];
 
     function initActWorld(force=false){
       const polymerModes = ["act4","act5","act6","act7"];
@@ -1131,7 +1464,6 @@
       resizeCanvas();
       const W = canvas.width, H = canvas.height;
 
-      // polymer init
       world.beads = [];
       world.bvx = new Array(P.beadCount).fill(0);
       world.bvy = new Array(P.beadCount).fill(0);
@@ -1145,7 +1477,6 @@
         world.beads.push({x,y});
       }
 
-      // Act 4: pre-fold (same as before)
       if (mode === "act4"){
         const a1 = {x: W*0.44, y: H*0.50};
         const a2 = {x: W*0.60, y: H*0.62};
@@ -1172,7 +1503,6 @@
         }
       }
 
-      // Act 5: TF wander
       world.tfs = [];
       if (mode === "act5"){
         for (let i=0;i<36;i++){
@@ -1184,21 +1514,17 @@
         }
       }
 
-      // Act 6: big TF
       if (mode === "act6"){
         bigTF.x = W*0.60;
         bigTF.y = H*0.56;
         bigTF.vx = 0; bigTF.vy = 0;
       }
 
-      // Act 7: start with polymer ALREADY WRAPPED around bigTF (high density),
-      // then drift additional big TFs in.
       if (mode === "act7"){
         bigTF.x = W*0.58;
         bigTF.y = H*0.54;
         bigTF.vx = 0; bigTF.vy = 0;
 
-        // pre-wrap: nudge many beads into a loose spiral around bigTF
         const center = {x: bigTF.x, y: bigTF.y};
         const R0 = bigTF.radius * 1.10;
         const R1 = bigTF.radius * 3.8;
@@ -1275,7 +1601,7 @@
         fy -= push * dy/d;
       } else if (d < attractR){
         const s = (1 - d/attractR);
-        const pull = 0.010 * s;  // slow
+        const pull = 0.010 * s;
         fx += pull * dx;
         fy += pull * dy;
       }
@@ -1286,7 +1612,6 @@
       world.frame++;
       const n = P.beadCount;
 
-      // internal polymer forces
       for (let i=0;i<n-1;i++){
         const a=world.beads[i], b=world.beads[i+1];
         const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
@@ -1299,7 +1624,6 @@
         world.bvy[i] += f.fy;
       }
 
-      // excluded volume
       const minBB = 2*P.beadR;
       for (let i=0;i<n;i++){
         const i0=Math.max(0,i-14);
@@ -1314,7 +1638,6 @@
         }
       }
 
-      // Act 4: mouse tether to pull a bead (interactive folding)
       if (mode === "act4" && draggingBead.active && draggingBead.idx >= 0){
         const i = draggingBead.idx;
         const b = world.beads[i];
@@ -1324,7 +1647,6 @@
         world.bvy[i] += beadDragK * dy;
       }
 
-      // Act 6: wrap around bigTF
       if (mode === "act6"){
         for (let i=0;i<n;i++){
           const p=world.beads[i];
@@ -1334,7 +1656,6 @@
         }
       }
 
-      // Brownian noise control per act
       let brown = 0.16;
       if (mode === "act4") brown = 0.22;
       if (mode === "act5") brown = 0.02;
@@ -1354,7 +1675,6 @@
         world.bvx[i]=out.vx; world.bvy[i]=out.vy;
       }
 
-      // Act 5 TF wander
       if (mode === "act5"){
         const W=canvas.width, H=canvas.height;
         for (const tf of world.tfs){
@@ -1371,7 +1691,6 @@
         }
       }
 
-      // Act 7: big TFs drift slowly toward hub
       if (mode === "act7"){
         const W=canvas.width, H=canvas.height;
         const target = {x: bigTF.x, y: bigTF.y};
@@ -1396,7 +1715,6 @@
     }
 
     function drawPolymerAndTFs(){
-      // polymer line
       ctx.save();
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 3.0;
@@ -1408,19 +1726,16 @@
       ctx.stroke();
       ctx.restore();
 
-      // beads
       for (const p of world.beads){
         glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
       }
 
-      // act5 TFs
       if (mode === "act5"){
         for (const tf of world.tfs){
           glowCircle(tf.x, tf.y, 6.2, "rgba(255,60,60,0.65)", 20);
         }
       }
 
-      // act6 big TF
       if (mode === "act6"){
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
@@ -1431,7 +1746,6 @@
         glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 40);
       }
 
-      // act7: show wrapped polymer + recruitment
       if (mode === "act7"){
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
@@ -1453,8 +1767,14 @@
     function tick(){
       resizeCanvas();
 
-      // If we're showing an image act, do NOT draw on canvas
-      if (mode === "act1_img" || mode === "act8_img"){
+      // If we're showing overlay-only acts, don't run canvas animation
+      if (mode === "act1_overlay"){
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      // Final image act
+      if (mode === "act8_img"){
         requestAnimationFrame(tick);
         return;
       }
@@ -1486,6 +1806,7 @@
   </script>
 </body>
 </html>
+
 
 
 
