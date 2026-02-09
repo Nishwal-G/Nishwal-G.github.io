@@ -1396,7 +1396,7 @@
 
       // hub pull on hub page (THIS is what stops the chain “relaxing away”)
       if (mode === "hub_story"){
-        const strength = 1.1; // strong enough to keep it clustered
+        const strength = 0.7; // strong enough to keep it clustered
         for (let i=0;i<n;i++){
           const p=world.beads[i];
           const f = hubPullForce(p, bigTF, strength);
