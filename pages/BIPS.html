@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>How do cells remember who they are? | DNA → Chromatin → BIPS</title>
 
   <style>
@@ -50,7 +50,7 @@
       align-items: center;
     }
 
-    /* TEXT AREA (ABOVE CANVAS) */
+    /* TEXT AREA (SCROLL STORY) */
     .textPanel{
       width: min(var(--maxw), 100%);
       border: 1px solid var(--border);
@@ -62,17 +62,37 @@
 
     .textInner{ padding: 18px 18px 14px 18px; }
 
+    .kickerRow{
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
     .kicker{
-      font-weight: 800;
-      letter-spacing: 0.2px;
+      font-weight: 900;
+      letter-spacing: 0.25px;
       font-size: 12px;
       color: rgba(31,41,55,0.65);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin: 0;
+    }
+
+    .progressPill{
+      border: 1px solid rgba(31,41,55,0.18);
+      background: rgba(31,41,55,0.03);
+      color: rgba(31,41,55,0.80);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      user-select:none;
     }
 
     .sceneTitle{
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: -0.4px;
       font-size: clamp(22px, 2.3vw, 30px);
       margin: 0;
@@ -87,9 +107,57 @@
       line-height: 1.65;
     }
 
-    /* NEW: learning goal callout */
+    /* Story sections (scroll) */
+    .story{
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section{
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: 16px;
+      padding: 14px 14px 12px 14px;
+      background: rgba(255,255,255,0.96);
+    }
+    .section.active{
+      border-color: rgba(37,99,235,0.25);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.06);
+    }
+
+    .sectionHeader{
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .sectionTag{
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing: 0.18px;
+      text-transform: uppercase;
+      color: rgba(31,41,55,0.60);
+    }
+    .sectionTitle{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      font-size: 18px;
+      margin: 6px 0 0 0;
+      color: rgba(31,41,55,0.94);
+    }
+    .sectionSub{
+      margin-top: 6px;
+      color: rgba(31,41,55,0.70);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Learning goal callout */
     .learnGoal{
-      margin-top: 12px;
+      margin-top: 10px;
       padding: 10px 12px;
       border: 1px solid rgba(31,41,55,0.12);
       background: rgba(5,150,105,0.06);
@@ -98,15 +166,14 @@
       color: rgba(31,41,55,0.88);
       font-size: 14px;
       line-height: 1.55;
-      display: none;
     }
     .learnGoal strong{
       color: rgba(5,150,105,0.95);
-      font-weight: 900;
+      font-weight: 950;
     }
 
     .storyText{
-      margin-top: 14px;
+      margin-top: 10px;
       color: rgba(31,41,55,0.92);
       font-size: 16px;
       line-height: 1.78;
@@ -126,61 +193,61 @@
       border-radius: 999px;
       border: 1px solid rgba(31,41,55,0.16);
       background: rgba(31,41,55,0.04);
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: 0.2px;
       text-transform: uppercase;
-      font-size: 13px;
+      font-size: 12px;
       color: rgba(31,41,55,0.92);
       cursor: pointer;
       user-select:none;
       transform: translateY(-1px);
+      white-space: nowrap;
     }
     .bigClick:hover{ background: rgba(31,41,55,0.07); }
     .bigClick.green{ border-color: rgba(5,150,105,0.28); color: var(--green); background: rgba(5,150,105,0.05); }
     .bigClick.purple{ border-color: rgba(124,58,237,0.24); color: var(--purple); background: rgba(124,58,237,0.05); }
     .bigClick.white{ border-color: rgba(31,41,55,0.18); color: rgba(31,41,55,0.92); }
 
-    /* Controls */
-    .controls{
+    /* Tiny helper row */
+    .helperRow{
+      margin-top: 10px;
       display:flex;
       gap: 10px;
-      align-items: center;
-      justify-content: flex-end;
-      margin-top: 14px;
       flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .pill{
+    .hintPill{
+      border: 1px solid rgba(31,41,55,0.18);
+      background: rgba(31,41,55,0.03);
+      color: rgba(31,41,55,0.75);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .toTop{
       border: 1px solid rgba(31,41,55,0.18);
       background: rgba(255,255,255,0.92);
       color: rgba(31,41,55,0.92);
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: 999px;
       cursor: pointer;
-      font-weight: 850;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      font-weight: 950;
+      font-size: 12px;
       user-select:none;
-      min-height: 42px; /* better taps on phones */
     }
-    .pill:hover{ background: rgba(31,41,55,0.04); }
-    .pill.ghost{ background: rgba(255,255,255,0.92); }
-    .pill.strong{
-      background: rgba(37,99,235,0.10);
-      border-color: rgba(37,99,235,0.30);
-      color: rgba(37,99,235,0.95);
-    }
-    .pill:disabled{ opacity: 0.45; cursor: default; }
+    .toTop:hover{ background: rgba(31,41,55,0.04); }
 
-    /* ACT 2+3+4 mini buttons (Base pair / Gene / Epigenetics) */
+    /* Act 2+3+4 mini buttons (Base pair / Gene / Locks) */
     .miniControls{
       display:flex;
       gap: 10px;
       align-items: center;
       justify-content: flex-start;
-      margin-top: 12px;
+      margin-top: 10px;
       flex-wrap: wrap;
     }
     .miniPill{
@@ -190,7 +257,7 @@
       padding: 9px 12px;
       border-radius: 999px;
       cursor: pointer;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 12px;
       letter-spacing: 0.2px;
       text-transform: uppercase;
@@ -210,7 +277,8 @@
       border-radius: 18px;
       overflow: hidden;
       background: var(--figureBg);
-      position: relative;
+      position: sticky;
+      top: 14px;
       box-shadow: 0 10px 30px rgba(17,24,39,0.12);
     }
 
@@ -220,7 +288,7 @@
       width:100%;
       height:100%;
       display:block;
-      touch-action: none; /* important for pointer dragging on mobile */
+      touch-action: none;
     }
 
     /* Act-image overlay (final act only) */
@@ -289,13 +357,13 @@
     .dragHint.show{ opacity: 1; transform: translateY(0); }
 
     @media (max-width: 860px){
-      .stage{ height: 52vh; }
+      .stage{ height: 52vh; position: relative; top: auto; }
       .textInner{ padding: 16px 14px 12px 14px; }
       .storyText{ font-size: 16px; }
     }
 
     /* ============================================================
-       Letter / base-pair panel shown under canvas in Acts 2–3
+       Letter / base-pair panel shown under canvas in DNA sections
        ============================================================ */
     .pairPanel{
       width: min(var(--maxw), 100%);
@@ -315,7 +383,7 @@
       margin-bottom: 10px;
     }
     .pairTitle{
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: -0.2px;
       font-size: 14px;
       color: rgba(31,41,55,0.88);
@@ -323,7 +391,7 @@
     .pairHint{
       font-size: 12px;
       color: rgba(31,41,55,0.62);
-      font-weight: 700;
+      font-weight: 850;
     }
 
     .pairStripWrap{
@@ -362,7 +430,7 @@
     .bp .top, .bp .bot{
       width: 100%;
       text-align: center;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 18px;
       line-height: 1.0;
       letter-spacing: 0.4px;
@@ -418,7 +486,7 @@
       border: 1px solid rgba(31,41,55,0.12);
       background: rgba(31,41,55,0.03);
       color: rgba(31,41,55,0.72);
-      font-weight: 800;
+      font-weight: 900;
       font-size: 12px;
       user-select:none;
     }
@@ -429,63 +497,59 @@
       background: rgba(37,99,235,0.75);
     }
     .chip.green .swatch{ background: rgba(5,150,105,0.80); }
+
   </style>
 </head>
 
 <body>
   <div class="page">
-    <section class="textPanel" aria-label="Story text">
+    <section class="textPanel" aria-label="Story (scroll)">
       <div class="textInner">
-        <div class="kicker" id="kicker">Page 1 of 8</div>
-
-        <h1 class="sceneTitle" id="sceneTitle">How do cells know who they are?</h1>
-
-        <div class="sceneSub" id="sceneSub">
-          Read the story, then look at the figure underneath. Use Next / Prev to move through the pages.
+        <div class="kickerRow">
+          <div class="kicker">Scroll the story — the figure updates as you go</div>
+          <div class="progressPill" id="progressPill">Section 1 / 8</div>
         </div>
 
-        <!-- NEW: learning goal -->
-        <div class="learnGoal" id="learnGoal"></div>
+        <h1 class="sceneTitle">How do cells remember who they are?</h1>
 
-        <div class="storyText" id="storyText"></div>
-
-        <!-- Mini buttons: shown for DNA (Act 2–3) + Epigenetics (Act 4) -->
-        <div class="miniControls" id="dnaButtons" style="display:none;">
-          <button class="miniPill white" id="btnBasepair" type="button">Base pairs</button>
-          <button class="miniPill green" id="btnGene" type="button">Gene</button>
-          <button class="miniPill purple" id="btnEpi" type="button">Epigenetics</button>
+        <div class="sceneSub">
+          Same DNA, different jobs. This story shows a simple idea:
+          <strong>DNA is the book</strong>, but <strong>how it’s folded</strong> helps decide what gets read.
+          <br>
+          As you scroll, the animation on the right changes to match the section you’re reading.
         </div>
 
-        <div class="controls">
-          <button class="pill ghost" id="prevBtn" type="button">← Prev</button>
-          <button class="pill ghost" id="resetBtn" type="button" title="Reset this page">↻ Reset</button>
-          <button class="pill strong" id="nextBtn" type="button">Next →</button>
+        <div class="helperRow">
+          <div class="hintPill" id="activeHint">Tip: scroll slowly — the figure will “snap” to each chapter.</div>
+          <button class="toTop" id="toTopBtn" type="button">↑ Back to top</button>
         </div>
+
+        <div class="story" id="story"></div>
       </div>
     </section>
 
     <section class="stage" aria-label="Figure (animation canvas)">
       <canvas id="stageCanvas"></canvas>
 
-      <!-- final page image -->
-      <img id="stageImage" class="stageImage" alt="Page image"/>
+      <!-- final image -->
+      <img id="stageImage" class="stageImage" alt="Summary image"/>
 
-      <div class="dragHint" id="dragHint">Page 6: drag the big TF (red)</div>
+      <div class="dragHint" id="dragHint">Drag the big red “reader”</div>
 
       <div class="legend" id="legend">
-        <span class="dot white"></span> chromatin
-        <span class="dot green"></span> gene / active region
-        <span class="dot red"></span> TF (reader)
-        <span class="dot pink"></span> hub / factory
-        <span class="dot purple"></span> locked DNA
+        <span class="dot white"></span> DNA (as a squiggly chain)
+        <span class="dot green"></span> a gene spot
+        <span class="dot red"></span> reader proteins
+        <span class="dot pink"></span> busy hub
+        <span class="dot purple"></span> hard-to-open DNA
       </div>
     </section>
 
-    <!-- ATCG + pairing panel under the figure (Pages 2–3 only) -->
+    <!-- DNA letters panel -->
     <section class="pairPanel" id="pairPanel" aria-label="DNA letters and base-pairing">
       <div class="pairInner">
         <div class="pairTitleRow">
-          <div class="pairTitle">DNA as letters (A, C, G, T) with base-pairing</div>
+          <div class="pairTitle">DNA as letters (A, C, G, T) — with matching pairs</div>
           <div class="pairHint">A↔T and C↔G</div>
         </div>
 
@@ -494,8 +558,8 @@
         </div>
 
         <div class="pairChips" aria-hidden="true">
-          <span class="chip"><span class="swatch"></span> base pair (click “Base pairs”)</span>
-          <span class="chip green"><span class="swatch"></span> gene region (click “Gene”)</span>
+          <span class="chip"><span class="swatch"></span> one base pair</span>
+          <span class="chip green"><span class="swatch"></span> a gene region</span>
         </div>
       </div>
     </section>
@@ -507,7 +571,6 @@
     // ============================================================
     const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
-
     const stageImage = document.getElementById("stageImage");
 
     function resizeCanvas() {
@@ -532,28 +595,33 @@
     function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
 
     // ============================================================
-    // UI
+    // Story sections (scroll-controlled)
     // ============================================================
-    const sceneTitle = document.getElementById("sceneTitle");
-    const sceneSub   = document.getElementById("sceneSub");
-    const storyText  = document.getElementById("storyText");
-    const kicker     = document.getElementById("kicker");
-    const learnGoal  = document.getElementById("learnGoal");
-
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const resetBtn = document.getElementById("resetBtn");
-
+    const storyEl = document.getElementById("story");
+    const progressPill = document.getElementById("progressPill");
     const legend = document.getElementById("legend");
     const dragHint = document.getElementById("dragHint");
+    const activeHint = document.getElementById("activeHint");
 
-    const dnaButtons = document.getElementById("dnaButtons");
-    const btnBasepair = document.getElementById("btnBasepair");
-    const btnGene = document.getElementById("btnGene");
-    const btnEpi = document.getElementById("btnEpi");
+    document.getElementById("toTopBtn").addEventListener("click", () => {
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+
+    // Clickable words highlight behaviour (DNA sections)
+    let highlight = null; // "basepair" | "gene" | "locks" | null
+
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest("[data-click]");
+      if (!el) return;
+      const id = el.getAttribute("data-click");
+      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
+      if (id === "gene")     highlight = (highlight === "gene") ? null : "gene";
+      if (id === "locks")    highlight = (highlight === "locks") ? null : "locks";
+      updatePairStrip();
+    });
 
     // ============================================================
-    // Letter / base-pair strip under the figure (Pages 2–3)
+    // DNA letters strip (shown in DNA sections)
     // ============================================================
     const pairPanel = document.getElementById("pairPanel");
     const pairStrip = document.getElementById("pairStrip");
@@ -595,37 +663,8 @@
       }
     }
 
-    // ============================================================
-    // Clickable words (text) + click-to-highlight (DNA)
-    // ============================================================
-    let highlight = null; // "basepair" | "gene" | "epi" | null
-
-    document.addEventListener("click", (e) => {
-      const el = e.target.closest("[data-click]");
-      if (!el) return;
-      const id = el.getAttribute("data-click");
-      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
-      if (id === "gene") highlight = (highlight === "gene") ? null : "gene";
-      if (id === "epi") highlight = (highlight === "epi") ? null : "epi";
-      updatePairStrip();
-    });
-
-    btnBasepair.addEventListener("click", () => {
-      highlight = (highlight === "basepair") ? null : "basepair";
-      updatePairStrip();
-    });
-    btnGene.addEventListener("click", () => {
-      highlight = (highlight === "gene") ? null : "gene";
-      updatePairStrip();
-    });
-    btnEpi.addEventListener("click", () => {
-      highlight = (highlight === "epi") ? null : "epi";
-      updatePairStrip();
-    });
-
     function updatePairStrip(){
-      // Show only on Page 2 (index 1) and Page 3 (index 2)
-      const show = (actIndex === 1 || actIndex === 2);
+      const show = (mode === "dna" || mode === "locks");
       pairPanel.style.display = show ? "block" : "none";
       if (!show) return;
 
@@ -647,259 +686,327 @@
     buildPairStrip();
 
     // ============================================================
-    // Acts (now “pages”)
+    // The story content (8 sections)
     // ============================================================
-    let actIndex = 0;
-    let mode = "intro"; // intro | dna | epi | act4 | act5 | act6 | act7 | act8_img
-
-    const ACTS = [
+    const SECTIONS = [
       {
+        id: "s1",
+        tag: "Chapter 1",
+        title: "Same book, different jobs",
+        sub: "Every cell carries the same DNA book — but different cells read different parts.",
+        goal: "Get the big idea: <strong>DNA is the book</strong>, but <strong>what gets read</strong> depends on access and 3D folding.",
         mode: "intro",
-        title: "How do cells know who they are?",
-        sub: "Most cells carry the same DNA — but they don’t behave the same. Why?",
-        goal: "Learning goal: understand how <strong>information</strong> (DNA) and <strong>physics</strong> (3D folding) work together to shape gene activity.",
+        hint: "You’re at the start. The figure shows the whole story arc.",
+        showLegend: false,
         html: `
           <p>
-            A skin cell, a neuron, and a blood cell usually contain the <strong>same DNA</strong> — yet they do different jobs.
-            This mini-story builds a simple chain of ideas:
+            Imagine every cell owns the <strong>same book</strong>.
+            The book is DNA.
+          </p>
+          <p>
+            A skin cell and a neuron have the same book —
+            but they do different jobs because they don’t read the same pages at the same time.
           </p>
           <ul>
-            <li><strong>DNA is a code</strong> written in four letters (A, C, G, T).</li>
-            <li><strong>Base pairing</strong> (A–T, C–G) makes the double helix stable.</li>
-            <li><strong>Genes</strong> are meaningful stretches of DNA that cells can “read”.</li>
-            <li><strong>Epigenetics</strong> helps keep some regions more closed / less accessible.</li>
-            <li><strong>Chromatin is a polymer</strong>: DNA folds in 3D around proteins.</li>
-            <li><strong>Multivalent TFs</strong> can pull chromatin together, forming dense hubs.</li>
-            <li>Those hubs can bias which regions get read → a physical contribution to <strong>cell identity</strong>.</li>
+            <li><strong>DNA</strong> is the letters.</li>
+            <li><strong>Genes</strong> are the sentences that mean something.</li>
+            <li><strong>Locks</strong> can make some pages hard to open.</li>
+            <li><strong>Folding</strong> changes what’s nearby and easy to reach.</li>
+            <li><strong>Hungry readers</strong> (proteins) spend more time where there are many “sentences” close together.</li>
           </ul>
-        `,
-        showLegend: false
+        `
       },
       {
+        id: "s2",
+        tag: "Chapter 2",
+        title: "DNA is a message in four letters",
+        sub: "DNA uses a tiny alphabet: A, C, G, T.",
+        goal: "Recognise the DNA alphabet and what a <strong>base pair</strong> is.",
         mode: "dna",
-        title: "What is DNA?",
-        sub: "DNA is information written in a simple alphabet — and arranged in a famous shape.",
-        goal: "Learning goal: recognise the DNA “alphabet” and how <strong>base pairs</strong> form the rungs of the double helix.",
+        hint: "Try clicking: Base pair / Gene in the text (little pill-words).",
+        showLegend: false,
         html: `
           <p>
-            DNA is a long molecule that stores biological information using just four “letters”:
+            DNA is written using just four letters:
             <strong>A</strong>, <strong>C</strong>, <strong>G</strong>, and <strong>T</strong>.
-            (Books use 26 letters — life gets a lot done with 4.)
           </p>
           <p>
-            DNA is shaped like a twisted ladder called the <strong>double helix</strong>.
-            Each rung is a matched pair of letters: A pairs with T, and C pairs with G.
-            Those rungs are called <strong>base pairs</strong>.
+            DNA usually comes as a twisted ladder.
+            Each rung is a matching pair:
+            <span class="bigClick white" data-click="basepair">base pair</span>.
+            A matches with T, and C matches with G.
           </p>
           <p>
-            Click the button below to highlight what a <strong>base pair</strong> looks like on the helix — and in the letter strip under the figure.
+            Click <span class="bigClick white" data-click="basepair">base pair</span> to highlight one rung —
+            both on the helix and in the little letter strip under the figure.
           </p>
-        `,
-        showLegend: false
+        `
       },
       {
+        id: "s3",
+        tag: "Chapter 3",
+        title: "A gene is a useful stretch of DNA",
+        sub: "If letters are the alphabet, a gene is a sentence the cell can copy and use.",
+        goal: "Understand a <strong>gene</strong> as a continuous stretch of DNA letters.",
         mode: "dna",
-        title: "What is a gene?",
-        sub: "If base pairs are letters, genes are meaningful “sentences” the cell can read.",
-        goal: "Learning goal: connect the idea of a <strong>gene</strong> to a contiguous stretch of DNA letters that can be read and used.",
+        hint: "Click the word ‘gene’ below to highlight a whole region.",
+        showLegend: false,
         html: `
           <p>
-            If <strong>base pairs</strong> are the letters, a <strong>gene</strong> is like a sentence (or recipe) inside the DNA book.
+            A <span class="bigClick green" data-click="gene">gene</span>
+            is a stretch of DNA that the cell can copy into RNA, and often use to build proteins.
           </p>
           <p>
-            When a cell “reads” a gene, it makes an RNA copy and often uses that to build proteins — the molecules that do work in the cell.
+            Different cell types choose different genes to read more often —
+            that’s a big part of what makes them different.
           </p>
           <p>
-            Different cell types read different genes. Click <strong>Gene</strong> to highlight one gene-sized region on the helix and in the letter strip.
+            Click <span class="bigClick green" data-click="gene">gene</span> to highlight a gene-sized region.
           </p>
-        `,
-        showLegend: false
+        `
       },
       {
-        mode: "epi",
-        title: "Epigenetics: locking some regions",
-        sub: "Cells can keep the ‘wrong’ chapters harder to access — to stay the same kind of cell.",
-        goal: "Learning goal: understand epigenetics as a way to tune <strong>accessibility</strong> (open vs closed DNA regions).",
+        id: "s4",
+        tag: "Chapter 4",
+        title: "Some pages are harder to open",
+        sub: "Cells can ‘lock’ parts of DNA to make them less reachable.",
+        goal: "See “locks” as a simple way to change <strong>access</strong> (easy vs hard to read).",
+        mode: "locks",
+        hint: "Click ‘locks’ to make the purple regions stand out.",
+        showLegend: false,
         html: `
           <p>
-            Cells use <strong>epigenetics</strong> to help keep some DNA regions “closed” and others more “open”.
-            You can think of it like placing locks and sticky notes in the DNA book: some chapters become hard to open.
+            Cells can add chemical marks that make some DNA regions more “closed”.
+            Think of it like putting a <span class="bigClick purple" data-click="locks">lock</span> on a chapter.
           </p>
           <p>
-            In the animation, locked regions glow in <span style="color: rgba(124,58,237,0.95); font-weight:900;">purple</span>.
-            Click <strong>Epigenetics</strong> to emphasise those locked sections.
+            Locked regions are not gone — they’re just harder for the cell’s readers to use.
           </p>
           <p>
-            Epigenetics is one way identity stays stable. But there’s another ingredient:
-            DNA also has <strong>physics</strong> — it folds in 3D.
+            Click <span class="bigClick purple" data-click="locks">locks</span> to emphasise the purple locked zones.
           </p>
-        `,
-        showLegend: false
+          <p>
+            Now comes the part people often forget: DNA is also a <strong>physical object</strong>.
+            It folds in 3D.
+          </p>
+        `
       },
       {
+        id: "s5",
+        tag: "Chapter 5",
+        title: "Zoom out: DNA becomes a moving chain",
+        sub: "Inside the nucleus, DNA is packed as chromatin: a flexible chain that wriggles and folds.",
+        goal: "See chromatin as a <strong>wiggly chain</strong> that can fold and rearrange.",
         mode: "act4",
-        title: "DNA is not a straight line — it folds in 3D",
-        sub: "Zoom out: DNA is packaged as chromatin, a flexible polymer inside the nucleus.",
-        goal: "Learning goal: see chromatin as a <strong>polymer</strong> (a chain) that can fold and rearrange in 3D.",
+        hint: "Try it: drag the chain and fold it a bit.",
+        showLegend: true,
         html: `
           <p>
-            DNA is extremely long (about <strong>2 metres</strong> per cell if stretched out), but the nucleus is tiny.
-            So DNA wraps around proteins and folds into <strong>chromatin</strong>.
+            DNA is extremely long, so it gets packed up with proteins into <strong>chromatin</strong>.
           </p>
           <p>
-            Physicists often model chromatin as a flexible chain (a <strong>polymer</strong>) made of connected beads.
-            In this cartoon, <strong>each bead stands for ~millions of base pairs</strong>.
+            In this cartoon, chromatin is drawn as a chain of little beads.
+            It moves and wiggles — like a soft thread floating in a crowded room.
           </p>
           <p>
-            <strong>Try it:</strong> drag the chain and fold it over itself. Let go and it will keep wiggling.
+            <strong>Try it:</strong> drag the chain around. Let go, and it keeps gently moving.
           </p>
-        `,
-        showLegend: true
+        `
       },
       {
+        id: "s6",
+        tag: "Chapter 6",
+        title: "Hungry readers wander around",
+        sub: "Reader proteins drift randomly, looking for good places to read.",
+        goal: "Understand the wandering as simple <strong>random motion</strong> (bumping around).",
         mode: "act5",
-        title: "The book readers: transcription factors (TFs)",
-        sub: "TFs drift around randomly. Before “sticking”, they have to find the right place.",
-        goal: "Learning goal: interpret TF motion as <strong>diffusion</strong> (random wandering) in the nucleus.",
+        hint: "Watch the red dots wander. No hub yet — just searching.",
+        showLegend: true,
         html: `
           <p>
-            The molecules that help “read” genes include proteins called <strong>transcription factors</strong> (TFs).
-            They move around the nucleus, bumping and drifting — a bit like particles in a fluid.
+            The cell has “readers” — proteins that help read genes.
+            They are a bit like hungry readers in a library: they move around looking for text.
           </p>
           <p>
-            In this page, TFs (red) mostly wander. The chromatin chain is present, but nothing is pulling it together yet.
+            At first, they mostly wander and bump into things.
+            Nothing is pulling the DNA into a hub yet.
           </p>
-        `,
-        showLegend: true
+        `
       },
       {
+        id: "s7",
+        tag: "Chapter 7",
+        title: "A busy hub forms (and stays)",
+        sub: "If a big reader can hold onto DNA well, nearby DNA gathers — making a crowded reading spot.",
+        goal: "See a simple feedback: <strong>crowding makes reading easier</strong>, so the hub tends to stay.",
         mode: "act6",
-        title: "Sticky hubs: multivalent binding increases local density",
-        sub: "A multivalent TF can bind in multiple places — acting like a hub that pulls chromatin in.",
-        goal: "Learning goal: understand how <strong>multivalency</strong> can create a local dense region by pulling polymer segments together.",
+        hint: "Drag the big red reader. The chain should wrap and stay clustered around it.",
+        showLegend: true,
         html: `
           <p>
-            Some TFs are <strong>multivalent</strong>: they can bind at more than one point.
-            That makes them act like a sticky hub that can pull in nearby chromatin.
+            Now imagine one reader is especially “hungry” and good at grabbing nearby DNA.
+            When it grabs, DNA gets pulled closer together.
           </p>
           <p>
-            <strong>Drag the big red TF</strong>. The chromatin will slowly wrap around it, making a dense region.
+            Once lots of DNA is close together, it looks like there are “more sentences” in one place.
+            That makes it a great spot for reading.
           </p>
-        `,
-        showLegend: true
+          <p>
+            <strong>Try it:</strong> drag the big red reader.
+            You should see the chain gather and stay clustered around it.
+          </p>
+        `
       },
       {
+        id: "s8",
+        tag: "Chapter 8",
+        title: "More readers drift to the busiest spot",
+        sub: "Where the DNA is densest, hungry readers are most likely to hang around.",
+        goal: "Connect density to bias: <strong>busy places stay busy</strong> — helping stable cell identity.",
         mode: "act7",
-        title: "Recruitment to a dense region",
-        sub: "Once a dense region exists, more TFs are more likely to arrive there — leaving other regions quieter.",
-        goal: "Learning goal: connect <strong>density</strong> to <strong>recruitment</strong> (a ‘rich get richer’ feedback).",
+        hint: "In this chapter, extra readers drift in — and the chain stays clustered at the hub.",
+        showLegend: true,
         html: `
           <p>
-            If chromatin is denser in one region, TFs bump into that region more often — so they tend to accumulate there.
-            That can create a “rich get richer” effect: <strong>density attracts readers</strong>.
+            Here’s the simple idea:
+            hungry readers prefer the place with the most “sentences” close together —
+            meaning the place where the DNA chain is most dense.
           </p>
           <p>
-            Here the chromatin is <strong>already wrapped</strong> around the main TF (a high-density hub),
-            and additional TFs drift <strong>slowly</strong> toward it.
-          </p>
-        `,
-        showLegend: true
-      },
-      {
-        mode: "act8_img",
-        title: "Transcription factories",
-        sub: "A summary picture: active hubs (‘factories’) and quieter regions.",
-        goal: "Learning goal: interpret hubs as a physical mechanism that can bias which genes are read, supporting stable identity.",
-        html: `
-          <p>
-            Dense hubs where many TFs gather are often called <strong>transcription factories</strong>.
-            If most readers are pulled into a few hubs, other regions can be left relatively quiet.
+            So once a busy hub exists, more readers tend to drift toward it and linger.
+            That leaves other regions quieter.
           </p>
           <p>
-            That means 3D structure isn’t just “packing” — it can help bias which genes get read, and help stabilise a cell’s identity.
+            Over time, that kind of bias can help the same genes get read again and again —
+            which is one way a cell can keep its identity.
           </p>
-        `,
-        showLegend: false
+          <p style="opacity:0.85;">
+            (Optional nerd note: some scientists call these busy hubs “transcription factories”, but you don’t need that phrase.)
+          </p>
+        `
       }
     ];
 
-    function applyAct(i){
-      actIndex = clamp(i, 0, ACTS.length - 1);
-      const A = ACTS[actIndex];
+    // Build the scroll story HTML
+    function buildStory(){
+      storyEl.innerHTML = "";
+      for (let i=0;i<SECTIONS.length;i++){
+        const S = SECTIONS[i];
+        const div = document.createElement("div");
+        div.className = "section";
+        div.id = S.id;
+        div.dataset.mode = S.mode;
 
-      mode = A.mode;
-      highlight = null;
+        div.innerHTML = `
+          <div class="sectionHeader">
+            <div class="sectionTag">${S.tag}</div>
+          </div>
+          <div class="sectionTitle">${S.title}</div>
+          <div class="sectionSub">${S.sub}</div>
+          <div class="learnGoal"><strong>Learning goal:</strong> ${S.goal}</div>
 
-      kicker.textContent = `Page ${actIndex + 1} of ${ACTS.length}`;
-      sceneTitle.textContent = A.title;
-      sceneSub.textContent = A.sub;
-      storyText.innerHTML = A.html;
+          ${renderMiniControls(S.mode, i)}
 
-      // learning goal
-      if (A.goal && A.goal.trim().length > 0){
-        learnGoal.innerHTML = `<strong>Learning goal:</strong> ${A.goal.replace(/^Learning goal:\s*/i,"")}`;
-        learnGoal.style.display = "block";
-      } else {
-        learnGoal.style.display = "none";
-        learnGoal.textContent = "";
+          <div class="storyText">${S.html}</div>
+        `;
+        storyEl.appendChild(div);
       }
+    }
 
-      prevBtn.disabled = (actIndex === 0);
-      nextBtn.disabled = (actIndex === ACTS.length - 1);
+    function renderMiniControls(mode, idx){
+      // Show mini buttons only for the DNA/locks chapters (2–4)
+      // Buttons simply toggle the highlight overlay (same behaviour as clicking words).
+      if (!(mode === "dna" || mode === "locks")) return "";
+      const showBase = (idx === 1 || idx === 2);
+      const showGene = (idx === 2);
+      const showLocks = (idx === 3);
 
-      // Reset only for polymer pages 5–8? (acts 4–7 in 0-index: 4..7)
-      resetBtn.style.display = (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7") ? "inline-flex" : "none";
+      return `
+        <div class="miniControls" aria-label="Quick highlights">
+          ${showBase ? `<button class="miniPill white" type="button" data-mini="basepair">Base pair</button>` : ``}
+          ${showGene ? `<button class="miniPill green" type="button" data-mini="gene">Gene</button>` : ``}
+          ${showLocks ? `<button class="miniPill purple" type="button" data-mini="locks">Locks</button>` : ``}
+        </div>
+      `;
+    }
 
-      dragHint.classList.toggle("show", mode === "act6");
+    buildStory();
 
-      if (A.showLegend) legend.classList.add("show");
-      else legend.classList.remove("show");
-
-      // Mini buttons visibility logic:
-      const showMini = (mode === "dna" || mode === "epi");
-      dnaButtons.style.display = showMini ? "flex" : "none";
-
-      btnBasepair.style.display = "none";
-      btnGene.style.display = "none";
-      btnEpi.style.display = "none";
-
-      if (actIndex === 1) { // DNA
-        btnBasepair.style.display = "inline-block";
-      } else if (actIndex === 2) { // Gene
-        btnBasepair.style.display = "inline-block";
-        btnGene.style.display = "inline-block";
-      } else if (actIndex === 3) { // Epigenetics
-        btnEpi.style.display = "inline-block";
-      }
-
-      // Final page image overlay
-      if (mode === "act8_img") {
-        stageImage.src = "assets/bips.png";
-        stageImage.classList.add("show");
-        canvas.style.display = "none";
-      } else {
-        stageImage.classList.remove("show");
-        stageImage.removeAttribute("src");
-        canvas.style.display = "block";
-      }
-
+    // Mini button clicks
+    storyEl.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-mini]");
+      if (!b) return;
+      const id = b.getAttribute("data-mini");
+      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
+      if (id === "gene")     highlight = (highlight === "gene") ? null : "gene";
+      if (id === "locks")    highlight = (highlight === "locks") ? null : "locks";
       updatePairStrip();
+    });
+
+    // ============================================================
+    // Scroll → choose active section → set mode
+    // ============================================================
+    let activeIndex = 0;
+    let mode = "intro";
+
+    function setActiveSection(i){
+      activeIndex = clamp(i, 0, SECTIONS.length - 1);
+      const S = SECTIONS[activeIndex];
+
+      mode = S.mode;
+
+      // cosmetics
+      const nodes = document.querySelectorAll(".section");
+      nodes.forEach((n, j) => n.classList.toggle("active", j === activeIndex));
+      progressPill.textContent = `Section ${activeIndex + 1} / ${SECTIONS.length}`;
+
+      legend.classList.toggle("show", !!S.showLegend);
+
+      // Drag hint appears for the hub chapters
+      dragHint.classList.toggle("show", (mode === "act6" || mode === "act7"));
+
+      activeHint.textContent = S.hint;
+
+      // Reset highlight when leaving DNA/locks modes (keeps it simpler)
+      if (!(mode === "dna" || mode === "locks")) highlight = null;
+      updatePairStrip();
+
+      // Final image overlay not used in this scroll version.
+      stageImage.classList.remove("show");
+      stageImage.removeAttribute("src");
+      canvas.style.display = "block";
+
+      // Make sure polymer world is (re)initialised when mode changes
       initActWorld(true);
     }
 
-    prevBtn.addEventListener("click", () => applyAct(actIndex - 1));
-    nextBtn.addEventListener("click", () => applyAct(actIndex + 1));
-    resetBtn.addEventListener("click", () => initActWorld(true));
+    // IntersectionObserver to “snap” the figure to the section in view
+    const sectionEls = Array.from(document.querySelectorAll(".section"));
+    const io = new IntersectionObserver((entries) => {
+      // choose the most visible entry
+      let best = {idx: activeIndex, ratio: 0};
+      for (const ent of entries){
+        if (!ent.isIntersecting) continue;
+        const idx = sectionEls.indexOf(ent.target);
+        if (ent.intersectionRatio > best.ratio){
+          best = {idx, ratio: ent.intersectionRatio};
+        }
+      }
+      if (best.idx !== activeIndex && best.ratio > 0.30){
+        setActiveSection(best.idx);
+      }
+    }, { threshold: [0.30, 0.55, 0.80] });
+
+    sectionEls.forEach(el => io.observe(el));
 
     // ============================================================
     // Drawing helpers
     // ============================================================
     function drawBackground(){
-      // Keep the figure window dark so existing animation colours pop.
       ctx.fillStyle = "#050507";
       ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      // Very subtle texture (NOT starfield)
+      // subtle texture
       ctx.fillStyle = "rgba(255,255,255,0.015)";
       for (let i=0;i<110;i++){
         const x=(i*131)%canvas.width;
@@ -933,18 +1040,18 @@
     }
 
     // ============================================================
-    // NEW: Intro flowchart on the canvas (Page 1)
+    // Intro flowchart (Section 1)
     // ============================================================
     function drawIntroFlowchart(){
       const W = canvas.width, H = canvas.height;
       const pad = Math.min(W,H)*0.07;
 
       const boxes = [
-        {x: pad, y: H*0.22, w: W*0.28, h: H*0.18, label:"DNA code\n(A,C,G,T)"},
-        {x: W*0.36, y: H*0.22, w: W*0.28, h: H*0.18, label:"Genes\n(regions read)"},
-        {x: W*0.68, y: H*0.22, w: W*0.28 - pad, h: H*0.18, label:"Epigenetics\n(access control)"},
-        {x: W*0.20, y: H*0.56, w: W*0.30, h: H*0.18, label:"Chromatin 3D\n(polymer folding)"},
-        {x: W*0.54, y: H*0.56, w: W*0.30, h: H*0.18, label:"BIPS hubs\n(TFs pull together)"},
+        {x: pad, y: H*0.22, w: W*0.28, h: H*0.18, label:"DNA letters\n(A,C,G,T)"},
+        {x: W*0.36, y: H*0.22, w: W*0.28, h: H*0.18, label:"Genes\n(sentences)"},
+        {x: W*0.68, y: H*0.22, w: W*0.28 - pad, h: H*0.18, label:"Locks\n(harder to open)"},
+        {x: W*0.20, y: H*0.56, w: W*0.30, h: H*0.18, label:"Folding\n(3D chain)"},
+        {x: W*0.54, y: H*0.56, w: W*0.30, h: H*0.18, label:"Busy hubs\n(reading spots)"},
       ];
 
       // arrows
@@ -966,18 +1073,14 @@
         ctx.fill();
       }
 
-      // top row arrows
       arrow(boxes[0].x+boxes[0].w, boxes[0].y+boxes[0].h*0.5, boxes[1].x, boxes[1].y+boxes[1].h*0.5);
       arrow(boxes[1].x+boxes[1].w, boxes[1].y+boxes[1].h*0.5, boxes[2].x, boxes[2].y+boxes[2].h*0.5);
-
-      // down to chromatin / hubs
       arrow(boxes[0].x+boxes[0].w*0.5, boxes[0].y+boxes[0].h, boxes[3].x+boxes[3].w*0.35, boxes[3].y);
       arrow(boxes[2].x+boxes[2].w*0.5, boxes[2].y+boxes[2].h, boxes[4].x+boxes[4].w*0.65, boxes[4].y);
       arrow(boxes[3].x+boxes[3].w, boxes[3].y+boxes[3].h*0.5, boxes[4].x, boxes[4].y+boxes[4].h*0.5);
 
       ctx.restore();
 
-      // draw boxes
       for (let i=0;i<boxes.length;i++){
         const b = boxes[i];
         ctx.save();
@@ -986,7 +1089,6 @@
         ctx.lineWidth = 2;
         roundRect(b.x, b.y, b.w, b.h, 16, true, true);
 
-        // slight accent bars
         const accent =
           (i===0) ? "rgba(255,255,255,0.55)" :
           (i===1) ? "rgba(0,255,140,0.55)" :
@@ -996,9 +1098,8 @@
         ctx.fillStyle = accent;
         roundRect(b.x+10, b.y+10, 10, b.h-20, 8, true, false);
 
-        // label
         ctx.fillStyle = "rgba(255,255,255,0.90)";
-        ctx.font = "900 16px system-ui";
+        ctx.font = "950 16px system-ui";
         const lines = b.label.split("\n");
         let ty = b.y + b.h*0.50 - (lines.length-1)*10;
         for (const line of lines){
@@ -1008,16 +1109,15 @@
         ctx.restore();
       }
 
-      // caption
       ctx.save();
       ctx.fillStyle = "rgba(255,255,255,0.70)";
-      ctx.font = "800 13px system-ui";
-      ctx.fillText("Figure: The story arc (information + accessibility + 3D physics → hubs → biased gene activity)", pad, H*0.90);
+      ctx.font = "900 13px system-ui";
+      ctx.fillText("Figure: DNA (book) + access + folding → busy hubs → biased reading", pad, H*0.90);
       ctx.restore();
     }
 
     // ============================================================
-    // DNA helix (pages: dna + epi)
+    // DNA helix (Sections 2–4)
     // ============================================================
     function drawDNAHelix(){
       const W = canvas.width, H = canvas.height;
@@ -1030,7 +1130,7 @@
 
       const baseHi = (highlight === "basepair");
       const geneHi = (highlight === "gene");
-      const epiHi  = (highlight === "epi");
+      const lockHi = (highlight === "locks");
 
       const geneStart = 15;
       const geneEnd   = 24;
@@ -1047,9 +1147,9 @@
         return false;
       }
 
-      if (mode === "epi") {
+      if (mode === "locks") {
         ctx.save();
-        ctx.globalAlpha = epiHi ? 0.28 : 0.20;
+        ctx.globalAlpha = lockHi ? 0.28 : 0.20;
         ctx.fillStyle = "rgba(170, 90, 255, 1)";
         const x0 = cx - (turns*pitch)/2;
         for (const seg of lockSegments){
@@ -1075,9 +1175,9 @@
         if (geneHi && inGene) { rungColor = "rgba(0,255,140,0.92)"; rungWidth = 3.0; }
         else if (baseHi && (i%4===0)) { rungColor = "rgba(255,255,255,0.92)"; rungWidth = 3.0; }
 
-        if (mode === "epi" && locked) {
-          rungColor = epiHi ? "rgba(230, 200, 255, 0.95)" : "rgba(230, 200, 255, 0.55)";
-          rungWidth = epiHi ? 3.0 : 2.2;
+        if (mode === "locks" && locked) {
+          rungColor = lockHi ? "rgba(230, 200, 255, 0.95)" : "rgba(230, 200, 255, 0.55)";
+          rungWidth = lockHi ? 3.0 : 2.2;
         }
 
         ctx.save();
@@ -1091,15 +1191,15 @@
 
         let backboneColor = "rgba(255,255,255,0.55)";
         if (geneHi && inGene) backboneColor = "rgba(0,255,140,0.65)";
-        if (mode === "epi" && locked) backboneColor = epiHi ? "rgba(190, 120, 255, 0.80)" : "rgba(190, 120, 255, 0.50)";
+        if (mode === "locks" && locked) backboneColor = lockHi ? "rgba(190, 120, 255, 0.80)" : "rgba(190, 120, 255, 0.50)";
 
         glowCircle(x, y1, 5.0, backboneColor, 18);
         glowCircle(x, y2, 5.0, backboneColor, 18);
 
-        if (mode === "epi" && locked && (i % 3 === 0)) {
+        if (mode === "locks" && locked && (i % 3 === 0)) {
           ctx.save();
-          ctx.font = "900 14px system-ui";
-          ctx.fillStyle = epiHi ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.70)";
+          ctx.font = "950 14px system-ui";
+          ctx.fillStyle = lockHi ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.70)";
           ctx.shadowColor = "rgba(190,120,255,0.55)";
           ctx.shadowBlur = 16;
           ctx.fillText("🔒", x - 7, (0.5*(y1+y2)) + 5);
@@ -1109,7 +1209,7 @@
     }
 
     // ============================================================
-    // Polymer worlds for pages 5–8 (unchanged physics)
+    // Polymer worlds (Sections 5–8)
     // ============================================================
     const world = {
       initialised: false,
@@ -1126,7 +1226,6 @@
       kSpring: 0.18,
       kBend: 0.010,
       damping: 0.92,
-      brownian: 0.18,
       beadR: 4.6,
       repelK: 0.55
     };
@@ -1164,7 +1263,7 @@
     canvas.addEventListener("pointerdown", (e) => {
       const p = pointerPos(e);
 
-      if (mode === "act6"){
+      if (mode === "act6" || mode === "act7"){
         const dx = p.x - bigTF.x;
         const dy = p.y - bigTF.y;
         if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
@@ -1186,6 +1285,8 @@
       }
     });
 
+    const lastPointer = {x:0,y:0};
+
     canvas.addEventListener("pointermove", (e) => {
       const p = pointerPos(e);
 
@@ -1198,20 +1299,15 @@
       lastPointer.y = p.y;
     });
 
-    canvas.addEventListener("pointerup", () => {
+    function stopDragging(){
       draggingTF = false;
       draggingBead.active = false;
       draggingBead.idx = -1;
-    });
-    canvas.addEventListener("pointercancel", () => {
-      draggingTF = false;
-      draggingBead.active = false;
-      draggingBead.idx = -1;
-    });
+    }
+    canvas.addEventListener("pointerup", stopDragging);
+    canvas.addEventListener("pointercancel", stopDragging);
 
-    const lastPointer = {x:0,y:0};
-
-    let bigTFs = []; // act7 extra TFs
+    let bigTFs = []; // extra readers in act7
 
     function initActWorld(force=false){
       const polymerModes = ["act4","act5","act6","act7"];
@@ -1237,6 +1333,7 @@
         world.beads.push({x,y});
       }
 
+      // Make act4 slightly folded so it’s fun to drag
       if (mode === "act4"){
         const a1 = {x: W*0.44, y: H*0.50};
         const a2 = {x: W*0.60, y: H*0.62};
@@ -1263,6 +1360,7 @@
         }
       }
 
+      // act5: many small readers wandering
       world.tfs = [];
       if (mode === "act5"){
         for (let i=0;i<36;i++){
@@ -1274,12 +1372,14 @@
         }
       }
 
+      // act6: big reader in the middle
       if (mode === "act6"){
         bigTF.x = W*0.60;
         bigTF.y = H*0.56;
         bigTF.vx = 0; bigTF.vy = 0;
       }
 
+      // act7: start already clustered around the big reader
       if (mode === "act7"){
         bigTF.x = W*0.58;
         bigTF.y = H*0.54;
@@ -1288,6 +1388,7 @@
         const center = {x: bigTF.x, y: bigTF.y};
         const R0 = bigTF.radius * 1.10;
         const R1 = bigTF.radius * 3.8;
+
         for (let i=0;i<P.beadCount;i++){
           const t = i/(P.beadCount-1);
           const w = Math.exp(-Math.pow((t-0.52)/0.22,2));
@@ -1303,7 +1404,7 @@
         }
 
         bigTFs = [];
-        const count = 6;
+        const count = 7;
         for (let i=0;i<count;i++){
           bigTFs.push({
             x: W*(0.12 + 0.76*Math.random()),
@@ -1346,7 +1447,9 @@
       return {vx,vy};
     }
 
-    function multivalentWrapForce(p, tf){
+    // This is the “hub” force: the chain is gently pulled toward the big reader
+    // In act7 we make it stronger so the chain stays clustered (no relaxing away).
+    function wrapForce(p, tf, strength){
       const dx=tf.x - p.x;
       const dy=tf.y - p.y;
       const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
@@ -1356,12 +1459,12 @@
 
       let fx=0, fy=0;
       if (d < repelR){
-        const push = (repelR - d) * 0.10;
+        const push = (repelR - d) * (0.10 * strength);
         fx -= push * dx/d;
         fy -= push * dy/d;
       } else if (d < attractR){
         const s = (1 - d/attractR);
-        const pull = 0.010 * s;
+        const pull = (0.010 * strength) * s;
         fx += pull * dx;
         fy += pull * dy;
       }
@@ -1372,6 +1475,7 @@
       world.frame++;
       const n = P.beadCount;
 
+      // Springs + bending
       for (let i=0;i<n-1;i++){
         const a=world.beads[i], b=world.beads[i+1];
         const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
@@ -1384,6 +1488,7 @@
         world.bvy[i] += f.fy;
       }
 
+      // Soft self-avoidance
       const minBB = 2*P.beadR;
       for (let i=0;i<n;i++){
         const i0=Math.max(0,i-14);
@@ -1398,6 +1503,7 @@
         }
       }
 
+      // Dragging a bead (act4)
       if (mode === "act4" && draggingBead.active && draggingBead.idx >= 0){
         const i = draggingBead.idx;
         const b = world.beads[i];
@@ -1407,20 +1513,23 @@
         world.bvy[i] += beadDragK * dy;
       }
 
-      if (mode === "act6"){
+      // Hub force (act6 + act7)
+      if (mode === "act6" || mode === "act7"){
+        const strength = (mode === "act7") ? 1.8 : 1.0; // <-- key change: act7 stays clustered
         for (let i=0;i<n;i++){
           const p=world.beads[i];
-          const f = multivalentWrapForce(p, bigTF);
+          const f = wrapForce(p, bigTF, strength);
           world.bvx[i] += f.fx;
           world.bvy[i] += f.fy;
         }
       }
 
+      // Brownian wiggle: tune per act
       let brown = 0.16;
       if (mode === "act4") brown = 0.22;
       if (mode === "act5") brown = 0.02;
-      if (mode === "act6") brown = 0.14;
-      if (mode === "act7") brown = 0.006;
+      if (mode === "act6") brown = 0.12;
+      if (mode === "act7") brown = 0.006; // very low so hub doesn’t “melt away”
 
       for (let i=0;i<n;i++){
         world.bvx[i] += brown*randn();
@@ -1435,6 +1544,7 @@
         world.bvx[i]=out.vx; world.bvy[i]=out.vy;
       }
 
+      // Small readers wandering (act5)
       if (mode === "act5"){
         const W=canvas.width, H=canvas.height;
         for (const tf of world.tfs){
@@ -1451,6 +1561,7 @@
         }
       }
 
+      // Extra readers drift toward the hub (act7)
       if (mode === "act7"){
         const W=canvas.width, H=canvas.height;
         const target = {x: bigTF.x, y: bigTF.y};
@@ -1458,8 +1569,9 @@
           tf.vx += 0.12*randn();
           tf.vy += 0.12*randn();
 
-          tf.vx += 0.0016*(target.x - tf.x);
-          tf.vy += 0.0016*(target.y - tf.y);
+          // gentle “hungry toward dense” drift
+          tf.vx += 0.0018*(target.x - tf.x);
+          tf.vy += 0.0018*(target.y - tf.y);
 
           tf.vx *= 0.88;
           tf.vy *= 0.88;
@@ -1475,6 +1587,7 @@
     }
 
     function drawPolymerAndTFs(){
+      // chain
       ctx.save();
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 3.0;
@@ -1486,35 +1599,31 @@
       ctx.stroke();
       ctx.restore();
 
+      // beads
       for (const p of world.beads){
         glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
       }
 
+      // small readers (act5)
       if (mode === "act5"){
         for (const tf of world.tfs){
           glowCircle(tf.x, tf.y, 6.2, "rgba(255,60,60,0.65)", 20);
         }
       }
 
-      if (mode === "act6"){
+      // big reader hub (act6/act7)
+      if (mode === "act6" || mode === "act7"){
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
         glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.0, "rgba(255,120,200,0.020)", 160);
         glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.6, "rgba(255,60,60,0.020)", 120);
         ctx.restore();
 
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 40);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 44);
       }
 
+      // extra readers drifting in (act7)
       if (mode === "act7"){
-        ctx.save();
-        ctx.globalCompositeOperation = "lighter";
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.2, "rgba(255,120,200,0.018)", 170);
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.8, "rgba(255,60,60,0.018)", 130);
-        ctx.restore();
-
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 44);
-
         for (const tf of bigTFs){
           glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
         }
@@ -1526,17 +1635,11 @@
     // ============================================================
     function tick(){
       resizeCanvas();
-
-      if (mode === "act8_img"){
-        requestAnimationFrame(tick);
-        return;
-      }
-
       drawBackground();
 
       if (mode === "intro"){
         drawIntroFlowchart();
-      } else if (mode === "dna" || mode === "epi"){
+      } else if (mode === "dna" || mode === "locks"){
         drawDNAHelix();
       } else if (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7"){
         initActWorld(false);
@@ -1556,11 +1659,12 @@
     });
 
     resizeCanvas();
-    applyAct(0);
+    setActiveSection(0);
     tick();
   </script>
 </body>
 </html>
+
 
 
 
