@@ -25,6 +25,7 @@
       --red: #dc2626;
       --pink: #db2777;
       --purple: #7c3aed;
+      --blue: #2563eb;
 
       --maxw: 1100px;
     }
@@ -160,6 +161,7 @@
     .bigClick:hover{ background: rgba(31,41,55,0.07); }
     .bigClick.green{ border-color: rgba(5,150,105,0.28); color: var(--green); background: rgba(5,150,105,0.05); }
     .bigClick.purple{ border-color: rgba(124,58,237,0.24); color: var(--purple); background: rgba(124,58,237,0.05); }
+    .bigClick.blue{ border-color: rgba(37,99,235,0.24); color: var(--blue); background: rgba(37,99,235,0.06); }
     .bigClick.white{ border-color: rgba(31,41,55,0.18); color: rgba(31,41,55,0.92); }
 
     /* Controls */
@@ -194,6 +196,11 @@
       border-color: rgba(37,99,235,0.30);
       color: rgba(37,99,235,0.95);
     }
+    .pill.danger{
+      background: rgba(220,38,38,0.10);
+      border-color: rgba(220,38,38,0.30);
+      color: rgba(220,38,38,0.95);
+    }
     .pill:disabled{ opacity: 0.45; cursor: default; }
 
     /* Mini buttons (Base pair / Gene / Locks) */
@@ -224,6 +231,26 @@
     .miniPill.green{ border-color: rgba(5,150,105,0.28); color: var(--green); background: rgba(5,150,105,0.05); }
     .miniPill.purple{ border-color: rgba(124,58,237,0.24); color: var(--purple); background: rgba(124,58,237,0.05); }
 
+    /* GAME controls row (only on final page) */
+    .gameControls{
+      display:none;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 12px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,41,55,0.10);
+      background: rgba(31,41,55,0.02);
+    }
+    .gameHint{
+      font-size: 13px;
+      font-weight: 900;
+      color: rgba(31,41,55,0.75);
+      margin-right: 4px;
+    }
+
     /* CANVAS PANEL (dark figure window) */
     .stage{
       width: min(var(--maxw), 100%);
@@ -245,7 +272,7 @@
       touch-action: none;
     }
 
-    /* Image overlay (unused now; kept for compatibility if you want later) */
+    /* kept but not used now */
     .stageImage{
       position:absolute;
       inset: 0;
@@ -291,6 +318,7 @@
     .dot.red{ background: var(--red); }
     .dot.pink{ background: var(--pink); }
     .dot.purple{ background: var(--purple); }
+    .dot.blue{ background: var(--blue); }
 
     .dragHint{
       position:absolute;
@@ -451,6 +479,99 @@
       background: rgba(37,99,235,0.75);
     }
     .chip.green .swatch{ background: rgba(5,150,105,0.80); }
+
+    /* ============================================================
+       Badge modal
+       ============================================================ */
+    .modalBackdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modalBackdrop.show{ display:flex; }
+
+    .modal{
+      width: min(720px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 20px 70px rgba(0,0,0,0.35);
+      overflow: hidden;
+      position: relative;
+    }
+    .modalHeader{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(31,41,55,0.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .modalHeader .title{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      font-size: 15px;
+      color: rgba(31,41,55,0.92);
+    }
+    .modalBody{
+      padding: 16px 16px 18px 16px;
+    }
+
+    .badgeRow{
+      display:flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .badge{
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      border: 2px solid rgba(37,99,235,0.35);
+      background: radial-gradient(circle at 30% 25%, rgba(37,99,235,0.22), rgba(37,99,235,0.06) 45%, rgba(255,255,255,0.0) 70%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 52px;
+      box-shadow: 0 0 0 6px rgba(37,99,235,0.06) inset;
+    }
+    .badgeText{
+      flex: 1 1 260px;
+      min-width: 240px;
+    }
+    .badgeText h3{
+      margin: 0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      color: rgba(31,41,55,0.92);
+    }
+    .badgeText p{
+      margin: 8px 0 0 0;
+      color: rgba(31,41,55,0.75);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .modalActions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    /* tiny confetti canvas */
+    #confettiCanvas{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
   </style>
 </head>
 
@@ -458,7 +579,7 @@
   <div class="page">
     <section class="textPanel" aria-label="Story text">
       <div class="textInner">
-        <div class="kicker" id="kicker">Page 1 of 6</div>
+        <div class="kicker" id="kicker">Page 1 of 7</div>
 
         <h1 class="sceneTitle" id="sceneTitle">How do cells know who they are?</h1>
 
@@ -475,6 +596,13 @@
           <button class="miniPill white" id="btnBasepair" type="button">Base pairs</button>
           <button class="miniPill green" id="btnGene" type="button">Gene</button>
           <button class="miniPill purple" id="btnLocks" type="button">Locks</button>
+        </div>
+
+        <!-- Game buttons: shown only on final page -->
+        <div class="gameControls" id="gameControls" aria-label="Reprogramming game controls">
+          <span class="gameHint">Game tools:</span>
+          <button class="pill danger" id="btnWeaken" type="button">Temporarily weaken hub pull (3s)</button>
+          <button class="pill ghost" id="btnResetGame" type="button">Reset game</button>
         </div>
 
         <div class="controls">
@@ -499,6 +627,7 @@
         <span class="dot red"></span> reader proteins
         <span class="dot pink"></span> busy hub
         <span class="dot purple"></span> locked DNA
+        <span class="dot blue"></span> target zone (game)
       </div>
     </section>
 
@@ -520,6 +649,42 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- Badge popup -->
+  <div class="modalBackdrop" id="badgeModal" role="dialog" aria-modal="true" aria-label="Young Geneticist badge">
+    <div class="modal">
+      <canvas id="confettiCanvas"></canvas>
+      <div class="modalHeader">
+        <div class="title">🎉 Scientist badge unlocked</div>
+        <button class="pill ghost" id="btnCloseBadge" type="button">Close</button>
+      </div>
+      <div class="modalBody">
+        <div style="font-weight:950; color: rgba(31,41,55,0.86);">
+          You just explored how physics can help cells remember who they are.
+        </div>
+        <div style="margin-top:6px; color: rgba(31,41,55,0.72); line-height:1.6; font-size:14px;">
+          There isn’t a single switch — just tendencies, feedback, and structure.
+        </div>
+
+        <div class="badgeRow">
+          <div class="badge" aria-hidden="true">🧬</div>
+          <div class="badgeText">
+            <h3>Young Geneticist</h3>
+            <p>
+              You successfully “broke the memory” by making a new hub form elsewhere and keeping it there.
+              Changing identity takes effort — and the right conditions.
+            </p>
+          </div>
+        </div>
+
+        <div class="modalActions">
+          <button class="pill ghost" id="btnReplayGame" type="button">Replay</button>
+          <button class="pill ghost" id="btnExploreAnother" type="button">Explore another cell</button>
+          <button class="pill strong" id="btnRealScientists" type="button">What real scientists do next →</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -572,6 +737,18 @@
     const btnBasepair = document.getElementById("btnBasepair");
     const btnGene = document.getElementById("btnGene");
     const btnLocks = document.getElementById("btnLocks");
+
+    // Game controls
+    const gameControls = document.getElementById("gameControls");
+    const btnWeaken = document.getElementById("btnWeaken");
+    const btnResetGame = document.getElementById("btnResetGame");
+
+    // Badge modal controls
+    const badgeModal = document.getElementById("badgeModal");
+    const btnCloseBadge = document.getElementById("btnCloseBadge");
+    const btnReplayGame = document.getElementById("btnReplayGame");
+    const btnExploreAnother = document.getElementById("btnExploreAnother");
+    const btnRealScientists = document.getElementById("btnRealScientists");
 
     // ============================================================
     // Letter / base-pair strip under the figure (Pages 2–3)
@@ -669,18 +846,16 @@
 
     // ============================================================
     // Acts (pages)
-    //  - We KEEP the old structure.
-    //  - We simply merge the old 6+7+8 content into ONE final page (Page 6).
     // ============================================================
     let actIndex = 0;
-    let mode = "intro"; // intro | dna | locks | act4 | act5 | hub_story
+    let mode = "intro"; // intro | dna | locks | act4 | hub_story | game
 
     const ACTS = [
       {
         mode: "intro",
         title: "How do cells know who they are?",
         sub: "Most cells carry the same DNA — but they don’t act the same. Why?",
-        goal: "Understand one simple idea: <strong>DNA is the book</strong>, but <strong>access + folding</strong> help decide what gets read.",
+        goal: "By the end, you’ll play a mini <strong>reprogramming game</strong> to test if you truly get it.",
         html: `
           <p>
             Imagine every cell owns the <strong>same book</strong>.
@@ -689,9 +864,16 @@
           <p>
             A skin cell and a neuron have the same book — but they do different jobs because they don’t read the same chapters.
           </p>
+          <div class="subBlock">
+            <h3 class="subTitle">Teaser</h3>
+            <div class="subLead">
+              By the end of this journey, we’ll play a game:
+              <strong>can you force the cell to change what it reads?</strong>
+            </div>
+          </div>
           <ul>
             <li><strong>DNA</strong> is written in four letters: A, C, G, T.</li>
-            <li><strong>Genes</strong> are the useful “sentences” in the book.</li>
+            <li><strong>Genes</strong> are useful “sentences” in the book.</li>
             <li><strong>Locks</strong> can make some chapters hard to open.</li>
             <li><strong>Folding</strong> changes what is nearby and easy to reach.</li>
           </ul>
@@ -821,11 +1003,42 @@
             <p>
               Once a hub exists, more readers tend to drift toward it and linger.
               Other regions get fewer visits.
-              Over time, that kind of bias can help the same genes get read again and again — which helps a cell keep its identity.
+              Over time, that bias can help the same genes get read again and again — which helps a cell keep its identity.
             </p>
             <p style="opacity:0.86;">
               (Some scientists call these busy hubs “transcription factories”, but you don’t need that phrase here.)
             </p>
+          </div>
+        `,
+        showLegend: true
+      },
+      {
+        mode: "game",
+        title: "Break the memory (Reprogramming game)",
+        sub: "Can you force the cell to change what it reads?",
+        goal: "Make a <strong>new hub</strong> form in the blue target zone — and <strong>keep it there</strong> long enough to stabilise.",
+        html: `
+          <p>
+            Final challenge.
+            Start with a stable hub (pink glow) around a big reader (red).
+            Your goal is to <strong>reprogram</strong> the system:
+            make the hub form somewhere else.
+          </p>
+
+          <div class="subBlock">
+            <h3 class="subTitle">How it works</h3>
+            <div class="subLead">You get one tool: temporarily weaken hub pull — plus you can drag the reader.</div>
+            <ul>
+              <li><strong>Drag</strong> the big red reader.</li>
+              <li>Use <span class="bigClick blue">Temporarily weaken hub pull</span> to loosen the old hub (3 seconds).</li>
+              <li>Move the reader into the <strong>blue target zone</strong>.</li>
+              <li>Then <strong>keep it there</strong> until the hub stabilises.</li>
+            </ul>
+          </div>
+
+          <div class="subBlock">
+            <h3 class="subTitle">Message at the end</h3>
+            <div class="subLead">Changing identity takes effort — and the right conditions.</div>
           </div>
         `,
         showLegend: true
@@ -856,11 +1069,11 @@
       prevBtn.disabled = (actIndex === 0);
       nextBtn.disabled = (actIndex === ACTS.length - 1);
 
-      // Reset button only for polymer pages (Page 5 and Page 6 here: act4 + hub_story)
-      resetBtn.style.display = (mode === "act4" || mode === "hub_story") ? "inline-flex" : "none";
+      // Reset button for polymer pages + game
+      resetBtn.style.display = (mode === "act4" || mode === "hub_story" || mode === "game") ? "inline-flex" : "none";
 
-      // drag hint
-      dragHint.classList.toggle("show", mode === "hub_story");
+      // drag hint on hub + game
+      dragHint.classList.toggle("show", mode === "hub_story" || mode === "game");
 
       if (A.showLegend) legend.classList.add("show");
       else legend.classList.remove("show");
@@ -882,13 +1095,21 @@
         btnLocks.style.display = "inline-block";
       }
 
-      // no image overlay in this version (we keep the canvas always)
+      // Game controls
+      gameControls.style.display = (mode === "game") ? "flex" : "none";
+
+      // canvas always visible
       stageImage.classList.remove("show");
       stageImage.removeAttribute("src");
       canvas.style.display = "block";
 
       updatePairStrip();
       initActWorld(true);
+
+      // reset game win state if entering game
+      if (mode === "game"){
+        resetGameState();
+      }
     }
 
     prevBtn.addEventListener("click", () => applyAct(actIndex - 1));
@@ -1104,16 +1325,16 @@
     }
 
     // ============================================================
-    // Polymer worlds for pages 5–6
+    // Polymer worlds for pages 5–7
     //  - act4: drag chain
     //  - hub_story: big TF hub + extra TFs drift in, and chain STAYS clustered
+    //  - game: reprogram hub to a target region and stabilise it
     // ============================================================
     const world = {
       initialised: false,
       beads: [],
       bvx: [],
       bvy: [],
-      tfs: [],
       frame: 0
     };
 
@@ -1162,8 +1383,8 @@
     canvas.addEventListener("pointerdown", (e) => {
       const p = pointerPos(e);
 
-      // hub page: drag the big reader
-      if (mode === "hub_story"){
+      // hub + game pages: drag the big reader
+      if (mode === "hub_story" || mode === "game"){
         const dx = p.x - bigTF.x;
         const dy = p.y - bigTF.y;
         if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
@@ -1208,8 +1429,39 @@
 
     let extraTFs = []; // extra readers drifting in on hub page
 
+    // GAME state
+    let gameWon = false;
+    let hubStrength = 0.70;        // baseline hub pull
+    let weakenUntil = 0;           // ms timestamp
+    let stableFrames = 0;          // counter toward win
+    const TARGET = { x: 0, y: 0, r: 80 };  // set in init
+    const STABLE_SECONDS = 4.0;    // hold hub stable this long
+    const FPS_ASSUMED = 60;
+
+    function resetGameState(){
+      gameWon = false;
+      stableFrames = 0;
+      hubStrength = 0.70;
+      weakenUntil = 0;
+      btnWeaken.disabled = false;
+    }
+
+    btnWeaken.addEventListener("click", () => {
+      if (mode !== "game" || gameWon) return;
+      const now = performance.now();
+      weakenUntil = now + 3000; // 3 seconds
+      btnWeaken.disabled = true;
+      setTimeout(() => { btnWeaken.disabled = false; }, 3100);
+    });
+
+    btnResetGame.addEventListener("click", () => {
+      if (mode !== "game") return;
+      initActWorld(true);
+      resetGameState();
+    });
+
     function initActWorld(force=false){
-      const polymerModes = ["act4","hub_story"];
+      const polymerModes = ["act4","hub_story","game"];
       if (!polymerModes.includes(mode)) return;
 
       if (world.initialised && !force) return;
@@ -1259,13 +1511,20 @@
         }
       }
 
-      // hub page: place big reader and start with DNA already somewhat gathered
-      if (mode === "hub_story"){
+      // hub_story + game: place big reader and start with DNA already somewhat gathered
+      if (mode === "hub_story" || mode === "game"){
         bigTF.x = W*0.58;
         bigTF.y = H*0.54;
         bigTF.vx = 0; bigTF.vy = 0;
 
-        // gently pre-wrap a mid region around the reader so it looks “hubby” immediately
+        // target zone (game)
+        if (mode === "game"){
+          TARGET.x = W*0.25;
+          TARGET.y = H*0.30;
+          TARGET.r = Math.min(W,H)*0.13;
+        }
+
+        // pre-wrap a mid region around the reader so it looks “hubby”
         const center = {x: bigTF.x, y: bigTF.y};
         const R0 = bigTF.radius * 1.10;
         const R1 = bigTF.radius * 3.8;
@@ -1284,16 +1543,18 @@
           world.beads[i].y = world.beads[i].y*(1-w) + targetY*w;
         }
 
-        // extra readers drift in
+        // extra readers drift in (hub_story only)
         extraTFs = [];
-        const count = 7;
-        for (let i=0;i<count;i++){
-          extraTFs.push({
-            x: W*(0.12 + 0.76*Math.random()),
-            y: H*(0.18 + 0.64*Math.random()),
-            vx: 0, vy: 0,
-            radius: 26 + 6*Math.random()
-          });
+        if (mode === "hub_story"){
+          const count = 7;
+          for (let i=0;i<count;i++){
+            extraTFs.push({
+              x: W*(0.12 + 0.76*Math.random()),
+              y: H*(0.18 + 0.64*Math.random()),
+              vx: 0, vy: 0,
+              radius: 26 + 6*Math.random()
+            });
+          }
         }
       }
     }
@@ -1352,6 +1613,16 @@
       return {fx, fy};
     }
 
+    function meanDistanceToHub(){
+      let acc = 0;
+      for (const p of world.beads){
+        const dx = p.x - bigTF.x;
+        const dy = p.y - bigTF.y;
+        acc += Math.sqrt(dx*dx + dy*dy);
+      }
+      return acc / Math.max(1, world.beads.length);
+    }
+
     function stepPolymer(){
       world.frame++;
       const n = P.beadCount;
@@ -1394,12 +1665,19 @@
         world.bvy[i] += beadDragK * dy;
       }
 
-      // hub pull on hub page (THIS is what stops the chain “relaxing away”)
-      if (mode === "hub_story"){
-        const strength = 0.7; // strong enough to keep it clustered
+      // hub pull on hub + game pages
+      if (mode === "hub_story" || mode === "game"){
+        // dynamic hub strength (game weakening)
+        const now = performance.now();
+        if (mode === "game"){
+          hubStrength = (now < weakenUntil) ? 0.14 : 0.70;
+        } else {
+          hubStrength = 0.70;
+        }
+
         for (let i=0;i<n;i++){
           const p=world.beads[i];
-          const f = hubPullForce(p, bigTF, strength);
+          const f = hubPullForce(p, bigTF, hubStrength);
           world.bvx[i] += f.fx;
           world.bvy[i] += f.fy;
         }
@@ -1407,8 +1685,9 @@
 
       // Brownian wiggle
       let brown = 0.16;
-      if (mode === "act4")     brown = 0.22;
+      if (mode === "act4")      brown = 0.22;
       if (mode === "hub_story") brown = 0.006; // low so the hub stays
+      if (mode === "game")      brown = 0.015; // a little noise to make stabilising meaningful
 
       for (let i=0;i<n;i++){
         world.bvx[i] += brown*randn();
@@ -1430,22 +1709,94 @@
         for (const tf of extraTFs){
           tf.vx += 0.12*randn();
           tf.vy += 0.12*randn();
-
-          // hungry drift toward “most sentences”
           tf.vx += 0.0019*(target.x - tf.x);
           tf.vy += 0.0019*(target.y - tf.y);
-
           tf.vx *= 0.88;
           tf.vy *= 0.88;
           tf.x += tf.vx;
           tf.y += tf.vy;
-
           if (tf.x<0) tf.x += W;
           if (tf.x>W) tf.x -= W;
           if (tf.y<0) tf.y += H;
           if (tf.y>H) tf.y -= H;
         }
       }
+
+      // game win condition
+      if (mode === "game" && !gameWon){
+        const dx = bigTF.x - TARGET.x;
+        const dy = bigTF.y - TARGET.y;
+        const insideTarget = (dx*dx + dy*dy) < (TARGET.r * TARGET.r);
+
+        const md = meanDistanceToHub();
+        const clustered = md < (bigTF.radius * 4.35); // heuristic: beads mostly gathered
+
+        const strongAgain = performance.now() >= weakenUntil + 50; // not currently weakened
+
+        if (insideTarget && clustered && strongAgain){
+          stableFrames += 1;
+        } else {
+          stableFrames = Math.max(0, stableFrames - 2);
+        }
+
+        if (stableFrames >= Math.floor(STABLE_SECONDS * FPS_ASSUMED)){
+          gameWon = true;
+          showBadge();
+        }
+      }
+    }
+
+    function drawTargetZone(){
+      if (mode !== "game") return;
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      glowCircle(TARGET.x, TARGET.y, TARGET.r*1.15, "rgba(37,99,235,0.06)", 70);
+      ctx.restore();
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(37,99,235,0.65)";
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([10,8]);
+      ctx.beginPath();
+      ctx.arc(TARGET.x, TARGET.y, TARGET.r, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "rgba(255,255,255,0.78)";
+      ctx.font = "900 13px system-ui";
+      ctx.fillText("Target zone", TARGET.x - 34, TARGET.y - TARGET.r - 10);
+      ctx.restore();
+    }
+
+    function drawGameProgress(){
+      if (mode !== "game" || gameWon) return;
+      const W = canvas.width, H = canvas.height;
+      const frac = clamp(stableFrames / Math.floor(STABLE_SECONDS * FPS_ASSUMED), 0, 1);
+
+      ctx.save();
+      ctx.globalAlpha = 0.95;
+      ctx.fillStyle = "rgba(0,0,0,0.45)";
+      roundRect(W*0.5 - 160, 18, 320, 44, 14, true, false);
+
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "900 12px system-ui";
+      ctx.fillText("Stabilise the new hub", W*0.5 - 142, 36);
+
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      roundRect(W*0.5 - 142, 44, 284, 10, 10, true, false);
+
+      ctx.fillStyle = "rgba(37,99,235,0.75)";
+      roundRect(W*0.5 - 142, 44, 284*frac, 10, 10, true, false);
+
+      // weaken indicator
+      const now = performance.now();
+      if (now < weakenUntil){
+        ctx.fillStyle = "rgba(255,60,60,0.85)";
+        ctx.font = "950 12px system-ui";
+        ctx.fillText("Hub pull weakened", W*0.5 + 32, 36);
+      }
+
+      ctx.restore();
     }
 
     function drawPolymerAndTFs(){
@@ -1466,7 +1817,7 @@
         glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
       }
 
-      if (mode === "hub_story"){
+      if (mode === "hub_story" || mode === "game"){
         // hub glow
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
@@ -1476,28 +1827,145 @@
 
         glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 44);
 
-        for (const tf of extraTFs){
-          glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
+        if (mode === "hub_story"){
+          for (const tf of extraTFs){
+            glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
+          }
         }
       }
     }
+
+    // ============================================================
+    // Badge modal + confetti
+    // ============================================================
+    const confettiCanvas = document.getElementById("confettiCanvas");
+    const cctx = confettiCanvas.getContext("2d");
+    let confetti = [];
+    let confettiRunning = false;
+
+    function resizeConfetti(){
+      const modal = badgeModal.querySelector(".modal");
+      const rect = modal.getBoundingClientRect();
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      confettiCanvas.width = Math.floor(rect.width * dpr);
+      confettiCanvas.height = Math.floor(rect.height * dpr);
+    }
+
+    function spawnConfetti(){
+      resizeConfetti();
+      confetti = [];
+      const W = confettiCanvas.width, H = confettiCanvas.height;
+      const n = 120;
+      for (let i=0;i<n;i++){
+        confetti.push({
+          x: W*0.5 + randn()*30,
+          y: H*0.18 + randn()*10,
+          vx: randn()*2.4,
+          vy: 2.0 + Math.random()*3.2,
+          r: 2 + Math.random()*3.5,
+          a: Math.random()*Math.PI*2,
+          va: randn()*0.12,
+          life: 1.0
+        });
+      }
+      confettiRunning = true;
+    }
+
+    function tickConfetti(){
+      if (!confettiRunning) return;
+      const W = confettiCanvas.width, H = confettiCanvas.height;
+
+      cctx.clearRect(0,0,W,H);
+      cctx.save();
+      for (const p of confetti){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a += p.va;
+        p.vy += 0.06;         // gravity
+        p.vx *= 0.995;
+        p.life *= 0.995;
+
+        // draw
+        cctx.save();
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.a);
+
+        // random-ish palette without hardcoding specific “styles”
+        const t = (p.x/W);
+        const col =
+          (t < 0.33) ? "rgba(37,99,235,0.85)" :
+          (t < 0.66) ? "rgba(5,150,105,0.85)" :
+                       "rgba(220,38,38,0.85)";
+        cctx.fillStyle = col;
+        cctx.fillRect(-p.r, -p.r*0.6, p.r*2.2, p.r*1.2);
+        cctx.restore();
+      }
+      cctx.restore();
+
+      // stop after a bit
+      confetti = confetti.filter(p => p.y < H + 40 && p.life > 0.2);
+      if (confetti.length === 0){
+        confettiRunning = false;
+        cctx.clearRect(0,0,W,H);
+        return;
+      }
+      requestAnimationFrame(tickConfetti);
+    }
+
+    function showBadge(){
+      badgeModal.classList.add("show");
+      spawnConfetti();
+      requestAnimationFrame(tickConfetti);
+    }
+
+    function hideBadge(){
+      badgeModal.classList.remove("show");
+      confettiRunning = false;
+      cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+    }
+
+    btnCloseBadge.addEventListener("click", hideBadge);
+    badgeModal.addEventListener("click", (e) => {
+      if (e.target === badgeModal) hideBadge();
+    });
+
+    btnReplayGame.addEventListener("click", () => {
+      hideBadge();
+      applyAct(ACTS.length - 1);
+      initActWorld(true);
+      resetGameState();
+    });
+
+    btnExploreAnother.addEventListener("click", () => {
+      hideBadge();
+      applyAct(0);
+    });
+
+    // Replace this with your real link later:
+    btnRealScientists.addEventListener("click", () => {
+      // Example: go to your research page / PDF / pipeline README
+      // window.location.href = "your_link_here.html";
+      hideBadge();
+      alert("Hook this button to your research page / paper / pipeline README when ready.");
+    });
 
     // ============================================================
     // Main tick
     // ============================================================
     function tick(){
       resizeCanvas();
-
       drawBackground();
 
       if (mode === "intro"){
         drawIntroFlowchart();
       } else if (mode === "dna" || mode === "locks"){
         drawDNAHelix();
-      } else if (mode === "act4" || mode === "hub_story"){
+      } else if (mode === "act4" || mode === "hub_story" || mode === "game"){
         initActWorld(false);
         stepPolymer();
+        drawTargetZone();
         drawPolymerAndTFs();
+        drawGameProgress();
       }
 
       requestAnimationFrame(tick);
@@ -1509,6 +1977,7 @@
     window.addEventListener("resize", () => {
       resizeCanvas();
       initActWorld(true);
+      if (badgeModal.classList.contains("show")) resizeConfetti();
     });
 
     resizeCanvas();
@@ -1517,6 +1986,7 @@
   </script>
 </body>
 </html>
+
 
 
 
