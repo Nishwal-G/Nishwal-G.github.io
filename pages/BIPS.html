@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How do cells remember who they are? | DNA → Chromatin → BIPS</title>
 
   <style>
@@ -50,7 +50,7 @@
       align-items: center;
     }
 
-    /* TEXT AREA (SCROLL STORY) */
+    /* TEXT AREA (ABOVE CANVAS) */
     .textPanel{
       width: min(var(--maxw), 100%);
       border: 1px solid var(--border);
@@ -62,33 +62,13 @@
 
     .textInner{ padding: 18px 18px 14px 18px; }
 
-    .kickerRow{
-      display:flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
     .kicker{
       font-weight: 900;
-      letter-spacing: 0.25px;
+      letter-spacing: 0.2px;
       font-size: 12px;
       color: rgba(31,41,55,0.65);
       text-transform: uppercase;
-      margin: 0;
-    }
-
-    .progressPill{
-      border: 1px solid rgba(31,41,55,0.18);
-      background: rgba(31,41,55,0.03);
-      color: rgba(31,41,55,0.80);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      user-select:none;
+      margin-bottom: 8px;
     }
 
     .sceneTitle{
@@ -107,57 +87,9 @@
       line-height: 1.65;
     }
 
-    /* Story sections (scroll) */
-    .story{
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .section{
-      border: 1px solid rgba(31,41,55,0.10);
-      border-radius: 16px;
-      padding: 14px 14px 12px 14px;
-      background: rgba(255,255,255,0.96);
-    }
-    .section.active{
-      border-color: rgba(37,99,235,0.25);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.06);
-    }
-
-    .sectionHeader{
-      display:flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 8px;
-    }
-    .sectionTag{
-      font-weight: 950;
-      font-size: 12px;
-      letter-spacing: 0.18px;
-      text-transform: uppercase;
-      color: rgba(31,41,55,0.60);
-    }
-    .sectionTitle{
-      font-weight: 950;
-      letter-spacing: -0.2px;
-      font-size: 18px;
-      margin: 6px 0 0 0;
-      color: rgba(31,41,55,0.94);
-    }
-    .sectionSub{
-      margin-top: 6px;
-      color: rgba(31,41,55,0.70);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* Learning goal callout */
+    /* learning goal callout */
     .learnGoal{
-      margin-top: 10px;
+      margin-top: 12px;
       padding: 10px 12px;
       border: 1px solid rgba(31,41,55,0.12);
       background: rgba(5,150,105,0.06);
@@ -166,6 +98,7 @@
       color: rgba(31,41,55,0.88);
       font-size: 14px;
       line-height: 1.55;
+      display: none;
     }
     .learnGoal strong{
       color: rgba(5,150,105,0.95);
@@ -173,7 +106,7 @@
     }
 
     .storyText{
-      margin-top: 10px;
+      margin-top: 14px;
       color: rgba(31,41,55,0.92);
       font-size: 16px;
       line-height: 1.78;
@@ -184,6 +117,28 @@
       padding: 0;
     }
     .storyText li{ margin: 8px 0; }
+
+    /* nice internal sub-sections (for the combined page) */
+    .subBlock{
+      margin-top: 14px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,41,55,0.10);
+      background: rgba(31,41,55,0.02);
+    }
+    .subTitle{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin: 0;
+      font-size: 15px;
+      color: rgba(31,41,55,0.92);
+    }
+    .subLead{
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(31,41,55,0.72);
+    }
 
     /* Big clickable glossary-like words */
     .bigClick{
@@ -196,58 +151,58 @@
       font-weight: 950;
       letter-spacing: 0.2px;
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 13px;
       color: rgba(31,41,55,0.92);
       cursor: pointer;
       user-select:none;
       transform: translateY(-1px);
-      white-space: nowrap;
     }
     .bigClick:hover{ background: rgba(31,41,55,0.07); }
     .bigClick.green{ border-color: rgba(5,150,105,0.28); color: var(--green); background: rgba(5,150,105,0.05); }
     .bigClick.purple{ border-color: rgba(124,58,237,0.24); color: var(--purple); background: rgba(124,58,237,0.05); }
     .bigClick.white{ border-color: rgba(31,41,55,0.18); color: rgba(31,41,55,0.92); }
 
-    /* Tiny helper row */
-    .helperRow{
-      margin-top: 10px;
+    /* Controls */
+    .controls{
       display:flex;
       gap: 10px;
-      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
+      margin-top: 14px;
+      flex-wrap: wrap;
     }
 
-    .hintPill{
-      border: 1px solid rgba(31,41,55,0.18);
-      background: rgba(31,41,55,0.03);
-      color: rgba(31,41,55,0.75);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-    }
-
-    .toTop{
+    .pill{
       border: 1px solid rgba(31,41,55,0.18);
       background: rgba(255,255,255,0.92);
       color: rgba(31,41,55,0.92);
-      padding: 9px 12px;
+      padding: 10px 14px;
       border-radius: 999px;
       cursor: pointer;
       font-weight: 950;
-      font-size: 12px;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       user-select:none;
+      min-height: 42px;
     }
-    .toTop:hover{ background: rgba(31,41,55,0.04); }
+    .pill:hover{ background: rgba(31,41,55,0.04); }
+    .pill.ghost{ background: rgba(255,255,255,0.92); }
+    .pill.strong{
+      background: rgba(37,99,235,0.10);
+      border-color: rgba(37,99,235,0.30);
+      color: rgba(37,99,235,0.95);
+    }
+    .pill:disabled{ opacity: 0.45; cursor: default; }
 
-    /* Act 2+3+4 mini buttons (Base pair / Gene / Locks) */
+    /* Mini buttons (Base pair / Gene / Locks) */
     .miniControls{
       display:flex;
       gap: 10px;
       align-items: center;
       justify-content: flex-start;
-      margin-top: 10px;
+      margin-top: 12px;
       flex-wrap: wrap;
     }
     .miniPill{
@@ -277,8 +232,7 @@
       border-radius: 18px;
       overflow: hidden;
       background: var(--figureBg);
-      position: sticky;
-      top: 14px;
+      position: relative;
       box-shadow: 0 10px 30px rgba(17,24,39,0.12);
     }
 
@@ -291,7 +245,7 @@
       touch-action: none;
     }
 
-    /* Act-image overlay (final act only) */
+    /* Image overlay (unused now; kept for compatibility if you want later) */
     .stageImage{
       position:absolute;
       inset: 0;
@@ -357,13 +311,13 @@
     .dragHint.show{ opacity: 1; transform: translateY(0); }
 
     @media (max-width: 860px){
-      .stage{ height: 52vh; position: relative; top: auto; }
+      .stage{ height: 52vh; }
       .textInner{ padding: 16px 14px 12px 14px; }
       .storyText{ font-size: 16px; }
     }
 
     /* ============================================================
-       Letter / base-pair panel shown under canvas in DNA sections
+       Letter / base-pair panel shown under canvas in Acts 2–3
        ============================================================ */
     .pairPanel{
       width: min(var(--maxw), 100%);
@@ -497,59 +451,62 @@
       background: rgba(37,99,235,0.75);
     }
     .chip.green .swatch{ background: rgba(5,150,105,0.80); }
-
   </style>
 </head>
 
 <body>
   <div class="page">
-    <section class="textPanel" aria-label="Story (scroll)">
+    <section class="textPanel" aria-label="Story text">
       <div class="textInner">
-        <div class="kickerRow">
-          <div class="kicker">Scroll the story — the figure updates as you go</div>
-          <div class="progressPill" id="progressPill">Section 1 / 8</div>
+        <div class="kicker" id="kicker">Page 1 of 6</div>
+
+        <h1 class="sceneTitle" id="sceneTitle">How do cells know who they are?</h1>
+
+        <div class="sceneSub" id="sceneSub">
+          Read the story, then look at the figure underneath. Use Next / Prev to move through the pages.
         </div>
 
-        <h1 class="sceneTitle">How do cells remember who they are?</h1>
+        <div class="learnGoal" id="learnGoal"></div>
 
-        <div class="sceneSub">
-          Same DNA, different jobs. This story shows a simple idea:
-          <strong>DNA is the book</strong>, but <strong>how it’s folded</strong> helps decide what gets read.
-          <br>
-          As you scroll, the animation on the right changes to match the section you’re reading.
+        <div class="storyText" id="storyText"></div>
+
+        <!-- Mini buttons: shown for DNA + Gene + Locks pages -->
+        <div class="miniControls" id="dnaButtons" style="display:none;">
+          <button class="miniPill white" id="btnBasepair" type="button">Base pairs</button>
+          <button class="miniPill green" id="btnGene" type="button">Gene</button>
+          <button class="miniPill purple" id="btnLocks" type="button">Locks</button>
         </div>
 
-        <div class="helperRow">
-          <div class="hintPill" id="activeHint">Tip: scroll slowly — the figure will “snap” to each chapter.</div>
-          <button class="toTop" id="toTopBtn" type="button">↑ Back to top</button>
+        <div class="controls">
+          <button class="pill ghost" id="prevBtn" type="button">← Prev</button>
+          <button class="pill ghost" id="resetBtn" type="button" title="Reset this page">↻ Reset</button>
+          <button class="pill strong" id="nextBtn" type="button">Next →</button>
         </div>
-
-        <div class="story" id="story"></div>
       </div>
     </section>
 
     <section class="stage" aria-label="Figure (animation canvas)">
       <canvas id="stageCanvas"></canvas>
 
-      <!-- final image -->
-      <img id="stageImage" class="stageImage" alt="Summary image"/>
+      <!-- kept but not used now -->
+      <img id="stageImage" class="stageImage" alt="Page image"/>
 
-      <div class="dragHint" id="dragHint">Drag the big red “reader”</div>
+      <div class="dragHint" id="dragHint">Drag the big red reader</div>
 
       <div class="legend" id="legend">
-        <span class="dot white"></span> DNA (as a squiggly chain)
-        <span class="dot green"></span> a gene spot
+        <span class="dot white"></span> DNA / chromatin (a squiggly chain)
+        <span class="dot green"></span> a gene region
         <span class="dot red"></span> reader proteins
         <span class="dot pink"></span> busy hub
-        <span class="dot purple"></span> hard-to-open DNA
+        <span class="dot purple"></span> locked DNA
       </div>
     </section>
 
-    <!-- DNA letters panel -->
+    <!-- ATCG + pairing panel under the figure (Pages 2–3 only) -->
     <section class="pairPanel" id="pairPanel" aria-label="DNA letters and base-pairing">
       <div class="pairInner">
         <div class="pairTitleRow">
-          <div class="pairTitle">DNA as letters (A, C, G, T) — with matching pairs</div>
+          <div class="pairTitle">DNA as letters (A, C, G, T) with base-pairing</div>
           <div class="pairHint">A↔T and C↔G</div>
         </div>
 
@@ -558,8 +515,8 @@
         </div>
 
         <div class="pairChips" aria-hidden="true">
-          <span class="chip"><span class="swatch"></span> one base pair</span>
-          <span class="chip green"><span class="swatch"></span> a gene region</span>
+          <span class="chip"><span class="swatch"></span> base pair (click “Base pairs”)</span>
+          <span class="chip green"><span class="swatch"></span> gene region (click “Gene”)</span>
         </div>
       </div>
     </section>
@@ -571,6 +528,7 @@
     // ============================================================
     const canvas = document.getElementById("stageCanvas");
     const ctx = canvas.getContext("2d");
+
     const stageImage = document.getElementById("stageImage");
 
     function resizeCanvas() {
@@ -595,33 +553,28 @@
     function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
 
     // ============================================================
-    // Story sections (scroll-controlled)
+    // UI
     // ============================================================
-    const storyEl = document.getElementById("story");
-    const progressPill = document.getElementById("progressPill");
+    const sceneTitle = document.getElementById("sceneTitle");
+    const sceneSub   = document.getElementById("sceneSub");
+    const storyText  = document.getElementById("storyText");
+    const kicker     = document.getElementById("kicker");
+    const learnGoal  = document.getElementById("learnGoal");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
     const legend = document.getElementById("legend");
     const dragHint = document.getElementById("dragHint");
-    const activeHint = document.getElementById("activeHint");
 
-    document.getElementById("toTopBtn").addEventListener("click", () => {
-      window.scrollTo({top: 0, behavior: "smooth"});
-    });
-
-    // Clickable words highlight behaviour (DNA sections)
-    let highlight = null; // "basepair" | "gene" | "locks" | null
-
-    document.addEventListener("click", (e) => {
-      const el = e.target.closest("[data-click]");
-      if (!el) return;
-      const id = el.getAttribute("data-click");
-      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
-      if (id === "gene")     highlight = (highlight === "gene") ? null : "gene";
-      if (id === "locks")    highlight = (highlight === "locks") ? null : "locks";
-      updatePairStrip();
-    });
+    const dnaButtons = document.getElementById("dnaButtons");
+    const btnBasepair = document.getElementById("btnBasepair");
+    const btnGene = document.getElementById("btnGene");
+    const btnLocks = document.getElementById("btnLocks");
 
     // ============================================================
-    // DNA letters strip (shown in DNA sections)
+    // Letter / base-pair strip under the figure (Pages 2–3)
     // ============================================================
     const pairPanel = document.getElementById("pairPanel");
     const pairStrip = document.getElementById("pairStrip");
@@ -663,8 +616,37 @@
       }
     }
 
+    // ============================================================
+    // Clickable words (text) + click-to-highlight (DNA)
+    // ============================================================
+    let highlight = null; // "basepair" | "gene" | "locks" | null
+
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest("[data-click]");
+      if (!el) return;
+      const id = el.getAttribute("data-click");
+      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
+      if (id === "gene")     highlight = (highlight === "gene") ? null : "gene";
+      if (id === "locks")    highlight = (highlight === "locks") ? null : "locks";
+      updatePairStrip();
+    });
+
+    btnBasepair.addEventListener("click", () => {
+      highlight = (highlight === "basepair") ? null : "basepair";
+      updatePairStrip();
+    });
+    btnGene.addEventListener("click", () => {
+      highlight = (highlight === "gene") ? null : "gene";
+      updatePairStrip();
+    });
+    btnLocks.addEventListener("click", () => {
+      highlight = (highlight === "locks") ? null : "locks";
+      updatePairStrip();
+    });
+
     function updatePairStrip(){
-      const show = (mode === "dna" || mode === "locks");
+      // Show only on Page 2 (index 1) and Page 3 (index 2)
+      const show = (actIndex === 1 || actIndex === 2);
       pairPanel.style.display = show ? "block" : "none";
       if (!show) return;
 
@@ -686,97 +668,91 @@
     buildPairStrip();
 
     // ============================================================
-    // The story content (8 sections)
+    // Acts (pages)
+    //  - We KEEP the old structure.
+    //  - We simply merge the old 6+7+8 content into ONE final page (Page 6).
     // ============================================================
-    const SECTIONS = [
+    let actIndex = 0;
+    let mode = "intro"; // intro | dna | locks | act4 | act5 | hub_story
+
+    const ACTS = [
       {
-        id: "s1",
-        tag: "Chapter 1",
-        title: "Same book, different jobs",
-        sub: "Every cell carries the same DNA book — but different cells read different parts.",
-        goal: "Get the big idea: <strong>DNA is the book</strong>, but <strong>what gets read</strong> depends on access and 3D folding.",
         mode: "intro",
-        hint: "You’re at the start. The figure shows the whole story arc.",
-        showLegend: false,
+        title: "How do cells know who they are?",
+        sub: "Most cells carry the same DNA — but they don’t act the same. Why?",
+        goal: "Understand one simple idea: <strong>DNA is the book</strong>, but <strong>access + folding</strong> help decide what gets read.",
         html: `
           <p>
             Imagine every cell owns the <strong>same book</strong>.
-            The book is DNA.
+            That book is DNA.
           </p>
           <p>
-            A skin cell and a neuron have the same book —
-            but they do different jobs because they don’t read the same pages at the same time.
+            A skin cell and a neuron have the same book — but they do different jobs because they don’t read the same chapters.
           </p>
           <ul>
-            <li><strong>DNA</strong> is the letters.</li>
-            <li><strong>Genes</strong> are the sentences that mean something.</li>
-            <li><strong>Locks</strong> can make some pages hard to open.</li>
-            <li><strong>Folding</strong> changes what’s nearby and easy to reach.</li>
-            <li><strong>Hungry readers</strong> (proteins) spend more time where there are many “sentences” close together.</li>
+            <li><strong>DNA</strong> is written in four letters: A, C, G, T.</li>
+            <li><strong>Genes</strong> are the useful “sentences” in the book.</li>
+            <li><strong>Locks</strong> can make some chapters hard to open.</li>
+            <li><strong>Folding</strong> changes what is nearby and easy to reach.</li>
           </ul>
-        `
+          <p>
+            On the later pages you’ll meet “readers” (proteins) that are hungry to read — and they tend to hang around where there are
+            lots of sentences close together.
+          </p>
+        `,
+        showLegend: false
       },
       {
-        id: "s2",
-        tag: "Chapter 2",
-        title: "DNA is a message in four letters",
-        sub: "DNA uses a tiny alphabet: A, C, G, T.",
-        goal: "Recognise the DNA alphabet and what a <strong>base pair</strong> is.",
         mode: "dna",
-        hint: "Try clicking: Base pair / Gene in the text (little pill-words).",
-        showLegend: false,
+        title: "DNA is a message in four letters",
+        sub: "DNA uses a tiny alphabet: A, C, G, T — and it comes as a twisted ladder.",
+        goal: "Recognise the DNA alphabet and what a <strong>base pair</strong> is.",
         html: `
           <p>
-            DNA is written using just four letters:
+            DNA is written using four letters:
             <strong>A</strong>, <strong>C</strong>, <strong>G</strong>, and <strong>T</strong>.
           </p>
           <p>
-            DNA usually comes as a twisted ladder.
-            Each rung is a matching pair:
+            DNA often looks like a twisted ladder.
+            Each rung is a matched pair:
             <span class="bigClick white" data-click="basepair">base pair</span>.
             A matches with T, and C matches with G.
           </p>
           <p>
-            Click <span class="bigClick white" data-click="basepair">base pair</span> to highlight one rung —
-            both on the helix and in the little letter strip under the figure.
+            Click <span class="bigClick white" data-click="basepair">base pair</span> to highlight one rung
+            (also shown in the letter strip under the figure).
           </p>
-        `
+        `,
+        showLegend: false
       },
       {
-        id: "s3",
-        tag: "Chapter 3",
+        mode: "dna",
         title: "A gene is a useful stretch of DNA",
         sub: "If letters are the alphabet, a gene is a sentence the cell can copy and use.",
-        goal: "Understand a <strong>gene</strong> as a continuous stretch of DNA letters.",
-        mode: "dna",
-        hint: "Click the word ‘gene’ below to highlight a whole region.",
-        showLegend: false,
+        goal: "See a <strong>gene</strong> as a continuous stretch of DNA letters.",
         html: `
           <p>
-            A <span class="bigClick green" data-click="gene">gene</span>
-            is a stretch of DNA that the cell can copy into RNA, and often use to build proteins.
+            A <span class="bigClick green" data-click="gene">gene</span> is a stretch of DNA that the cell can copy into RNA,
+            and often use to build proteins.
           </p>
           <p>
-            Different cell types choose different genes to read more often —
-            that’s a big part of what makes them different.
+            Different cell types read different genes more often.
+            That’s a big part of what makes them different.
           </p>
           <p>
-            Click <span class="bigClick green" data-click="gene">gene</span> to highlight a gene-sized region.
+            Click <span class="bigClick green" data-click="gene">gene</span> to highlight one gene-sized region.
           </p>
-        `
+        `,
+        showLegend: false
       },
       {
-        id: "s4",
-        tag: "Chapter 4",
-        title: "Some pages are harder to open",
-        sub: "Cells can ‘lock’ parts of DNA to make them less reachable.",
-        goal: "See “locks” as a simple way to change <strong>access</strong> (easy vs hard to read).",
         mode: "locks",
-        hint: "Click ‘locks’ to make the purple regions stand out.",
-        showLegend: false,
+        title: "Some chapters are harder to open",
+        sub: "Cells can ‘lock’ parts of DNA to make them less reachable.",
+        goal: "Understand locks as a simple way to change <strong>access</strong> (easy vs hard to read).",
         html: `
           <p>
-            Cells can add chemical marks that make some DNA regions more “closed”.
+            Cells can place chemical marks that make some DNA regions more “closed”.
             Think of it like putting a <span class="bigClick purple" data-click="locks">lock</span> on a chapter.
           </p>
           <p>
@@ -786,218 +762,138 @@
             Click <span class="bigClick purple" data-click="locks">locks</span> to emphasise the purple locked zones.
           </p>
           <p>
-            Now comes the part people often forget: DNA is also a <strong>physical object</strong>.
-            It folds in 3D.
+            Now zoom out: DNA is also a physical object. It folds in 3D.
           </p>
-        `
+        `,
+        showLegend: false
       },
       {
-        id: "s5",
-        tag: "Chapter 5",
+        mode: "act4",
         title: "Zoom out: DNA becomes a moving chain",
         sub: "Inside the nucleus, DNA is packed as chromatin: a flexible chain that wriggles and folds.",
         goal: "See chromatin as a <strong>wiggly chain</strong> that can fold and rearrange.",
-        mode: "act4",
-        hint: "Try it: drag the chain and fold it a bit.",
-        showLegend: true,
         html: `
           <p>
             DNA is extremely long, so it gets packed up with proteins into <strong>chromatin</strong>.
           </p>
           <p>
-            In this cartoon, chromatin is drawn as a chain of little beads.
-            It moves and wiggles — like a soft thread floating in a crowded room.
+            In this cartoon, chromatin is drawn as a chain of beads.
+            It moves and wiggles — like a soft thread floating in a busy room.
           </p>
           <p>
-            <strong>Try it:</strong> drag the chain around. Let go, and it keeps gently moving.
+            <strong>Try it:</strong> drag the chain and fold it a bit.
           </p>
-        `
+        `,
+        showLegend: true
       },
       {
-        id: "s6",
-        tag: "Chapter 6",
-        title: "Hungry readers wander around",
-        sub: "Reader proteins drift randomly, looking for good places to read.",
-        goal: "Understand the wandering as simple <strong>random motion</strong> (bumping around).",
-        mode: "act5",
-        hint: "Watch the red dots wander. No hub yet — just searching.",
-        showLegend: true,
+        mode: "hub_story",
+        title: "Hungry readers + a busy hub (all together)",
+        sub: "Readers wander, a hub can form, and then more readers drift to the busiest spot.",
+        goal: "Learn one simple loop: <strong>dense DNA</strong> makes a place easier to read, so readers tend to gather there.",
         html: `
           <p>
-            The cell has “readers” — proteins that help read genes.
-            They are a bit like hungry readers in a library: they move around looking for text.
+            Now meet the <strong>readers</strong> (red): proteins that help read genes.
+            Imagine they are <strong>hungry to read</strong>.
+            They roam around looking for good places to spend their time.
           </p>
-          <p>
-            At first, they mostly wander and bump into things.
-            Nothing is pulling the DNA into a hub yet.
-          </p>
-        `
-      },
-      {
-        id: "s7",
-        tag: "Chapter 7",
-        title: "A busy hub forms (and stays)",
-        sub: "If a big reader can hold onto DNA well, nearby DNA gathers — making a crowded reading spot.",
-        goal: "See a simple feedback: <strong>crowding makes reading easier</strong>, so the hub tends to stay.",
-        mode: "act6",
-        hint: "Drag the big red reader. The chain should wrap and stay clustered around it.",
-        showLegend: true,
-        html: `
-          <p>
-            Now imagine one reader is especially “hungry” and good at grabbing nearby DNA.
-            When it grabs, DNA gets pulled closer together.
-          </p>
-          <p>
-            Once lots of DNA is close together, it looks like there are “more sentences” in one place.
-            That makes it a great spot for reading.
-          </p>
-          <p>
-            <strong>Try it:</strong> drag the big red reader.
-            You should see the chain gather and stay clustered around it.
-          </p>
-        `
-      },
-      {
-        id: "s8",
-        tag: "Chapter 8",
-        title: "More readers drift to the busiest spot",
-        sub: "Where the DNA is densest, hungry readers are most likely to hang around.",
-        goal: "Connect density to bias: <strong>busy places stay busy</strong> — helping stable cell identity.",
-        mode: "act7",
-        hint: "In this chapter, extra readers drift in — and the chain stays clustered at the hub.",
-        showLegend: true,
-        html: `
-          <p>
-            Here’s the simple idea:
-            hungry readers prefer the place with the most “sentences” close together —
-            meaning the place where the DNA chain is most dense.
-          </p>
-          <p>
-            So once a busy hub exists, more readers tend to drift toward it and linger.
-            That leaves other regions quieter.
-          </p>
-          <p>
-            Over time, that kind of bias can help the same genes get read again and again —
-            which is one way a cell can keep its identity.
-          </p>
-          <p style="opacity:0.85;">
-            (Optional nerd note: some scientists call these busy hubs “transcription factories”, but you don’t need that phrase.)
-          </p>
-        `
+
+          <div class="subBlock">
+            <h3 class="subTitle">Part 1: Readers wander around</h3>
+            <div class="subLead">At first, they mostly drift and bump around randomly.</div>
+            <p>
+              That wandering is normal — it’s like people walking around a library looking for the best desk.
+            </p>
+          </div>
+
+          <div class="subBlock">
+            <h3 class="subTitle">Part 2: A “busy hub” can form</h3>
+            <div class="subLead">If one big hungry reader grabs DNA well, nearby DNA gathers into a crowded spot.</div>
+            <p>
+              <strong>Try it:</strong> drag the big red reader.
+              The DNA chain should gather and stay clustered around it — like bringing lots of sentences into one place.
+            </p>
+          </div>
+
+          <div class="subBlock">
+            <h3 class="subTitle">Part 3: More readers drift to the busiest spot</h3>
+            <div class="subLead">Where DNA is densest, hungry readers are most likely to hang around.</div>
+            <p>
+              Once a hub exists, more readers tend to drift toward it and linger.
+              Other regions get fewer visits.
+              Over time, that kind of bias can help the same genes get read again and again — which helps a cell keep its identity.
+            </p>
+            <p style="opacity:0.86;">
+              (Some scientists call these busy hubs “transcription factories”, but you don’t need that phrase here.)
+            </p>
+          </div>
+        `,
+        showLegend: true
       }
     ];
 
-    // Build the scroll story HTML
-    function buildStory(){
-      storyEl.innerHTML = "";
-      for (let i=0;i<SECTIONS.length;i++){
-        const S = SECTIONS[i];
-        const div = document.createElement("div");
-        div.className = "section";
-        div.id = S.id;
-        div.dataset.mode = S.mode;
+    function applyAct(i){
+      actIndex = clamp(i, 0, ACTS.length - 1);
+      const A = ACTS[actIndex];
 
-        div.innerHTML = `
-          <div class="sectionHeader">
-            <div class="sectionTag">${S.tag}</div>
-          </div>
-          <div class="sectionTitle">${S.title}</div>
-          <div class="sectionSub">${S.sub}</div>
-          <div class="learnGoal"><strong>Learning goal:</strong> ${S.goal}</div>
+      mode = A.mode;
+      highlight = null;
 
-          ${renderMiniControls(S.mode, i)}
+      kicker.textContent = `Page ${actIndex + 1} of ${ACTS.length}`;
+      sceneTitle.textContent = A.title;
+      sceneSub.textContent = A.sub;
+      storyText.innerHTML = A.html;
 
-          <div class="storyText">${S.html}</div>
-        `;
-        storyEl.appendChild(div);
+      // learning goal
+      if (A.goal && A.goal.trim().length > 0){
+        learnGoal.innerHTML = `<strong>Learning goal:</strong> ${A.goal.replace(/^Learning goal:\s*/i,"")}`;
+        learnGoal.style.display = "block";
+      } else {
+        learnGoal.style.display = "none";
+        learnGoal.textContent = "";
       }
-    }
 
-    function renderMiniControls(mode, idx){
-      // Show mini buttons only for the DNA/locks chapters (2–4)
-      // Buttons simply toggle the highlight overlay (same behaviour as clicking words).
-      if (!(mode === "dna" || mode === "locks")) return "";
-      const showBase = (idx === 1 || idx === 2);
-      const showGene = (idx === 2);
-      const showLocks = (idx === 3);
+      prevBtn.disabled = (actIndex === 0);
+      nextBtn.disabled = (actIndex === ACTS.length - 1);
 
-      return `
-        <div class="miniControls" aria-label="Quick highlights">
-          ${showBase ? `<button class="miniPill white" type="button" data-mini="basepair">Base pair</button>` : ``}
-          ${showGene ? `<button class="miniPill green" type="button" data-mini="gene">Gene</button>` : ``}
-          ${showLocks ? `<button class="miniPill purple" type="button" data-mini="locks">Locks</button>` : ``}
-        </div>
-      `;
-    }
+      // Reset button only for polymer pages (Page 5 and Page 6 here: act4 + hub_story)
+      resetBtn.style.display = (mode === "act4" || mode === "hub_story") ? "inline-flex" : "none";
 
-    buildStory();
+      // drag hint
+      dragHint.classList.toggle("show", mode === "hub_story");
 
-    // Mini button clicks
-    storyEl.addEventListener("click", (e) => {
-      const b = e.target.closest("button[data-mini]");
-      if (!b) return;
-      const id = b.getAttribute("data-mini");
-      if (id === "basepair") highlight = (highlight === "basepair") ? null : "basepair";
-      if (id === "gene")     highlight = (highlight === "gene") ? null : "gene";
-      if (id === "locks")    highlight = (highlight === "locks") ? null : "locks";
-      updatePairStrip();
-    });
+      if (A.showLegend) legend.classList.add("show");
+      else legend.classList.remove("show");
 
-    // ============================================================
-    // Scroll → choose active section → set mode
-    // ============================================================
-    let activeIndex = 0;
-    let mode = "intro";
+      // Mini buttons visibility logic:
+      const showMini = (mode === "dna" || mode === "locks");
+      dnaButtons.style.display = showMini ? "flex" : "none";
 
-    function setActiveSection(i){
-      activeIndex = clamp(i, 0, SECTIONS.length - 1);
-      const S = SECTIONS[activeIndex];
+      btnBasepair.style.display = "none";
+      btnGene.style.display = "none";
+      btnLocks.style.display = "none";
 
-      mode = S.mode;
+      if (actIndex === 1) { // DNA
+        btnBasepair.style.display = "inline-block";
+      } else if (actIndex === 2) { // Gene
+        btnBasepair.style.display = "inline-block";
+        btnGene.style.display = "inline-block";
+      } else if (actIndex === 3) { // Locks
+        btnLocks.style.display = "inline-block";
+      }
 
-      // cosmetics
-      const nodes = document.querySelectorAll(".section");
-      nodes.forEach((n, j) => n.classList.toggle("active", j === activeIndex));
-      progressPill.textContent = `Section ${activeIndex + 1} / ${SECTIONS.length}`;
-
-      legend.classList.toggle("show", !!S.showLegend);
-
-      // Drag hint appears for the hub chapters
-      dragHint.classList.toggle("show", (mode === "act6" || mode === "act7"));
-
-      activeHint.textContent = S.hint;
-
-      // Reset highlight when leaving DNA/locks modes (keeps it simpler)
-      if (!(mode === "dna" || mode === "locks")) highlight = null;
-      updatePairStrip();
-
-      // Final image overlay not used in this scroll version.
+      // no image overlay in this version (we keep the canvas always)
       stageImage.classList.remove("show");
       stageImage.removeAttribute("src");
       canvas.style.display = "block";
 
-      // Make sure polymer world is (re)initialised when mode changes
+      updatePairStrip();
       initActWorld(true);
     }
 
-    // IntersectionObserver to “snap” the figure to the section in view
-    const sectionEls = Array.from(document.querySelectorAll(".section"));
-    const io = new IntersectionObserver((entries) => {
-      // choose the most visible entry
-      let best = {idx: activeIndex, ratio: 0};
-      for (const ent of entries){
-        if (!ent.isIntersecting) continue;
-        const idx = sectionEls.indexOf(ent.target);
-        if (ent.intersectionRatio > best.ratio){
-          best = {idx, ratio: ent.intersectionRatio};
-        }
-      }
-      if (best.idx !== activeIndex && best.ratio > 0.30){
-        setActiveSection(best.idx);
-      }
-    }, { threshold: [0.30, 0.55, 0.80] });
-
-    sectionEls.forEach(el => io.observe(el));
+    prevBtn.addEventListener("click", () => applyAct(actIndex - 1));
+    nextBtn.addEventListener("click", () => applyAct(actIndex + 1));
+    resetBtn.addEventListener("click", () => initActWorld(true));
 
     // ============================================================
     // Drawing helpers
@@ -1006,7 +902,6 @@
       ctx.fillStyle = "#050507";
       ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      // subtle texture
       ctx.fillStyle = "rgba(255,255,255,0.015)";
       for (let i=0;i<110;i++){
         const x=(i*131)%canvas.width;
@@ -1040,7 +935,7 @@
     }
 
     // ============================================================
-    // Intro flowchart (Section 1)
+    // Intro flowchart on the canvas (Page 1)
     // ============================================================
     function drawIntroFlowchart(){
       const W = canvas.width, H = canvas.height;
@@ -1054,7 +949,6 @@
         {x: W*0.54, y: H*0.56, w: W*0.30, h: H*0.18, label:"Busy hubs\n(reading spots)"},
       ];
 
-      // arrows
       ctx.save();
       ctx.strokeStyle = "rgba(255,255,255,0.40)";
       ctx.lineWidth = 2;
@@ -1075,6 +969,7 @@
 
       arrow(boxes[0].x+boxes[0].w, boxes[0].y+boxes[0].h*0.5, boxes[1].x, boxes[1].y+boxes[1].h*0.5);
       arrow(boxes[1].x+boxes[1].w, boxes[1].y+boxes[1].h*0.5, boxes[2].x, boxes[2].y+boxes[2].h*0.5);
+
       arrow(boxes[0].x+boxes[0].w*0.5, boxes[0].y+boxes[0].h, boxes[3].x+boxes[3].w*0.35, boxes[3].y);
       arrow(boxes[2].x+boxes[2].w*0.5, boxes[2].y+boxes[2].h, boxes[4].x+boxes[4].w*0.65, boxes[4].y);
       arrow(boxes[3].x+boxes[3].w, boxes[3].y+boxes[3].h*0.5, boxes[4].x, boxes[4].y+boxes[4].h*0.5);
@@ -1112,12 +1007,12 @@
       ctx.save();
       ctx.fillStyle = "rgba(255,255,255,0.70)";
       ctx.font = "900 13px system-ui";
-      ctx.fillText("Figure: DNA (book) + access + folding → busy hubs → biased reading", pad, H*0.90);
+      ctx.fillText("Figure: book (DNA) + access + folding → busy hubs → biased reading", pad, H*0.90);
       ctx.restore();
     }
 
     // ============================================================
-    // DNA helix (Sections 2–4)
+    // DNA helix (pages: dna + locks)
     // ============================================================
     function drawDNAHelix(){
       const W = canvas.width, H = canvas.height;
@@ -1209,7 +1104,9 @@
     }
 
     // ============================================================
-    // Polymer worlds (Sections 5–8)
+    // Polymer worlds for pages 5–6
+    //  - act4: drag chain
+    //  - hub_story: big TF hub + extra TFs drift in, and chain STAYS clustered
     // ============================================================
     const world = {
       initialised: false,
@@ -1260,10 +1157,13 @@
       return best.idx;
     }
 
+    const lastPointer = {x:0,y:0};
+
     canvas.addEventListener("pointerdown", (e) => {
       const p = pointerPos(e);
 
-      if (mode === "act6" || mode === "act7"){
+      // hub page: drag the big reader
+      if (mode === "hub_story"){
         const dx = p.x - bigTF.x;
         const dy = p.y - bigTF.y;
         if (Math.sqrt(dx*dx+dy*dy) < bigTF.radius*1.15){
@@ -1275,6 +1175,7 @@
         }
       }
 
+      // chain page: drag beads
       if (mode === "act4"){
         const idx = findNearestBead(p.x, p.y, 26);
         if (idx !== -1){
@@ -1284,8 +1185,6 @@
         }
       }
     });
-
-    const lastPointer = {x:0,y:0};
 
     canvas.addEventListener("pointermove", (e) => {
       const p = pointerPos(e);
@@ -1307,10 +1206,10 @@
     canvas.addEventListener("pointerup", stopDragging);
     canvas.addEventListener("pointercancel", stopDragging);
 
-    let bigTFs = []; // extra readers in act7
+    let extraTFs = []; // extra readers drifting in on hub page
 
     function initActWorld(force=false){
-      const polymerModes = ["act4","act5","act6","act7"];
+      const polymerModes = ["act4","hub_story"];
       if (!polymerModes.includes(mode)) return;
 
       if (world.initialised && !force) return;
@@ -1333,7 +1232,7 @@
         world.beads.push({x,y});
       }
 
-      // Make act4 slightly folded so it’s fun to drag
+      // act4: pre-fold a little so dragging feels nice
       if (mode === "act4"){
         const a1 = {x: W*0.44, y: H*0.50};
         const a2 = {x: W*0.60, y: H*0.62};
@@ -1360,31 +1259,13 @@
         }
       }
 
-      // act5: many small readers wandering
-      world.tfs = [];
-      if (mode === "act5"){
-        for (let i=0;i<36;i++){
-          world.tfs.push({
-            x: W*(0.20 + 0.60*Math.random()),
-            y: H*(0.20 + 0.60*Math.random()),
-            vx: 0, vy: 0
-          });
-        }
-      }
-
-      // act6: big reader in the middle
-      if (mode === "act6"){
-        bigTF.x = W*0.60;
-        bigTF.y = H*0.56;
-        bigTF.vx = 0; bigTF.vy = 0;
-      }
-
-      // act7: start already clustered around the big reader
-      if (mode === "act7"){
+      // hub page: place big reader and start with DNA already somewhat gathered
+      if (mode === "hub_story"){
         bigTF.x = W*0.58;
         bigTF.y = H*0.54;
         bigTF.vx = 0; bigTF.vy = 0;
 
+        // gently pre-wrap a mid region around the reader so it looks “hubby” immediately
         const center = {x: bigTF.x, y: bigTF.y};
         const R0 = bigTF.radius * 1.10;
         const R1 = bigTF.radius * 3.8;
@@ -1392,7 +1273,7 @@
         for (let i=0;i<P.beadCount;i++){
           const t = i/(P.beadCount-1);
           const w = Math.exp(-Math.pow((t-0.52)/0.22,2));
-          if (w < 0.12) continue;
+          if (w < 0.10) continue;
 
           const angle = (i*0.36);
           const r = (R0 + (R1-R0)*(0.5+0.5*Math.sin(i*0.07))) * (0.6 + 0.5*w);
@@ -1403,10 +1284,11 @@
           world.beads[i].y = world.beads[i].y*(1-w) + targetY*w;
         }
 
-        bigTFs = [];
+        // extra readers drift in
+        extraTFs = [];
         const count = 7;
         for (let i=0;i<count;i++){
-          bigTFs.push({
+          extraTFs.push({
             x: W*(0.12 + 0.76*Math.random()),
             y: H*(0.18 + 0.64*Math.random()),
             vx: 0, vy: 0,
@@ -1447,9 +1329,8 @@
       return {vx,vy};
     }
 
-    // This is the “hub” force: the chain is gently pulled toward the big reader
-    // In act7 we make it stronger so the chain stays clustered (no relaxing away).
-    function wrapForce(p, tf, strength){
+    // "hub pull": keeps DNA gathered near the big reader
+    function hubPullForce(p, tf, strength){
       const dx=tf.x - p.x;
       const dy=tf.y - p.y;
       const d=Math.sqrt(dx*dx+dy*dy)+1e-6;
@@ -1475,20 +1356,20 @@
       world.frame++;
       const n = P.beadCount;
 
-      // Springs + bending
+      // springs
       for (let i=0;i<n-1;i++){
         const a=world.beads[i], b=world.beads[i+1];
         const f=springForce(a.x,a.y,b.x,b.y,P.restLen,P.kSpring);
         world.bvx[i] += f.fx; world.bvy[i] += f.fy;
         world.bvx[i+1] -= f.fx; world.bvy[i+1] -= f.fy;
       }
+      // bending
       for (let i=1;i<n-1;i++){
         const f=bendForce(world.beads[i-1], world.beads[i], world.beads[i+1], P.kBend);
         world.bvx[i] += f.fx;
         world.bvy[i] += f.fy;
       }
-
-      // Soft self-avoidance
+      // self-avoidance
       const minBB = 2*P.beadR;
       for (let i=0;i<n;i++){
         const i0=Math.max(0,i-14);
@@ -1503,7 +1384,7 @@
         }
       }
 
-      // Dragging a bead (act4)
+      // drag bead on act4
       if (mode === "act4" && draggingBead.active && draggingBead.idx >= 0){
         const i = draggingBead.idx;
         const b = world.beads[i];
@@ -1513,23 +1394,21 @@
         world.bvy[i] += beadDragK * dy;
       }
 
-      // Hub force (act6 + act7)
-      if (mode === "act6" || mode === "act7"){
-        const strength = (mode === "act7") ? 1.8 : 1.0; // <-- key change: act7 stays clustered
+      // hub pull on hub page (THIS is what stops the chain “relaxing away”)
+      if (mode === "hub_story"){
+        const strength = 1.9; // strong enough to keep it clustered
         for (let i=0;i<n;i++){
           const p=world.beads[i];
-          const f = wrapForce(p, bigTF, strength);
+          const f = hubPullForce(p, bigTF, strength);
           world.bvx[i] += f.fx;
           world.bvy[i] += f.fy;
         }
       }
 
-      // Brownian wiggle: tune per act
+      // Brownian wiggle
       let brown = 0.16;
-      if (mode === "act4") brown = 0.22;
-      if (mode === "act5") brown = 0.02;
-      if (mode === "act6") brown = 0.12;
-      if (mode === "act7") brown = 0.006; // very low so hub doesn’t “melt away”
+      if (mode === "act4")     brown = 0.22;
+      if (mode === "hub_story") brown = 0.006; // low so the hub stays
 
       for (let i=0;i<n;i++){
         world.bvx[i] += brown*randn();
@@ -1544,34 +1423,17 @@
         world.bvx[i]=out.vx; world.bvy[i]=out.vy;
       }
 
-      // Small readers wandering (act5)
-      if (mode === "act5"){
-        const W=canvas.width, H=canvas.height;
-        for (const tf of world.tfs){
-          tf.vx += 0.55*randn();
-          tf.vy += 0.55*randn();
-          tf.vx *= 0.93;
-          tf.vy *= 0.93;
-          tf.x += tf.vx;
-          tf.y += tf.vy;
-          if (tf.x<0) tf.x += W;
-          if (tf.x>W) tf.x -= W;
-          if (tf.y<0) tf.y += H;
-          if (tf.y>H) tf.y -= H;
-        }
-      }
-
-      // Extra readers drift toward the hub (act7)
-      if (mode === "act7"){
+      // extra readers drift into the hub on hub page
+      if (mode === "hub_story"){
         const W=canvas.width, H=canvas.height;
         const target = {x: bigTF.x, y: bigTF.y};
-        for (const tf of bigTFs){
+        for (const tf of extraTFs){
           tf.vx += 0.12*randn();
           tf.vy += 0.12*randn();
 
-          // gentle “hungry toward dense” drift
-          tf.vx += 0.0018*(target.x - tf.x);
-          tf.vy += 0.0018*(target.y - tf.y);
+          // hungry drift toward “most sentences”
+          tf.vx += 0.0019*(target.x - tf.x);
+          tf.vy += 0.0019*(target.y - tf.y);
 
           tf.vx *= 0.88;
           tf.vy *= 0.88;
@@ -1587,7 +1449,7 @@
     }
 
     function drawPolymerAndTFs(){
-      // chain
+      // chain line
       ctx.save();
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 3.0;
@@ -1604,27 +1466,17 @@
         glowCircle(p.x,p.y, 4.6, "rgba(255,255,255,0.52)", 15);
       }
 
-      // small readers (act5)
-      if (mode === "act5"){
-        for (const tf of world.tfs){
-          glowCircle(tf.x, tf.y, 6.2, "rgba(255,60,60,0.65)", 20);
-        }
-      }
-
-      // big reader hub (act6/act7)
-      if (mode === "act6" || mode === "act7"){
+      if (mode === "hub_story"){
+        // hub glow
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.0, "rgba(255,120,200,0.020)", 160);
-        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.6, "rgba(255,60,60,0.020)", 120);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*5.2, "rgba(255,120,200,0.018)", 170);
+        glowCircle(bigTF.x, bigTF.y, bigTF.radius*2.8, "rgba(255,60,60,0.018)", 130);
         ctx.restore();
 
         glowCircle(bigTF.x, bigTF.y, bigTF.radius, "rgba(255,60,60,0.92)", 44);
-      }
 
-      // extra readers drifting in (act7)
-      if (mode === "act7"){
-        for (const tf of bigTFs){
+        for (const tf of extraTFs){
           glowCircle(tf.x, tf.y, tf.radius, "rgba(255,60,60,0.55)", 28);
         }
       }
@@ -1635,13 +1487,14 @@
     // ============================================================
     function tick(){
       resizeCanvas();
+
       drawBackground();
 
       if (mode === "intro"){
         drawIntroFlowchart();
       } else if (mode === "dna" || mode === "locks"){
         drawDNAHelix();
-      } else if (mode === "act4" || mode === "act5" || mode === "act6" || mode === "act7"){
+      } else if (mode === "act4" || mode === "hub_story"){
         initActWorld(false);
         stepPolymer();
         drawPolymerAndTFs();
@@ -1659,11 +1512,12 @@
     });
 
     resizeCanvas();
-    setActiveSection(0);
+    applyAct(0);
     tick();
   </script>
 </body>
 </html>
+
 
 
 
