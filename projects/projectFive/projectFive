@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Understanding Waddington’s Landscape</title>
+  <link rel="stylesheet" href="../../stylesheets/individualProject_style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+
+  <!-- ======= Header ======= -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Nishwal Gora</a>
+      <nav class="site-nav">
+        <ul class="nav-pill">
+          <li><a href="../../index.html">Home</a></li>
+          <li><a class="active" href="../../pages/projects.html">Projects</a></li>
+          <li><a href="../../pages/cv.html">CV</a></li>
+          <li><a href="../../pages/about.html">About Me</a></li>
+          <li><a href="../../pages/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======= Page Title ======= -->
+  <h1 class="page-title">Understanding Waddington’s Landscape through Bridging-Induced Phase Separation and Transcriptional Dynamics</h1>
+
+  <main class="container">
+
+    <section class="cv-actions">
+      <div class="download-row">
+        <a class="btn-cta" href="../../assets/MPhys_Project_NG.pdf" download>
+          <i class="fa fa-download" aria-hidden="true"></i>
+          Download Project PDF
+        </a>
+      </div>
+    </section>
+
+    <section class="card project-description">
+      <h2>Project Overview</h2>
+      <p>
+        This MPhys project studies how chromatin organisation can influence transcriptional dynamics and cellular identity through the language of Waddington’s landscape.
+        Using a coarse-grained polymer model of bridging-induced phase separation (BIPS), chromatin is represented as a bead–spring fibre and transcription factors as
+        diffusing multivalent binders that can transiently bridge distant regions of the genome. This provides a physical framework for understanding how three-dimensional
+        chromatin architecture may help stabilise developmental states.
+      </p>
+      <p>
+        From the simulated chromatin–transcription factor dynamics, I constructed binary transcription-unit activity traces and analysed them using a telegraph model.
+        This allowed me to extract effective switching rates, burst statistics, and correlation times, and to compare stem-like, differentiated, and senescent-like chromatin states.
+        The main result was that differentiation redistributes activity away from flexible intermediate switching regimes towards more strongly locked ON and OFF states,
+        suppresses burst initiation, and concentrates transcription into a smaller subset of dominant units — a process I describe as <em>fossilisation</em>.
+      </p>
+      <p>
+        I then followed differentiation dynamically using both chromatin-remodelling and transcription-factor-collapse protocols, showing that commitment emerges primarily
+        through suppression of OFF→ON reactivation rather than a simple global shutdown of activity. Finally, reversal simulations revealed that transcription-factor abundance
+        strengthens memory and canalisation: higher TF number makes differentiated transcriptional programmes more persistent and more attractor-like during reversal.
+      </p>
+    </section>
+
+    <section class="card project-description">
+      <h2>What I Learned</h2>
+      <p>
+        This project gave me extensive experience in computational biophysics, polymer modelling, and transcriptional dynamics. I worked with LAMMPS and VMD to simulate
+        chromatin folding, translated and extended baseline simulation code, and developed new dynamical protocols to model differentiation and reversal. I also built a Python
+        analysis pipeline to extract transcriptional observables from simulation output, including telegraph-model inference, burst statistics, heterogeneity, plasticity,
+        programme drift, and correlation times.
+      </p>
+      <p>
+        More broadly, the project taught me how to connect abstract biological ideas — such as differentiation, commitment, memory, and Waddington’s landscape —
+        to explicit physical observables in a controlled model. It deepened my understanding of chromatin physics, stochastic processes, and soft matter approaches
+        to gene regulation, while also strengthening my scientific writing, figure design, and the ability to turn a large simulation project into a coherent research story.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
+      <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
+    </div>
+  </footer>
+
+  <script>
+  window.addEventListener("scroll", () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById("scroll-progress").style.width = progress + "%";
+  });
+  </script>
+
+</body>
+</html>
