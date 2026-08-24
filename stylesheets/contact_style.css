@@ -101,7 +101,7 @@
   transform: translateY(-2px);
 }
 
-.contact-link__icon {
+.contact-link .contact-link__icon {
   width: 42px;
   height: 42px;
   padding: 0;
@@ -112,6 +112,7 @@
   background: var(--color-accent-soft);
   border-radius: 50%;
   font-size: 1.15rem;
+  line-height: 1;
 }
 
 .contact-link strong,
