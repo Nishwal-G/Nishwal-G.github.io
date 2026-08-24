@@ -1,26 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nishwal Gora – Homepage</title>
-  <link rel="stylesheet" href="stylesheets/index_style.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Nishwal Gora is a physicist researching collective behaviour in quantum materials, active matter, and biological systems."
+  >
+  <title>Nishwal Gora | Physicist</title>
+
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="index_style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  >
+
+  <noscript>
+    <style>
+      .fade-in { opacity: 1; transform: none; }
+    </style>
+  </noscript>
 </head>
 
 <body>
-  <div id="scroll-progress"></div>
+  <div id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- Slick header -->
-  <header class="site-header fade-in">
+  <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="./index.html">Nishwal Gora</a>
-      <nav class="site-nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Nishwal Gora, home">
+        Nishwal Gora
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
         <ul class="nav-pill">
-          <li><a class="active" href="./index.html" aria-current="page">Home</a></li>
+          <li>
+            <a class="active" href="index.html" aria-current="page">Home</a>
+          </li>
           <li><a href="pages/projects.html">Projects</a></li>
           <li><a href="pages/cv.html">CV</a></li>
-          <li><a href="pages/about.html">About Me</a></li>
+          <li><a href="pages/about.html">About</a></li>
           <li><a href="pages/contact.html">Contact</a></li>
           <li><a href="pages/more.html">More</a></li>
         </ul>
@@ -28,105 +47,345 @@
     </div>
   </header>
 
-  <!-- Optional page title under header -->
-  <h1 class="page-title fade-in">Welcome to my Homepage!</h1>
+  <main>
+    <section class="hero container-wide" aria-labelledby="hero-title">
+      <div class="hero-copy fade-in">
+        <p class="eyebrow">Physicist · Complex systems · Active matter</p>
 
-  <!-- Introduction and portrait -->
-  <div class="intro-layout">
-    <section id="homeText" class="fade-in">
-      <p>
-  Welcome to my website. I am a physicist interested in how complex collective
-  behaviour emerges from microscopic physical rules. My research spans quantum
-  materials, statistical physics, biological physics, and computational
-  modelling—from neutron-scattering studies of frustrated quantum magnets to
-  polymer simulations of chromatin organisation and cellular memory. Having
-  recently completed an MPhys in Physics at the University of Edinburgh, my
-  next research will focus on collective ciliary dynamics, active matter, and
-  biological information processing at the University of Cambridge.
-</p>
+        <h1 id="hero-title">
+          Physics across scales—from quantum materials to living systems.
+        </h1>
 
-<p>
-  This site brings together my research, publications, computational projects,
-  and wider academic interests. I have tried to make it clear and accessible,
-  including for readers with colour-vision deficiencies and reading
-  difficulties. If you notice anything that could make the site more inclusive
-  or easier to use, please feel free to get in touch.
-</p>
+        <p class="hero-intro">
+          I am a physicist interested in how collective behaviour emerges from
+          microscopic rules. My work brings together statistical physics,
+          biological physics, quantum materials, and computational modelling.
+        </p>
 
-<ul class="education-list">
-  <li>
-    <strong>University of Edinburgh</strong> — MPhys Physics (2021–2026)
-  </li>
-  <li>
-    <strong>University of Cambridge</strong> — PhD Physics (2026–Present)
-  </li>
-</ul>
-  
+        <div class="hero-actions" aria-label="Featured links">
+          <a class="btn-cta" href="pages/projects.html">
+            Explore my research
+          </a>
+
+          <a class="btn-outline" href="pages/cv.html">
+            View my CV
+          </a>
+        </div>
+
+        <dl class="academic-path" aria-label="Academic background">
+          <div>
+            <dt>Current</dt>
+            <dd>PhD Physics, University of Cambridge</dd>
+          </div>
+
+          <div>
+            <dt>Education</dt>
+            <dd>MPhys Physics, University of Edinburgh</dd>
+          </div>
+        </dl>
+      </div>
+
+      <figure class="hero-portrait fade-in">
+        <div class="portrait-frame">
+          <img
+            src="assets/profile.jpg"
+            alt="Portrait of Nishwal Gora"
+            width="800"
+            height="1000"
+            fetchpriority="high"
+          >
+        </div>
+
+        <figcaption>
+          Exploring collective ciliary dynamics, active matter, and biological
+          information processing.
+        </figcaption>
+      </figure>
     </section>
 
-    <figure class="portrait-card fade-in">
-      <img
-        src="assets/profile.jpg"
-        alt="Portrait of Nishwal Gora"
-        width="800"
-        height="1000"
-      />
-    </figure>
-  </div>
+    <section
+      class="research-overview section"
+      aria-labelledby="research-title"
+    >
+      <div class="container-wide">
+        <div class="section-heading fade-in">
+          <p class="eyebrow">Research interests</p>
 
-  <section class="banner fade-in" id="projectsBanner">
-    <a href="pages/projects.html">
-      <h2>RESEARCH AND OTHER PROJECTS</h2>
-    </a>
-  </section>
+          <h2 id="research-title">
+            Understanding collective behaviour
+          </h2>
 
-  <section class="banner fade-in" id="cvBanner">
-    <a href="pages/cv.html">
-      <h2>CURRICULUM VITAE</h2>
-    </a>
-  </section>
+          <p>
+            I use analytical, computational, and experimental ideas to study
+            how simple interactions produce rich behaviour across physical
+            systems.
+          </p>
+        </div>
 
-  <section class="banner fade-in" id="aboutBanner">
-    <a href="pages/about.html">
-      <h2>ABOUT ME</h2>
-    </a>
-  </section>
+        <div class="interest-grid">
+          <article class="interest-card card fade-in">
+            <span class="interest-number" aria-hidden="true">01</span>
 
-  <section class="banner fade-in" id="contactBanner">
-    <a href="pages/contact.html">
-      <h2>CONTACT</h2>
-    </a>
-  </section>
+            <h3>Quantum materials</h3>
+
+            <p>
+              Frustrated magnetism, neutron scattering, and the collective
+              excitations that reveal how quantum materials organise.
+            </p>
+          </article>
+
+          <article class="interest-card card fade-in">
+            <span class="interest-number" aria-hidden="true">02</span>
+
+            <h3>Biological physics</h3>
+
+            <p>
+              Chromatin organisation, cellular memory, and the physical
+              mechanisms through which living systems store information.
+            </p>
+          </article>
+
+          <article class="interest-card card fade-in">
+            <span class="interest-number" aria-hidden="true">03</span>
+
+            <h3>Active matter</h3>
+
+            <p>
+              Collective ciliary dynamics and emergent motion in systems whose
+              individual components continuously consume energy.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="selected-work section container-wide"
+      aria-labelledby="work-title"
+    >
+      <div class="section-heading section-heading--split fade-in">
+        <div>
+          <p class="eyebrow">Selected work</p>
+
+          <h2 id="work-title">
+            Research and computational projects
+          </h2>
+        </div>
+
+        <a class="section-link" href="pages/projects.html">
+          View all projects <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="work-grid">
+        <article class="work-card fade-in">
+          <a
+            class="work-image"
+            href="projects/projectOne/projectOne.html"
+            aria-label="Read about Zeeman-split Kramers doublets"
+          >
+            <img
+              src="assets/zeeman.png"
+              alt="Visualisation from the Zeeman-split Kramers doublets project"
+              width="900"
+              height="600"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="work-copy">
+            <p class="project-meta">Quantum magnetism · 2024</p>
+
+            <h3>
+              <a href="projects/projectOne/projectOne.html">
+                Zeeman-split Kramers doublets
+              </a>
+            </h3>
+
+            <p>
+              A study of field-dependent excitations in a frustrated quantum
+              magnet, connecting model calculations with neutron-scattering
+              data.
+            </p>
+          </div>
+        </article>
+
+        <article class="work-card fade-in">
+          <a
+            class="work-image"
+            href="projects/projectTwo/projectTwo.html"
+            aria-label="Read about the cobalt titanate research project"
+          >
+            <img
+              src="assets/SHP.png"
+              alt="Scientific figure from the cobalt titanate research project"
+              width="900"
+              height="600"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="work-copy">
+            <p class="project-meta">Condensed matter · 2025</p>
+
+            <h3>
+              <a href="projects/projectTwo/projectTwo.html">
+                Magnetic excitations in CoTiO₃
+              </a>
+            </h3>
+
+            <p>
+              An investigation of magnetic order and excitation spectra in a
+              honeycomb-lattice material using theory and experimental results.
+            </p>
+          </div>
+        </article>
+
+        <article class="work-card fade-in">
+          <a
+            class="work-image"
+            href="projects/projectThree/projectThree.html"
+            aria-label="Read about the Kepler simulation"
+          >
+            <img
+              src="assets/kepler.png"
+              alt="Orbital paths generated by the Kepler simulation"
+              width="900"
+              height="600"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="work-copy">
+            <p class="project-meta">Computational physics · 2024</p>
+
+            <h3>
+              <a href="projects/projectThree/projectThree.html">
+                Kepler simulation
+              </a>
+            </h3>
+
+            <p>
+              A numerical model of planetary motion that explores orbital
+              dynamics, integration methods, and scientific programming.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="profile-callout section">
+      <div class="profile-callout__inner container fade-in">
+        <p class="eyebrow">Beyond the research</p>
+
+        <h2>
+          A physicist with broad interests and a personal perspective.
+        </h2>
+
+        <p>
+          This website brings together my research, publications, computational
+          projects, and wider academic interests. I have designed it to be
+          clear and accessible, and I welcome suggestions that could make it
+          more inclusive.
+        </p>
+
+        <div class="profile-links">
+          <a href="pages/about.html">
+            More about me <span aria-hidden="true">→</span>
+          </a>
+
+          <a href="pages/contact.html">
+            Get in touch <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    <div class="social-links">
-      <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
-      <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
+    <p class="footer-name">Nishwal Gora</p>
+
+    <p class="footer-note">
+      Physicist working across complex and living systems.
+    </p>
+
+    <div class="social-links" aria-label="Social links">
+      <a
+        href="https://www.linkedin.com/in/nishwal-gora/"
+        class="fa fa-linkedin"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on LinkedIn"
+      ></a>
+
+      <a
+        href="https://github.com/Nishwal-G"
+        class="fa fa-github"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on GitHub"
+      ></a>
     </div>
   </footer>
 
   <script>
-  window.addEventListener("scroll", () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const progress = (scrollTop / scrollHeight) * 100;
-    document.getElementById("scroll-progress").style.width = progress + "%";
-  });
-  </script>
+    (() => {
+      const progressBar = document.getElementById("scroll-progress");
+      let scrollFrame;
 
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          obs.unobserve(entry.target);
+      const updateProgress = () => {
+        const page = document.documentElement;
+        const scrollableHeight = page.scrollHeight - page.clientHeight;
+
+        const progress = scrollableHeight > 0
+          ? (page.scrollTop / scrollableHeight) * 100
+          : 0;
+
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+        scrollFrame = null;
+      };
+
+      window.addEventListener("scroll", () => {
+        if (!scrollFrame) {
+          scrollFrame = window.requestAnimationFrame(updateProgress);
         }
-      });
-    }, { threshold: 0.1 });
+      }, { passive: true });
 
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  });
+      updateProgress();
+
+      const animatedElements = document.querySelectorAll(".fade-in");
+
+      const reduceMotion = window
+        .matchMedia("(prefers-reduced-motion: reduce)")
+        .matches;
+
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        animatedElements.forEach((element) => {
+          element.classList.add("visible");
+        });
+
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries, currentObserver) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              currentObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -36px"
+        }
+      );
+
+      animatedElements.forEach((element) => {
+        observer.observe(element);
+      });
+    })();
   </script>
 </body>
 </html>
