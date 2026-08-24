@@ -1,99 +1,313 @@
+Copy this into `pages/contact.html`:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="apple-touch-icon" href="../assets/favicon.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Me</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Contact Nishwal Gora about research, biological physics, active matter, science writing, or other academic enquiries."
+  >
+  <title>Contact | Nishwal Gora</title>
 
-  <link rel="stylesheet" href="../stylesheets/contact_style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="../stylesheets/base.css">
+  <link rel="stylesheet" href="../stylesheets/contact_style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  >
 
+  <noscript>
+    <style>
+      .fade-in {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </noscript>
 </head>
-<body>
-  <div id="scroll-progress"></div>
 
-  <!-- Header / pill nav -->
+<body>
+  <div id="scroll-progress" aria-hidden="true"></div>
+
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="../index.html">Nishwal Gora</a>
-      <nav class="site-nav">
+      <a
+        class="brand"
+        href="../index.html"
+        aria-label="Nishwal Gora, home"
+      >
+        Nishwal Gora
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
         <ul class="nav-pill">
           <li><a href="../index.html">Home</a></li>
           <li><a href="projects.html">Projects</a></li>
           <li><a href="cv.html">CV</a></li>
-          <li><a href="about.html">About Me</a></li>
-          <li><a class="active" href="contact.html">Contact</a></li>
+          <li><a href="about.html">About</a></li>
+          <li>
+            <a
+              class="active"
+              href="contact.html"
+              aria-current="page"
+            >
+              Contact
+            </a>
+          </li>
           <li><a href="more.html">More</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Hero title -->
-  <section class="contact-hero">
-    <h1>Contact me</h1>
-    <p>Feel free to reach out to me using the form below.</p>
-  </section>
+  <main>
 
-  <!-- Contact form -->
-  <!-- ACTION options:
-       1) Use Formspree/Netlify/etc. Replace the action with your endpoint.
-       2) Keep "#" for now; nothing gets sent.
-  -->
-  <main class="contact-wrap">
-    <form class="contact-form" action="https://formspree.io/f/mjkolopl" method="post" novalidate>
-      <div class="grid two">
-        <div class="field">
-          <label for="firstName">First Name</label>
-          <input id="firstName" name="firstName" type="text" autocomplete="given-name" required>
+    <section
+      class="contact-layout container-wide"
+      aria-label="Contact options"
+    >
+      <aside class="contact-intro fade-in">
+        <p class="contact-intro__label">Contact</p>
+
+        <h2>The best way to reach me</h2>
+
+        <p>
+          Send me a message using the form and I will reply as soon as I can.
+          You can also find my professional and research-related work through
+          the links below.
+        </p>
+
+        <div class="contact-links">
+          <a
+            class="contact-link"
+            href="https://www.linkedin.com/in/nishwal-gora/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span
+              class="contact-link__icon fa fa-linkedin"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              <strong>LinkedIn</strong>
+              <small>Connect professionally</small>
+            </span>
+
+            <span class="contact-link__arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="contact-link"
+            href="https://github.com/Nishwal-G"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span
+              class="contact-link__icon fa fa-github"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              <strong>GitHub</strong>
+              <small>Explore my code and projects</small>
+            </span>
+
+            <span class="contact-link__arrow" aria-hidden="true">↗</span>
+          </a>
         </div>
-        <div class="field">
-          <label for="lastName">Last Name</label>
-          <input id="lastName" name="lastName" type="text" autocomplete="family-name" required>
+
+        <p class="contact-note">
+          For context about my current work, you may also wish to
+          <a href="projects.html">explore my research</a>
+          before getting in touch.
+        </p>
+      </aside>
+
+      <div class="form-panel fade-in">
+        <div class="form-heading">
+          <p class="form-heading__number" aria-hidden="true">01</p>
+
+          <div>
+            <h2>Send a message</h2>
+            <p>All fields are required.</p>
+          </div>
         </div>
-      </div>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required>
-      </div>
+        <form
+          class="contact-form"
+          action="https://formspree.io/f/mjkolopl"
+          method="post"
+        >
+          <input
+            type="hidden"
+            name="_subject"
+            value="New message from Nishwal Gora's website"
+          >
 
-      <div class="field">
-        <label for="phone">Phone Number</label>
-        <input id="phone" name="phone" type="tel" autocomplete="tel">
-      </div>
+          <div class="field">
+            <label for="name">Your name</label>
 
-      <div class="field">
-        <label for="subject">Subject</label>
-        <input id="subject" name="subject" type="text" required>
-      </div>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Name"
+              required
+            >
+          </div>
 
-      <div class="field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="8" required></textarea>
-      </div>
+          <div class="field">
+            <label for="email">Email address</label>
 
-      <button class="btn-primary" type="submit">Send</button>
-    </form>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              placeholder="name@example.com"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject</label>
+
+            <input
+              id="subject"
+              name="subject"
+              type="text"
+              autocomplete="off"
+              placeholder="What would you like to discuss?"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+
+            <textarea
+              id="message"
+              name="message"
+              rows="7"
+              placeholder="Write your message here…"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-footer">
+            <p>
+              Your details will only be used to reply to your message.
+            </p>
+
+            <button class="btn-primary" type="submit">
+              Send message
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <div class="social-links">
-      <a href="https://www.linkedin.com/in/nishwal-gora/" class="fa fa-linkedin" target="_blank" rel="noopener noreferrer"></a>
-      <a href="https://github.com/Nishwal-G" class="fa fa-github" target="_blank" rel="noopener noreferrer"></a>
+    <p class="footer-name">Nishwal Gora</p>
+    <p class="footer-note">Thank you for visiting.</p>
+
+    <div class="social-links" aria-label="Social links">
+      <a
+        href="https://www.linkedin.com/in/nishwal-gora/"
+        class="fa fa-linkedin"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on LinkedIn"
+      ></a>
+
+      <a
+        href="https://github.com/Nishwal-G"
+        class="fa fa-github"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on GitHub"
+      ></a>
     </div>
   </footer>
-    <script>
-    window.addEventListener("scroll", () => {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = (scrollTop / scrollHeight) * 100;
-      document.getElementById("scroll-progress").style.width = progress + "%";
-    });
-    </script>
 
+  <script>
+    (() => {
+      const progressBar = document.getElementById("scroll-progress");
+      const animatedElements = document.querySelectorAll(".fade-in");
+      let scrollFrame;
+
+      const updateProgress = () => {
+        const page = document.documentElement;
+        const scrollableHeight =
+          page.scrollHeight - page.clientHeight;
+
+        const progress = scrollableHeight > 0
+          ? (page.scrollTop / scrollableHeight) * 100
+          : 0;
+
+        progressBar.style.width =
+          `${Math.min(progress, 100)}%`;
+
+        scrollFrame = null;
+      };
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!scrollFrame) {
+            scrollFrame =
+              window.requestAnimationFrame(updateProgress);
+          }
+        },
+        { passive: true }
+      );
+
+      updateProgress();
+
+      const reduceMotion = window
+        .matchMedia("(prefers-reduced-motion: reduce)")
+        .matches;
+
+      if (
+        reduceMotion ||
+        !("IntersectionObserver" in window)
+      ) {
+        animatedElements.forEach((element) => {
+          element.classList.add("visible");
+        });
+
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries, currentObserver) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              currentObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+          rootMargin: "0px 0px -28px"
+        }
+      );
+
+      animatedElements.forEach((element) => {
+        observer.observe(element);
+      });
+    })();
+  </script>
 </body>
 </html>
+```
 
