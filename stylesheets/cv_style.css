@@ -1,418 +1,480 @@
-:root{
-  /* =========================
-     CV page — minimalist + accessible
-     (keeps your hover + fade + scroll bar)
-     ========================= */
+/* CV-page layout. Shared site styling lives in base.css. */
 
-  /* Colors (colorblind-safe, high contrast) */
-  --bg: #F8FAFC;
-  --surface: #FFFFFF;
-  --text: #0F172A;
-  --muted: #475569;
-  --border: #E2E8F0;
-
-  /* Accent (deep blue) */
-  --accent: #1D4ED8;
-  --accent-hover: #1E40AF;
-
-  /* Header */
-  --header-bg: #0B1220;
-  --header-text: #FFFFFF;
-
-  /* Typography */
-  --font-body: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-               "Apple Color Emoji", "Segoe UI Emoji";
-  --font-heading: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-                  "Apple Color Emoji", "Segoe UI Emoji";
-
-  /* Sizing */
-  --radius: 12px;
-  --spacing-xs: 8px;
-  --spacing-sm: 16px;
-  --spacing-md: 24px;
-  --spacing-lg: 40px;
-
-  --container: 980px;
-}
-
-/* ============ Global Reset ============ */
-*{ margin:0; padding:0; box-sizing:border-box; }
-html, body{ overflow-x:hidden; }
-body{
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-  font-family: var(--font-body);
-  min-height: 100vh;
-  display:flex;
-  flex-direction:column;
-}
-
-/* Optional shared container */
-.container{ max-width: var(--container); margin: 0 auto; padding: 0 var(--spacing-sm); }
-
-/* ============ Header (minimal, consistent) ============ */
-.site-header{
-  background: var(--header-bg);
-  padding: 12px 0;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-.header-inner{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.brand{
+.eyebrow {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-accent-strong);
   font-family: var(--font-heading);
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--header-text);
-  text-decoration:none;
-  letter-spacing: 0.2px;
-  transition: opacity 0.2s ease;
-}
-.brand:hover{ opacity: 0.88; }
-
-.site-nav .nav-pill{
-  list-style:none;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding: 6px 8px;
-  margin: 0;
-  border-radius: 9999px;
-  background: rgba(255,255,255,0.06);
-}
-.site-nav .nav-pill a{
-  color: var(--header-text);
-  text-decoration:none;
-  font-family: var(--font-heading);
-  font-weight: 650;
-  font-size: 0.95rem;
-  padding: 8px 12px;
-  border-radius: 9999px;
-  opacity: 0.92;
-  transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
-}
-.site-nav .nav-pill a:hover{
-  background: rgba(255,255,255,0.10);
-  transform: translateY(-1px);
-  opacity: 1;
-}
-.site-nav .nav-pill a:focus-visible{
-  outline: 3px solid rgba(255,255,255,0.75);
-  outline-offset: 2px;
-}
-.site-nav .nav-pill a.active{
-  background: rgba(255,255,255,0.16);
-  opacity: 1;
-  outline: 1px solid rgba(255,255,255,0.18);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
 }
 
-/* ============ Page title ============ */
-.page-title{
-  text-align:center;
-  font-family: var(--font-heading);
-  font-size: clamp(1.9rem, 3.2vw, 2.4rem);
-  font-weight: 850;
-  margin: var(--spacing-lg) 0 var(--spacing-md);
-  color: var(--text);
-  letter-spacing: -0.01em;
-}
-.page-title::after{
-  content:'';
-  display:block;
-  width: 96px;
-  height: 2px;
-  background: var(--border);
-  margin: var(--spacing-xs) auto 0;
-  border-radius: 999px;
+.section-heading {
+  max-width: 720px;
+  margin-bottom: clamp(var(--spacing-lg), 5vw, var(--spacing-xl));
 }
 
-/* ============ Banner ============ */
-section.banner{
-  width: 100%;
+.section-heading h2,
+.document-heading h2 {
+  margin-bottom: var(--spacing-sm);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  letter-spacing: -0.035em;
+}
+
+.section-heading > p:last-child {
+  margin-bottom: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-lg);
+}
+
+/* Introduction */
+
+.cv-hero {
+  padding-block: clamp(var(--spacing-xl), 8vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+  align-items: center;
+  gap: clamp(var(--spacing-lg), 7vw, 88px);
+}
+
+.cv-hero__heading h1 {
   margin-bottom: var(--spacing-md);
-  overflow:hidden;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.cv-hero__heading > p:not(.eyebrow) {
+  max-width: 60ch;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-muted);
+  font-size: var(--font-size-lg);
+}
+
+.cv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.academic-summary {
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.academic-summary div {
+  padding: var(--spacing-md);
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.academic-summary div:last-child {
+  border-bottom: 0;
+}
+
+.academic-summary dt {
+  padding-top: 3px;
+  color: var(--color-accent-strong);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.academic-summary dd {
+  margin: 0;
+  color: var(--color-heading);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.academic-summary dd span {
+  margin-top: var(--spacing-2xs);
+  display: block;
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+/* Embedded CV */
+
+.cv-document {
+  background: rgba(238, 233, 224, 0.62);
+  border-block: 1px solid var(--color-border);
+}
+
+.document-heading {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.document-heading h2 {
+  margin-bottom: 0;
+}
+
+.document-heading > p {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-muted);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+}
+
+.pdf-frame {
+  padding: 10px;
+  overflow: hidden;
+  background: #3a3740;
+  border: 1px solid #2d2a31;
   border-radius: var(--radius);
-}
-section.banner img{
-  display:block;
-  width:100%;
-  height:auto;
-  object-fit: cover;
-  opacity: 0;
-  animation: banner-fade 1.6s forwards;
-}
-@keyframes banner-fade{ from{opacity:0;} to{opacity:1;} }
-
-/* ============ CV Actions (Download) ============ */
-.cv-actions{
-  max-width: var(--container);
-  margin: 0 auto var(--spacing-sm);
-  text-align: right;
-  padding: 0 var(--spacing-sm);
+  box-shadow: 0 18px 46px rgba(47, 39, 30, 0.16);
 }
 
-/* Use this if your HTML uses <a class="download-link"> */
-.download-link{
-  color: var(--accent);
-  text-decoration:none;
-  position:relative;
+.pdf-frame object {
+  width: 100%;
+  height: clamp(680px, 84vh, 1020px);
+  display: block;
+  background: #fff;
+  border: 0;
+  border-radius: calc(var(--radius) - 6px);
+}
+
+.pdf-fallback {
+  min-height: 420px;
+  padding: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.pdf-fallback p {
+  margin: 0;
+}
+
+/* Awards */
+
+.award-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.award-card {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.award-card__heading {
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.award-card__heading p {
+  margin: 0;
+}
+
+.award-card__place {
+  color: var(--color-heading);
   font-family: var(--font-heading);
   font-weight: 700;
 }
-.download-link::after{
-  content:'';
-  position:absolute;
-  bottom:-2px; left:0;
-  width:100%; height:2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease;
-}
-.download-link:hover::after,
-.download-link:focus::after{ transform: scaleX(1); }
-.download-link:hover{ color: var(--accent-hover); }
-.download-link:focus-visible{
-  outline: 3px solid rgba(29, 78, 216, 0.25);
-  outline-offset: 3px;
-  border-radius: 6px;
+
+.award-card__period {
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
 }
 
-/* If you used .btn-cta on CV instead, support it too */
-.btn-cta{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:12px 18px;
-  border-radius:9999px;
-  text-decoration:none;
+.award-list {
+  margin: 0;
+  padding: 0 var(--spacing-md);
+  list-style: none;
+}
+
+.award-list li {
+  padding-block: var(--spacing-md);
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.award-list li:last-child {
+  border-bottom: 0;
+}
+
+.award-marker {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-strong);
+  background: var(--color-accent-soft);
+  border-radius: 50%;
   font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: .2px;
-  color:#fff;
-  background: var(--accent);
-  box-shadow: 0 10px 22px rgba(29, 78, 216, 0.18);
-  transition: transform .15s ease, box-shadow .2s ease, background .15s ease;
-}
-.btn-cta:hover{
-  transform: translateY(-1px);
-  background: var(--accent-hover);
-  box-shadow: 0 16px 30px rgba(29, 78, 216, 0.22);
-}
-.btn-cta:focus-visible{
-  outline: 3px solid rgba(29, 78, 216, 0.25);
-  outline-offset: 3px;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
-/* ============ PDF Card ============ */
-.card{
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-  padding: var(--spacing-md);
-}
-section.pdf{
-  max-width: var(--container);
-  margin: 0 auto var(--spacing-lg);
-  padding: 0 var(--spacing-sm);
-}
-section.pdf embed{
-  display:block;
-  width:100%;
-  height: clamp(420px, 70vh, 820px);
-  border-radius: calc(var(--radius) - 2px);
-  border: 1px solid var(--border);
-}
-
-/* ============ Afterword ============ */
-#afterword p{
-  font-style: italic;
-  font-size: 0.95rem;
-  text-align: center;
-  color: var(--muted);
-  margin: var(--spacing-md) var(--spacing-sm) 0 0;
-}
-
-/* ============ Courses ============ */
-#courses{
-  margin: 0 auto var(--spacing-lg);
-  padding: 0 var(--spacing-sm);
-  max-width: var(--container);
-}
-
-/* Centered heading + subtle underline */
-#courses h2{
-  font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
-  color: var(--text);
-  text-align: center;
-  font-weight: 850;
-}
-#courses h2::after{
-  content:'';
-  display:block;
-  width: 96px;
-  height: 2px;
-  background: var(--border);
-  margin: var(--spacing-xs) auto 0;
-  border-radius: 999px;
-}
-
-/* Short intro under the H2 */
-.courses-intro{
-  max-width: 70ch;
-  margin: 0 auto var(--spacing-md);
-  color: var(--muted);
+.award-list h3 {
+  margin-bottom: var(--spacing-2xs);
   font-size: 1.05rem;
-  text-align: center;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
-/* Centered row of year cards */
-.courses-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap: var(--spacing-md);
-  justify-content:center;
+.award-list p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
 }
 
-/* Individual year card */
-.year{
-  background: var(--surface);
-  border: 1px solid var(--border);
+/* Coursework */
+
+.coursework {
+  padding-bottom: clamp(var(--spacing-xl), 8vw, 96px);
+}
+
+.course-years {
+  display: grid;
+  gap: 12px;
+}
+
+.course-year {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-  padding: var(--spacing-md);
-  flex: 1 1 260px;
-  max-width: 360px;
+  box-shadow: var(--shadow-sm);
 }
-.year h3{
+
+.course-year summary {
+  min-height: 86px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  color: var(--color-heading);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--transition-fast);
+}
+
+.course-year summary::-webkit-details-marker {
+  display: none;
+}
+
+.course-year summary:hover,
+.course-year[open] summary {
+  background: var(--color-surface-muted);
+}
+
+.course-year[open] summary {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.course-year summary > span:first-child {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.course-year__number {
   font-family: var(--font-heading);
-  margin-bottom: var(--spacing-sm);
-  font-weight: 850;
-  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 700;
 }
-.year h3::after{
-  content:'';
-  display:block;
-  width: 64px;
+
+.course-year__period {
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+}
+
+.course-year__toggle {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.course-year__toggle::before,
+.course-year__toggle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
   height: 2px;
-  background: var(--border);
-  margin-top: var(--spacing-xs);
-  border-radius: 999px;
-}
-.year ul{ list-style:none; margin:0; padding:0; }
-.year li + li{ margin-top: 6px; }
-
-/* Course links (keep your “code black, title accent” idea) */
-.year a{
-  color: var(--accent);
-  text-decoration:none;
-  position:relative;
-  display:inline-block;
-  max-width:100%;
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-.year a .code{
-  color: var(--text);
-  font-weight: 750;
-  letter-spacing: 0.2px;
-  display:inline-block;
-  margin-right: 8px;
-}
-.year a::after{
-  content:'';
-  position:absolute;
-  bottom:-2px; left:0;
-  width:100%; height:2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease;
-}
-.year a:hover::after,
-.year a:focus::after{ transform: scaleX(1); }
-.year a:hover{ color: var(--accent-hover); }
-.year a:focus-visible{
-  outline: 3px solid rgba(29, 78, 216, 0.25);
-  outline-offset: 3px;
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-strong);
+  transform: translate(-50%, -50%);
+  transition: transform var(--transition-fast);
 }
 
-/* ============ Footer (minimal) ============ */
-footer{
-  margin-top: auto;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  text-align:center;
-  padding: var(--spacing-md) 0;
-}
-.social-links a{
-  color: var(--text);
-  font-size: 1.5em;
-  margin: 0 var(--spacing-xs);
-  display:inline-block;
-  opacity: 0.75;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.social-links a:hover,
-.social-links a:focus{ transform: scale(1.1); opacity: 1; }
-
-/* ============ Responsive Tweaks ============ */
-@media (max-width: 768px){
-  .header-inner{ flex-direction: column; gap: 10px; }
-  .site-nav .nav-pill{ flex-wrap: wrap; justify-content: center; padding: 6px 10px; }
-  .site-nav .nav-pill a{ padding: 8px 12px; }
-
-  .cv-actions{ text-align: center; }
-  section.pdf{ margin-bottom: var(--spacing-md); }
-  section.pdf embed{ height: 500px; }
-}
-@media (max-width: 480px){
-  .page-title{ font-size: 1.6rem; }
-  section.pdf embed{ height: 340px; }
+.course-year__toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 
-/* ============ Scroll progress bar (keep) ============ */
-#scroll-progress{
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: var(--accent);
-  width: 0%;
-  z-index: 9999;
-  transition: width 0.15s ease-out;
+.course-year[open] .course-year__toggle::after {
+  transform: translate(-50%, -50%) rotate(0deg);
 }
 
-/* ================= Fade in (keep) ================= */
-.fade-in{
-  opacity: 0;
-  transform: translateY(16px);
-  will-change: opacity, transform;
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.fade-in.visible{
-  opacity: 1;
-  transform: translateY(0);
+.course-list {
+  margin: 0;
+  padding: var(--spacing-md);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px var(--spacing-lg);
+  list-style: none;
 }
 
-/* ============ Reduced Motion ============ */
-@media (prefers-reduced-motion: reduce){
-  * { animation: none !important; transition: none !important; }
+.course-list a {
+  min-height: 42px;
+  padding-block: 8px;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 10px;
+  color: var(--color-text);
+  border-bottom: 1px solid rgba(221, 213, 201, 0.7);
+  text-decoration: none;
+  line-height: 1.45;
+}
+
+.course-list a:hover {
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent);
+}
+
+.course-code {
+  color: var(--color-muted);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* Footer */
+
+.footer-name {
+  margin-bottom: var(--spacing-2xs);
+  color: var(--color-on-dark);
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.footer-note {
+  margin-bottom: var(--spacing-sm);
+  color: rgba(252, 250, 246, 0.65);
+  font-size: var(--font-size-sm);
+}
+
+/* Responsive behavior */
+
+@media (max-width: 900px) {
+  .cv-hero {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .academic-summary {
+    max-width: 680px;
+  }
+
+  .award-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .cv-hero {
+    padding-block: var(--spacing-xl);
+  }
+
+  .cv-hero__heading h1 {
+    font-size: clamp(2.7rem, 13vw, 4rem);
+  }
+
+  .document-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .document-heading > p {
+    margin: 0;
+  }
+
+  .pdf-frame {
+    padding: 6px;
+  }
+
+  .pdf-frame object {
+    height: 74vh;
+    min-height: 520px;
+  }
+
+  .course-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .cv-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cv-actions a {
+    width: 100%;
+  }
+
+  .academic-summary div {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xs);
+  }
+
+  .award-card__heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+  }
+
+  .course-year summary > span:first-child {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+  }
+
+  .course-list a {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xs);
+  }
 }
 
 
