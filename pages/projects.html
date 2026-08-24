@@ -1,578 +1,602 @@
-/* Projects-page layout. Shared site styling lives in base.css. */
-
-.eyebrow {
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-accent-strong);
-  font-family: var(--font-heading);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
-.section-heading {
-  max-width: 720px;
-  margin-bottom: clamp(var(--spacing-lg), 5vw, var(--spacing-xl));
-}
-
-.section-heading h2,
-.contact-callout h2 {
-  margin-bottom: var(--spacing-sm);
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  letter-spacing: -0.035em;
-}
-
-.section-heading > p:last-child {
-  margin-bottom: 0;
-  color: var(--color-muted);
-  font-size: var(--font-size-lg);
-}
-
-.section-heading--split {
-  max-width: none;
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.section-heading--split h2 {
-  margin-bottom: 0;
-}
-
-.section-link {
-  flex: 0 0 auto;
-  padding-bottom: 5px;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-accent);
-}
-
-/* ========== Page introduction ========== */
-
-.projects-hero {
-  padding-block: clamp(var(--spacing-xl), 8vw, 96px);
-  display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(270px, 0.55fr);
-  align-items: center;
-  gap: clamp(var(--spacing-lg), 7vw, 88px);
-}
-
-.projects-hero__copy {
-  max-width: 780px;
-}
-
-.projects-hero h1 {
-  max-width: 15ch;
-  margin-bottom: var(--spacing-md);
-  font-size: clamp(2.7rem, 6vw, 5.25rem);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1.03;
-}
-
-.projects-hero__intro {
-  max-width: 66ch;
-  margin-bottom: var(--spacing-md);
-  color: var(--color-text);
-  font-size: clamp(1.08rem, 1.6vw, 1.25rem);
-}
-
-.projects-hero__context {
-  max-width: 68ch;
-  margin-bottom: 0;
-  padding-left: var(--spacing-sm);
-  color: var(--color-muted);
-  border-left: 2px solid var(--color-accent-soft);
-}
-
-.focus-card {
-  padding: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
-  background: var(--color-accent-strong);
-  background-image:
-    radial-gradient(circle at 95% 0%, rgba(255, 255, 255, 0.12), transparent 16rem),
-    linear-gradient(145deg, #383148, var(--color-accent-strong));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  color: var(--color-on-dark);
-}
-
-.focus-card__label {
-  margin-bottom: var(--spacing-md);
-  color: #d8d1ef;
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.focus-card ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.focus-card li {
-  padding-block: 11px;
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.focus-card li:first-child {
-  padding-top: 0;
-}
-
-.focus-card li:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-/* ========== Current work ========== */
-
-.current-work {
-  background: rgba(238, 233, 224, 0.62);
-  border-block: 1px solid var(--color-border);
-}
-
-.current-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--spacing-md);
-}
-
-.current-card {
-  min-height: 390px;
-  padding: clamp(var(--spacing-md), 4vw, var(--spacing-lg));
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast);
-}
-
-.current-card:hover {
-  border-color: #c8bedd;
-  box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
-}
-
-.current-card__topline {
-  margin-bottom: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-xs);
-}
-
-.status-badge,
-.project-field {
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.status-badge {
-  padding: 6px 9px;
-  color: var(--color-accent-strong);
-  background: var(--color-accent-soft);
-  border-radius: var(--radius-pill);
-}
-
-.project-field {
-  color: var(--color-muted);
-}
-
-.current-card h3 {
-  margin-top: clamp(var(--spacing-xl), 7vw, 76px);
-  font-size: clamp(1.55rem, 3vw, 2.15rem);
-  letter-spacing: -0.025em;
-}
-
-.current-card > p {
-  color: var(--color-muted);
-}
-
-.collaborator {
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-accent-strong) !important;
-  font-size: var(--font-size-sm);
-  font-style: italic;
-}
-
-/* ========== Project cards ========== */
-
-.featured-projects {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-  align-items: stretch;
-  gap: var(--spacing-md);
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: stretch;
-  gap: var(--spacing-md);
-}
-
-.project-card {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast);
-}
-
-.project-card:hover {
-  border-color: #c8bedd;
-  box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
-}
-
-.project-card__image {
-  aspect-ratio: 3 / 2;
-  display: block;
-  overflow: hidden;
-  background: var(--color-surface-muted);
-}
-
-.project-card__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 500ms var(--ease-standard);
-}
-
-.project-card:hover .project-card__image img {
-  transform: scale(1.025);
-}
-
-.project-card__body {
-  height: 100%;
-  padding: clamp(var(--spacing-md), 3vw, var(--spacing-lg));
-  display: flex;
-  flex-direction: column;
-}
-
-.project-card--text .project-card__body {
-  justify-content: center;
-}
-
-.project-meta {
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-muted);
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.5;
-  text-transform: uppercase;
-}
-
-.project-card h3 {
-  margin-bottom: var(--spacing-sm);
-  font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-  letter-spacing: -0.025em;
-  line-height: 1.25;
-}
-
-.project-grid .project-card h3 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-}
-
-.project-card h3 a {
-  color: var(--color-heading);
-  text-decoration: none;
-}
-
-.project-card h3 a:hover {
-  color: var(--color-accent-strong);
-}
-
-.project-card__body > p:not(.project-meta, .collaborator) {
-  margin-bottom: var(--spacing-md);
-  color: var(--color-muted);
-  line-height: 1.65;
-}
-
-.method-list {
-  margin: auto 0 0;
-  padding: var(--spacing-sm) 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  list-style: none;
-}
-
-.method-list li {
-  padding: 5px 9px;
-  color: var(--color-muted);
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.project-actions {
-  margin-top: var(--spacing-md);
-  padding-top: var(--spacing-sm);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-  border-top: 1px solid var(--color-border);
-}
-
-.project-actions a {
-  color: var(--color-accent-strong);
-  font-family: var(--font-heading);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.project-actions a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
-/* ========== Earlier work ========== */
-
-.earlier-work {
-  background: rgba(238, 233, 224, 0.62);
-  border-block: 1px solid var(--color-border);
-}
-
-/* ========== Outputs ========== */
-
-.output-list {
-  border-top: 1px solid var(--color-border);
-}
-
-.output-item {
-  min-height: 88px;
-  padding-block: var(--spacing-sm);
-  display: grid;
-  grid-template-columns: minmax(130px, 0.35fr) minmax(0, 1.65fr) auto;
-  align-items: center;
-  gap: var(--spacing-md);
-  color: var(--color-heading);
-  border-bottom: 1px solid var(--color-border);
-  text-decoration: none;
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast),
-    padding-inline var(--transition-fast);
-}
-
-.output-item:hover {
-  padding-inline: var(--spacing-sm);
-  color: var(--color-accent-strong);
-  background: rgba(252, 250, 246, 0.65);
-}
-
-.output-item__type {
-  color: var(--color-muted);
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.output-item__title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-}
-
-.output-item__arrow {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-}
-
-/* ========== Contact and footer ========== */
-
-.contact-callout {
-  color: rgba(252, 250, 246, 0.84);
-  background: var(--color-accent-strong);
-  background-image:
-    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.1), transparent 28rem),
-    linear-gradient(120deg, #383148, var(--color-accent-strong));
-}
-
-.contact-callout__inner {
-  text-align: center;
-}
-
-.contact-callout .eyebrow {
-  color: #d8d1ef;
-}
-
-.contact-callout h2 {
-  max-width: 18ch;
-  margin-inline: auto;
-  color: var(--color-on-dark);
-}
-
-.contact-callout p:not(.eyebrow) {
-  max-width: 58ch;
-  margin: 0 auto var(--spacing-lg);
-  font-size: var(--font-size-lg);
-}
-
-.contact-callout .btn-cta {
-  color: var(--color-accent-strong);
-  background: var(--color-surface);
-  box-shadow: none;
-}
-
-.contact-callout .btn-cta:hover {
-  color: var(--color-accent-strong);
-  background: #fff;
-}
-
-.footer-name {
-  margin-bottom: var(--spacing-2xs);
-  color: var(--color-on-dark);
-  font-family: var(--font-heading);
-  font-weight: 700;
-}
-
-.footer-note {
-  margin-bottom: var(--spacing-sm);
-  color: rgba(252, 250, 246, 0.65);
-  font-size: var(--font-size-sm);
-}
-
-/* ========== Responsive behavior ========== */
-
-@media (max-width: 980px) {
-  .projects-hero {
-    grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
-    gap: var(--spacing-xl);
-  }
-
-  .featured-projects {
-    grid-template-columns: 1fr;
-  }
-
-  .project-card--text {
-    min-height: 340px;
-  }
-
-  .project-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .project-grid .project-card:last-child {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
-  }
-
-  .project-grid .project-card:last-child .project-card__image {
-    height: 100%;
-    aspect-ratio: auto;
-  }
-}
-
-@media (max-width: 760px) {
-  .projects-hero {
-    grid-template-columns: 1fr;
-    padding-block: var(--spacing-xl);
-  }
-
-  .projects-hero h1 {
-    font-size: clamp(2.5rem, 11vw, 4rem);
-  }
-
-  .focus-card {
-    max-width: 480px;
-  }
-
-  .current-grid,
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .current-card {
-    min-height: 340px;
-  }
-
-  .project-grid .project-card:last-child {
-    grid-column: auto;
-    display: flex;
-  }
-
-  .project-grid .project-card:last-child .project-card__image {
-    height: auto;
-    aspect-ratio: 3 / 2;
-  }
-
-  .section-heading--split {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .output-item {
-    grid-template-columns: 1fr auto;
-    gap: 6px var(--spacing-sm);
-  }
-
-  .output-item__type {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 480px) {
-  .current-card__topline {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .current-card h3 {
-    margin-top: var(--spacing-xl);
-  }
-
-  .project-card__body {
-    padding: var(--spacing-md);
-  }
-
-  .project-actions {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .current-card:hover,
-  .project-card:hover,
-  .project-card:hover .project-card__image img {
-    transform: none;
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Research by Nishwal Gora in biological physics, active matter, chromatin dynamics, and earlier work in quantum materials."
+  >
+  <title>Research and Projects | Nishwal Gora</title>
+
+  <link rel="stylesheet" href="../stylesheets/base.css">
+  <link rel="stylesheet" href="../stylesheets/projects_style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  >
+
+  <noscript>
+    <style>
+      .fade-in { opacity: 1; transform: none; }
+    </style>
+  </noscript>
+</head>
+
+<body>
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html" aria-label="Nishwal Gora, home">
+        Nishwal Gora
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <ul class="nav-pill">
+          <li><a href="../index.html">Home</a></li>
+          <li>
+            <a class="active" href="projects.html" aria-current="page">
+              Projects
+            </a>
+          </li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="more.html">More</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section
+      class="projects-hero container-wide"
+      aria-labelledby="projects-title"
+    >
+      <div class="projects-hero__copy fade-in">
+        <p class="eyebrow">Research portfolio</p>
+
+        <h1 id="projects-title">
+          Current work in biological physics and active matter.
+        </h1>
+
+        <p class="projects-hero__intro">
+          My present interests centre on collective behaviour in living systems:
+          how active components coordinate, how chromatin organisation shapes
+          transcription, and how biological systems store information. I use
+          theoretical and computational approaches to connect microscopic
+          interactions with emergent dynamics.
+        </p>
+
+        <p class="projects-hero__context">
+          Earlier in my training, I worked extensively on quantum magnetism and
+          neutron-scattering studies of frustrated materials. Those projects
+          remain an important part of my research background, but they are not
+          my current focus.
+        </p>
+      </div>
+
+      <aside
+        class="focus-card fade-in"
+        aria-label="Current research interests"
+      >
+        <p class="focus-card__label">Current interests</p>
+
+        <ul>
+          <li>Biological physics</li>
+          <li>Active matter</li>
+          <li>Chromatin dynamics</li>
+          <li>Biological information processing</li>
+          <li>Computational modelling</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="current-work section" aria-labelledby="current-title">
+      <div class="container-wide">
+        <div class="section-heading fade-in">
+          <p class="eyebrow">Ongoing</p>
+          <h2 id="current-title">Current research</h2>
+          <p>Two projects currently shape the direction of my work.</p>
+        </div>
+
+        <div class="current-grid">
+          <article class="current-card fade-in">
+            <div class="current-card__topline">
+              <span class="status-badge">Current PhD research</span>
+              <span class="project-field">Active matter</span>
+            </div>
+
+            <h3>Collective ciliary dynamics</h3>
+
+            <p>
+              My PhD research focuses on how interactions between beating cilia
+              generate coordinated motion. I am interested in the collective
+              dynamics that emerge from these local interactions and their role
+              in transport and information processing in biological systems.
+            </p>
+
+            <ul class="method-list" aria-label="Research themes">
+              <li>Collective dynamics</li>
+              <li>Active matter</li>
+              <li>Biological physics</li>
+            </ul>
+          </article>
+
+          <article class="current-card fade-in">
+            <div class="current-card__topline">
+              <span class="status-badge">
+                Ongoing since August 2025
+              </span>
+              <span class="project-field">Chromatin physics</span>
+            </div>
+
+            <h3>Hopfield networks and chromatin memory</h3>
+
+            <p class="collaborator">With Davide Marenduzzo</p>
+
+            <p>
+              This project asks whether chromatin-folding states associated with
+              transcription factories can act as stable cellular memories. It
+              connects physical models of genome organisation with
+              Hopfield-network attractors to explore how cellular identity may
+              be preserved and restored.
+            </p>
+
+            <ul class="method-list" aria-label="Research themes">
+              <li>Hopfield networks</li>
+              <li>Chromatin folding</li>
+              <li>Cellular memory</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="completed-work section container-wide"
+      aria-labelledby="completed-title"
+    >
+      <div class="section-heading fade-in">
+        <p class="eyebrow">Completed work</p>
+
+        <h2 id="completed-title">
+          Biological physics and active matter
+        </h2>
+
+        <p>
+          Completed projects that led into my present interests in living and
+          nonequilibrium systems.
+        </p>
+      </div>
+
+      <div class="featured-projects">
+        <article class="project-card project-card--featured fade-in">
+          <a
+            class="project-card__image"
+            href="../projects/projectFive/projectFive.html"
+            aria-label="Read about Waddington's landscape through transcriptional dynamics"
+          >
+            <img
+              src="../assets/waddington_project.png"
+              alt="Diagram of transcription factors bridging sites along a chromatin polymer"
+              width="1156"
+              height="682"
+              loading="lazy"
+            >
+          </a>
+
+          <div class="project-card__body">
+            <p class="project-meta">
+              MPhys project · Computational biophysics · 2025–2026
+            </p>
+
+            <h3>
+              <a href="../projects/projectFive/projectFive.html">
+                Waddington’s landscape through transcriptional dynamics
+              </a>
+            </h3>
+
+            <p>
+              Using a coarse-grained polymer model, this project investigated
+              how chromatin organisation and transcription-factor dynamics
+              shape gene expression, differentiation, and cellular memory.
+              Telegraph-model analysis connected simulated transcription traces
+              to switching, bursting, and the stabilisation of cellular states.
+            </p>
+
+            <ul class="method-list" aria-label="Methods used">
+              <li>Polymer modelling</li>
+              <li>LAMMPS</li>
+              <li>Python</li>
+              <li>Stochastic processes</li>
+            </ul>
+
+            <div class="project-actions">
+              <a href="../projects/projectFive/projectFive.html">
+                Read project <span aria-hidden="true">→</span>
+              </a>
+
+              <a href="../assets/MPhys_Project_NG.pdf">
+                View report <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card project-card--text fade-in">
+          <div class="project-card__body">
+            <p class="project-meta">
+              Completed research · Active matter
+            </p>
+
+            <h3>
+              Modelling bacterial turbulence with finite tumbling
+            </h3>
+
+            <p class="collaborator">With Alexander Morozov</p>
+
+            <p>
+              This project examined how finite tumbling duration changes the
+              onset of hydrodynamic instability in suspensions of bacterial
+              swimmers. Coupled Smoluchowski equations and linear stability
+              analysis linked microscopic run-and-tumble dynamics to emergent
+              large-scale flows.
+            </p>
+
+            <ul class="method-list" aria-label="Methods used">
+              <li>Linear stability</li>
+              <li>Smoluchowski equations</li>
+              <li>Spherical harmonics</li>
+              <li>Active suspensions</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="earlier-work section" aria-labelledby="earlier-title">
+      <div class="container-wide">
+        <div class="section-heading fade-in">
+          <p class="eyebrow">Research background</p>
+
+          <h2 id="earlier-title">
+            Earlier work in quantum materials
+          </h2>
+
+          <p>
+            These projects developed my experience in neutron scattering,
+            magnetic excitations, theoretical modelling, and scientific
+            publishing.
+          </p>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card fade-in">
+            <a
+              class="project-card__image"
+              href="../projects/projectFour/projectFour.html"
+              aria-label="Read about magnetoelastic honeycomb fragmentation in VI3"
+            >
+              <img
+                src="../assets/vi3_honeycomb.png"
+                alt="Scientific visualisation of the honeycomb structure in VI3"
+                width="900"
+                height="600"
+                loading="lazy"
+              >
+            </a>
+
+            <div class="project-card__body">
+              <p class="project-meta">
+                Published research · Quantum materials
+              </p>
+
+              <h3>
+                <a href="../projects/projectFour/projectFour.html">
+                  Magnetoelastic honeycomb fragmentation in
+                  VI<sub>3</sub>
+                </a>
+              </h3>
+
+              <p>
+                Neutron spectroscopy and diffraction revealed how
+                symmetry-breaking lattice distortions reshape magnetic exchange
+                and fragment the honeycomb lattice into inequivalent magnetic
+                sublattices.
+              </p>
+
+              <ul class="method-list" aria-label="Methods used">
+                <li>Neutron spectroscopy</li>
+                <li>Diffraction</li>
+                <li>Symmetry analysis</li>
+              </ul>
+
+              <div class="project-actions">
+                <a href="../projects/projectFour/projectFour.html">
+                  Read project <span aria-hidden="true">→</span>
+                </a>
+
+                <a href="../assets/vi3_PRB.pdf">
+                  View paper <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card fade-in">
+            <a
+              class="project-card__image"
+              href="../projects/projectTwo/projectTwo.html"
+              aria-label="Read about bond-dependent exchange in cobalt titanate"
+            >
+              <img
+                src="../assets/SHP.png"
+                alt="Scientific figure from the cobalt titanate research project"
+                width="900"
+                height="600"
+                loading="lazy"
+              >
+            </a>
+
+            <div class="project-card__body">
+              <p class="project-meta">
+                Senior Honours project · 2025
+              </p>
+
+              <h3>
+                <a href="../projects/projectTwo/projectTwo.html">
+                  Bond-dependent exchange in CoTiO<sub>3</sub>
+                </a>
+              </h3>
+
+              <p>
+                A Green’s-function response model connected spin-wave
+                excitations with single-ion cobalt physics and strongly
+                anisotropic, bond-dependent magnetic exchange.
+              </p>
+
+              <ul class="method-list" aria-label="Methods used">
+                <li>Green’s functions</li>
+                <li>Spin-wave modelling</li>
+                <li>MATLAB</li>
+              </ul>
+
+              <div class="project-actions">
+                <a href="../projects/projectTwo/projectTwo.html">
+                  Read project <span aria-hidden="true">→</span>
+                </a>
+
+                <a href="../assets/CTO_SH.pdf">
+                  View report <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card fade-in">
+            <a
+              class="project-card__image"
+              href="../projects/projectOne/projectOne.html"
+              aria-label="Read about Zeeman-split Kramers doublets"
+            >
+              <img
+                src="../assets/zeeman.png"
+                alt="Visualisation from the Zeeman-split Kramers doublets project"
+                width="900"
+                height="600"
+                loading="lazy"
+              >
+            </a>
+
+            <div class="project-card__body">
+              <p class="project-meta">
+                Research project · June–August 2024
+              </p>
+
+              <h3>
+                <a href="../projects/projectOne/projectOne.html">
+                  Zeeman-split Kramers doublets
+                </a>
+              </h3>
+
+              <p class="collaborator">
+                With Chris Stock and Tiberiu Popescu
+              </p>
+
+              <p>
+                High-field neutron spectroscopy was used to study field-tuned
+                excitations in a triangular antiferromagnet near a quantum
+                critical point and their connection to magnetocaloric
+                behaviour.
+              </p>
+
+              <ul class="method-list" aria-label="Methods used">
+                <li>Neutron scattering</li>
+                <li>Quantum magnetism</li>
+                <li>MATLAB</li>
+              </ul>
+
+              <div class="project-actions">
+                <a href="../projects/projectOne/projectOne.html">
+                  Read project <span aria-hidden="true">→</span>
+                </a>
+
+                <a href="../assets/zeeman.pdf">
+                  View paper <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="outputs section container-wide"
+      aria-labelledby="outputs-title"
+    >
+      <div class="section-heading section-heading--split fade-in">
+        <div>
+          <p class="eyebrow">Documents</p>
+          <h2 id="outputs-title">Selected research outputs</h2>
+        </div>
+
+        <a class="section-link" href="cv.html">
+          View full CV <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="output-list">
+        <a
+          class="output-item fade-in"
+          href="../assets/MPhys_Project_NG.pdf"
+        >
+          <span class="output-item__type">MPhys report</span>
+          <span class="output-item__title">
+            Waddington’s Landscape through Transcriptional Dynamics
+          </span>
+          <span class="output-item__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a
+          class="output-item fade-in"
+          href="../assets/vi3_PRB.pdf"
+        >
+          <span class="output-item__type">Published paper</span>
+          <span class="output-item__title">
+            Magnetoelastic Honeycomb Fragmentation in VI<sub>3</sub>
+          </span>
+          <span class="output-item__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a
+          class="output-item fade-in"
+          href="../assets/CTO_SH.pdf"
+        >
+          <span class="output-item__type">Honours report</span>
+          <span class="output-item__title">
+            Bond-Dependent Exchange in CoTiO<sub>3</sub>
+          </span>
+          <span class="output-item__arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a
+          class="output-item fade-in"
+          href="../assets/zeeman.pdf"
+        >
+          <span class="output-item__type">Research paper</span>
+          <span class="output-item__title">
+            Zeeman-Split Kramers Doublets
+          </span>
+          <span class="output-item__arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="contact-callout section">
+      <div class="contact-callout__inner container fade-in">
+        <p class="eyebrow">Conversation and collaboration</p>
+
+        <h2>Interested in discussing the research?</h2>
+
+        <p>
+          I welcome conversations about biological physics, active matter,
+          chromatin dynamics, and related research questions.
+        </p>
+
+        <a class="btn-cta" href="contact.html">Get in touch</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-name">Nishwal Gora</p>
+
+    <p class="footer-note">
+      Biological physics, active matter, and collective behaviour.
+    </p>
+
+    <div class="social-links" aria-label="Social links">
+      <a
+        href="https://www.linkedin.com/in/nishwal-gora/"
+        class="fa fa-linkedin"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on LinkedIn"
+      ></a>
+
+      <a
+        href="https://github.com/Nishwal-G"
+        class="fa fa-github"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Nishwal Gora on GitHub"
+      ></a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const progressBar = document.getElementById("scroll-progress");
+      const animatedElements = document.querySelectorAll(".fade-in");
+      let scrollFrame;
+
+      const updateProgress = () => {
+        const page = document.documentElement;
+        const scrollableHeight = page.scrollHeight - page.clientHeight;
+
+        const progress = scrollableHeight > 0
+          ? (page.scrollTop / scrollableHeight) * 100
+          : 0;
+
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+        scrollFrame = null;
+      };
+
+      window.addEventListener("scroll", () => {
+        if (!scrollFrame) {
+          scrollFrame = window.requestAnimationFrame(updateProgress);
+        }
+      }, { passive: true });
+
+      updateProgress();
+
+      const reduceMotion = window
+        .matchMedia("(prefers-reduced-motion: reduce)")
+        .matches;
+
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        animatedElements.forEach((element) => {
+          element.classList.add("visible");
+        });
+
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries, currentObserver) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              currentObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+          rootMargin: "0px 0px -32px"
+        }
+      );
+
+      animatedElements.forEach((element) => {
+        observer.observe(element);
+      });
+    })();
+  </script>
+</body>
+</html>
 
 
 
