@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta
     name="description"
     content="Nishwal Gora is a physicist researching collective behaviour in quantum materials, active matter, and biological systems."
   >
+
   <title>Nishwal Gora | Physicist</title>
 
-  <link rel="stylesheet" href="/stylesheets/base.css">
-  <link rel="stylesheet" href="/stylesheets/index_style.css">
+  <link rel="stylesheet" href="stylesheets/base.css">
+  <link rel="stylesheet" href="stylesheets/index_style.css">
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -18,7 +21,10 @@
 
   <noscript>
     <style>
-      .fade-in { opacity: 1; transform: none; }
+      .fade-in {
+        opacity: 1;
+        transform: none;
+      }
     </style>
   </noscript>
 </head>
@@ -28,15 +34,26 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Nishwal Gora, home">
+      <a
+        class="brand"
+        href="index.html"
+        aria-label="Nishwal Gora, home"
+      >
         Nishwal Gora
       </a>
 
       <nav class="site-nav" aria-label="Primary navigation">
         <ul class="nav-pill">
           <li>
-            <a class="active" href="index.html" aria-current="page">Home</a>
+            <a
+              class="active"
+              href="index.html"
+              aria-current="page"
+            >
+              Home
+            </a>
           </li>
+
           <li><a href="pages/projects.html">Projects</a></li>
           <li><a href="pages/cv.html">CV</a></li>
           <li><a href="pages/about.html">About</a></li>
@@ -48,19 +65,24 @@
   </header>
 
   <main>
-    <section class="hero container-wide" aria-labelledby="hero-title">
+    <section
+      class="hero container-wide"
+      aria-labelledby="hero-title"
+    >
       <div class="hero-copy fade-in">
-        <p class="eyebrow">Physicist · Complex systems · Active matter</p>
+        <p class="eyebrow">
+          Physicist · Complex systems · Active matter
+        </p>
 
         <h1 id="hero-title">
           Interested in how simple interactions produce complex behaviour.
         </h1>
 
         <p class="hero-intro">
-          I am a physics student with interests in statistical physics, biological
-          physics, and quantum materials. Through research and computational projects,
-          I have explored how collective behaviour can emerge from relatively simple
-          microscopic rules.
+          I am a physics student with interests in statistical physics,
+          biological physics, and quantum materials. Through research and
+          computational projects, I have explored how collective behaviour
+          can emerge from relatively simple microscopic rules.
         </p>
 
         <div class="hero-actions" aria-label="Featured links">
@@ -195,7 +217,9 @@
           </a>
 
           <div class="work-copy">
-            <p class="project-meta">Quantum magnetism · 2024</p>
+            <p class="project-meta">
+              Quantum magnetism · 2024
+            </p>
 
             <h3>
               <a href="projects/projectOne/projectOne.html">
@@ -227,7 +251,9 @@
           </a>
 
           <div class="work-copy">
-            <p class="project-meta">Quantum magnetism · 2025</p>
+            <p class="project-meta">
+              Condensed matter · 2025
+            </p>
 
             <h3>
               <a href="projects/projectTwo/projectTwo.html">
@@ -243,44 +269,45 @@
         </article>
 
         <article class="work-card fade-in">
-  <a
-    class="work-image"
-    href="projects/projectFive/projectFive.html"
-    aria-label="Read about Waddington's landscape through transcriptional dynamics"
-  >
-    <img
-      src="assets/waddington_project.png"
-      alt="Diagram showing transcription factors bridging chromatin sites"
-      width="900"
-      height="600"
-      loading="lazy"
-    >
-  </a>
+          <a
+            class="work-image"
+            href="projects/projectFive/projectFive.html"
+            aria-label="Read about Waddington's landscape through transcriptional dynamics"
+          >
+            <img
+              src="assets/waddington_project.png"
+              alt="Diagram showing transcription factors bridging chromatin sites"
+              width="900"
+              height="600"
+              loading="lazy"
+            >
+          </a>
 
-  <div class="work-copy">
-    <p class="project-meta">Computational biophysics · 2025–2026</p>
+          <div class="work-copy">
+            <p class="project-meta">
+              Computational biophysics · 2025–2026
+            </p>
 
-    <h3>
-      <a href="projects/projectFive/projectFive.html">
-        Waddington’s landscape through transcriptional dynamics
-      </a>
-    </h3>
+            <h3>
+              <a href="projects/projectFive/projectFive.html">
+                Waddington’s landscape through transcriptional dynamics
+              </a>
+            </h3>
 
-    <p>
-      A polymer-model study of how chromatin organisation and
-      transcription-factor dynamics shape gene expression, cellular
-      identity, and memory.
-    </p>
-  </div>
-</article>
-
-    </div>
+            <p>
+              A polymer-model study of how chromatin organisation and
+              transcription-factor dynamics shape gene expression, cellular
+              identity, and memory.
+            </p>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="profile-callout section">
       <div class="profile-callout__inner container fade-in">
         <p class="eyebrow">Beyond the research</p>
-        
+
         <p>
           This website brings together my research, publications, computational
           projects, and wider academic interests. I have designed it to be
@@ -344,11 +371,15 @@
         scrollFrame = null;
       };
 
-      window.addEventListener("scroll", () => {
-        if (!scrollFrame) {
-          scrollFrame = window.requestAnimationFrame(updateProgress);
-        }
-      }, { passive: true });
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!scrollFrame) {
+            scrollFrame = window.requestAnimationFrame(updateProgress);
+          }
+        },
+        { passive: true }
+      );
 
       updateProgress();
 
