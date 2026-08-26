@@ -467,6 +467,36 @@
   }
 }
 
+/* University logos beside the academic details. */
+.academic-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.academic-logo {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
+  object-fit: contain;
+}
+
+/* Subtle degree labels on the research-interest cards. */
+.interest-card .interest-level {
+  margin: var(--spacing-lg) 0 var(--spacing-xs);
+  color: var(--color-muted);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.interest-card .interest-level + h3 {
+  margin-top: 0;
+}
+
 
 
 
