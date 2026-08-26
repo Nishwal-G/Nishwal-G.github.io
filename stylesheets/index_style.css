@@ -469,15 +469,17 @@
 
 /* University logos beside the academic details. */
 .academic-entry {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
 }
 
 .academic-logo {
-  width: 2rem;
-  height: 2rem;
-  flex: 0 0 2rem;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  flex: 0 0 40px;
   object-fit: contain;
 }
 
