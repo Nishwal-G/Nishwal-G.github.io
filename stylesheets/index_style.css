@@ -483,7 +483,7 @@
 
 /* Subtle degree labels on the research-interest cards. */
 .interest-card .interest-level {
-  margin: var(--spacing-lg) 0 var(--spacing-xs);
+  margin: var(--spacing-lg) 0 0.2rem;
   color: var(--color-muted);
   font-family: var(--font-heading);
   font-size: 0.8rem;
